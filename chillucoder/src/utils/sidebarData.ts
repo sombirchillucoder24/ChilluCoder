@@ -123,5 +123,11 @@ export const sidebarData = {
         { title: "Event Reference", href: "/html/events" },
       ],
     },
+    {
+      group: "Html Live Editor",
+      items: [
+        { title: "Html Live Editor", href: "/compilers/html-editor" },
+      ],
+    },
   ],
 }

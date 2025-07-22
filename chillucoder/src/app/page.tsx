@@ -1,7 +1,7 @@
 "use client"
 import { Topbar } from '@/components/Topbar'
 import { Navbar } from '@/components/Navbar'
-import { LanguageBar } from '@/components/LanguageBar'
+import LanguageBar from '@/components/LanguageBar'
 import { FaCode, FaLaptopCode, FaServer, FaDatabase } from 'react-icons/fa'
 
 export default function Home() {

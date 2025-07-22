@@ -106,20 +106,20 @@ className={`
       {!collapsed && (
         <div className="flex justify-between items-center px-4 py-3 border-b">
           <h2 className="text-md font-bold text-gray-900 uppercase">{selectedLang} Tutorial</h2>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 px-2">
             <button
               onClick={expandAll}
               className="text-blue-600 hover:text-blue-800"
               title="Expand All"
             >
-              <FaPlusSquare size={16} />
+              <FaPlusSquare size={20} />
             </button>
             <button
               onClick={collapseAll}
               className="text-blue-600 hover:text-blue-800"
               title="Collapse All"
             >
-              <FaMinusSquare size={16} />
+              <FaMinusSquare size={20} />
             </button>
           </div>
         </div>
