@@ -1,8 +1,24 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { FaImage, FaCopy, FaCheck, FaRuler, FaChevronDown, FaPlay, FaInfoCircle, FaCode, FaEdit, FaSave, FaTimes, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaImage,
+  FaCopy,
+  FaCheck,
+  FaRuler,
+  FaChevronDown,
+  FaPlay,
+  FaInfoCircle,
+  FaCode,
+  FaEdit,
+  FaSave,
+  FaTimes,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
 interface Coordinates {
@@ -27,7 +43,7 @@ interface EditableCoordinates {
 
 interface ClickableArea {
   coords: string;
-  shape: 'circle' | 'rect';
+  shape: "circle" | "rect";
   title: string;
   href: string;
 }
@@ -47,61 +63,61 @@ export default function ImageMapExamples() {
     center: { x: 0, y: 0 },
     edge: { x: 0, y: 0 },
     radius: 0,
-    step: 0
+    step: 0,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editableCoords, setEditableCoords] = useState<EditableCoordinates>({
-    centerX: '0',
-    centerY: '0',
-    radius: '0'
+    centerX: "0",
+    centerY: "0",
+    radius: "0",
   });
   const imgRef = useRef<HTMLImageElement>(null);
 
-const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
-  if (!isMapping || !imgRef.current || isEditing) return;
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (!isMapping || !imgRef.current || isEditing) return;
 
-  const img = imgRef.current;
-  const rect = img.getBoundingClientRect();
-  const scaleX = img.naturalWidth / rect.width;
-  const scaleY = img.naturalHeight / rect.height;
+    const img = imgRef.current;
+    const rect = img.getBoundingClientRect();
+    const scaleX = img.naturalWidth / rect.width;
+    const scaleY = img.naturalHeight / rect.height;
 
-  const x = Math.round((e.clientX - rect.left) * scaleX);
-  const y = Math.round((e.clientY - rect.top) * scaleY);
+    const x = Math.round((e.clientX - rect.left) * scaleX);
+    const y = Math.round((e.clientY - rect.top) * scaleY);
 
-  if (coordinates.step === 0) {
-    const newCoords = {
-      center: { x, y },
-      edge: { x, y },
-      radius: 0,
-      step: 1
-    };
-    setCoordinates(newCoords);
-    setEditableCoords({
-      centerX: x.toString(),
-      centerY: y.toString(),
-      radius: '0'
-    });
-  } else if (coordinates.step === 1) {
-    const radius = Math.round(
-      Math.sqrt(
-        Math.pow(x - coordinates.center.x, 2) + 
-        Math.pow(y - coordinates.center.y, 2)
-      )
-    );
-    const newCoords = {
-      center: coordinates.center,
-      edge: { x, y },
-      radius,
-      step: 2
-    };
-    setCoordinates(newCoords);
-    setEditableCoords({
-      centerX: coordinates.center.x.toString(),
-      centerY: coordinates.center.y.toString(),
-      radius: radius.toString()
-    });
-  }
-};
+    if (coordinates.step === 0) {
+      const newCoords = {
+        center: { x, y },
+        edge: { x, y },
+        radius: 0,
+        step: 1,
+      };
+      setCoordinates(newCoords);
+      setEditableCoords({
+        centerX: x.toString(),
+        centerY: y.toString(),
+        radius: "0",
+      });
+    } else if (coordinates.step === 1) {
+      const radius = Math.round(
+        Math.sqrt(
+          Math.pow(x - coordinates.center.x, 2) +
+            Math.pow(y - coordinates.center.y, 2)
+        )
+      );
+      const newCoords = {
+        center: coordinates.center,
+        edge: { x, y },
+        radius,
+        step: 2,
+      };
+      setCoordinates(newCoords);
+      setEditableCoords({
+        centerX: coordinates.center.x.toString(),
+        centerY: coordinates.center.y.toString(),
+        radius: radius.toString(),
+      });
+    }
+  };
 
   const toggleMapping = () => {
     setIsMapping(!isMapping);
@@ -110,55 +126,61 @@ const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
       center: { x: 0, y: 0 },
       edge: { x: 0, y: 0 },
       radius: 0,
-      step: 0
+      step: 0,
     });
     setEditableCoords({
-      centerX: '0',
-      centerY: '0',
-      radius: '0'
+      centerX: "0",
+      centerY: "0",
+      radius: "0",
     });
   };
 
   const handleEditToggle = () => {
     if (coordinates.step < 2) return;
-    
+
     if (isEditing) {
       const centerX = parseInt(editableCoords.centerX) || 0;
       const centerY = parseInt(editableCoords.centerY) || 0;
       const radius = parseInt(editableCoords.radius) || 0;
-      
+
       setCoordinates({
         ...coordinates,
         center: { x: centerX, y: centerY },
-        radius: radius
+        radius: radius,
       });
     } else {
       setEditableCoords({
         centerX: coordinates.center.x.toString(),
         centerY: coordinates.center.y.toString(),
-        radius: coordinates.radius.toString()
+        radius: coordinates.radius.toString(),
       });
     }
-    
+
     setIsEditing(!isEditing);
   };
 
-  const handleInputChange = (field: keyof EditableCoordinates, value: string) => {
-    if (value === '' || /^\d+$/.test(value)) {
-      setEditableCoords(prev => ({
+  const handleInputChange = (
+    field: keyof EditableCoordinates,
+    value: string
+  ) => {
+    if (value === "" || /^\d+$/.test(value)) {
+      setEditableCoords((prev) => ({
         ...prev,
-        [field]: value
+        [field]: value,
       }));
-      
-      if (value !== '') {
-        const centerX = parseInt(field === 'centerX' ? value : editableCoords.centerX) || 0;
-        const centerY = parseInt(field === 'centerY' ? value : editableCoords.centerY) || 0;
-        const radius = parseInt(field === 'radius' ? value : editableCoords.radius) || 0;
-        
-        setCoordinates(prev => ({
+
+      if (value !== "") {
+        const centerX =
+          parseInt(field === "centerX" ? value : editableCoords.centerX) || 0;
+        const centerY =
+          parseInt(field === "centerY" ? value : editableCoords.centerY) || 0;
+        const radius =
+          parseInt(field === "radius" ? value : editableCoords.radius) || 0;
+
+        setCoordinates((prev) => ({
           ...prev,
           center: { x: centerX, y: centerY },
-          radius: radius
+          radius: radius,
         }));
       }
     }
@@ -169,12 +191,12 @@ const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
       center: { x: 0, y: 0 },
       edge: { x: 0, y: 0 },
       radius: 0,
-      step: 0
+      step: 0,
     });
     setEditableCoords({
-      centerX: '0',
-      centerY: '0',
-      radius: '0'
+      centerX: "0",
+      centerY: "0",
+      radius: "0",
     });
     setIsEditing(false);
   };
@@ -185,7 +207,7 @@ const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
     setTimeout(() => setCopied(null), 2000);
   };
 
-const handleOpenEditor = (code: string) => {
+  const handleOpenEditor = (code: string) => {
     try {
       localStorage.setItem("html-code", code);
       router.push("/compilers/html-editor");
@@ -196,7 +218,7 @@ const handleOpenEditor = (code: string) => {
   };
 
   const toggleSection = (section: keyof ExpandedSections) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const getCurrentCoordinates = () => {
@@ -209,48 +231,140 @@ const handleOpenEditor = (code: string) => {
   // Define clickable areas for each example
   const clickableAreas = {
     solarSystem: [
-      { coords: "403,335,80", shape: "circle" as const, title: "Sun - Our star", href: "/html/image-maps/sun" },
-      { coords: "514,568,38", shape: "circle" as const, title: "Mercury", href: "/html/image-maps/mercury" },
-      { coords: "470,130,38", shape: "circle" as const, title: "Venus", href: "/html/image-maps/venus" },
-      { coords: "210,338,41", shape: "circle" as const, title: "Earth", href: "/html/image-maps/earth" },
-      { coords: "100,526,35", shape: "circle" as const, title: "Mars", href: "/html/image-maps/mars" },
-      { coords: "606,408,75", shape: "circle" as const, title: "Jupiter", href: "/html/image-maps/jupiter" },
-      { coords: "335,540,55", shape: "circle" as const, title: "Saturn", href: "/html/image-maps/saturn" },
-      { coords: "665,215,50", shape: "circle" as const, title: "Uranus", href: "/html/image-maps/uranus" },
-      { coords: "242,155,40", shape: "circle" as const, title: "Neptune", href: "/html/image-maps/neptune" },
-      { coords: "552,185,18", shape: "circle" as const, title: "Pluto", href: "/html/image-maps/pluto" }
+      {
+        coords: "403,335,80",
+        shape: "circle" as const,
+        title: "Sun - Our star",
+        href: "/html/image-maps/sun",
+      },
+      {
+        coords: "514,568,38",
+        shape: "circle" as const,
+        title: "Mercury",
+        href: "/html/image-maps/mercury",
+      },
+      {
+        coords: "470,130,38",
+        shape: "circle" as const,
+        title: "Venus",
+        href: "/html/image-maps/venus",
+      },
+      {
+        coords: "210,338,41",
+        shape: "circle" as const,
+        title: "Earth",
+        href: "/html/image-maps/earth",
+      },
+      {
+        coords: "100,526,35",
+        shape: "circle" as const,
+        title: "Mars",
+        href: "/html/image-maps/mars",
+      },
+      {
+        coords: "606,408,75",
+        shape: "circle" as const,
+        title: "Jupiter",
+        href: "/html/image-maps/jupiter",
+      },
+      {
+        coords: "335,540,55",
+        shape: "circle" as const,
+        title: "Saturn",
+        href: "/html/image-maps/saturn",
+      },
+      {
+        coords: "665,215,50",
+        shape: "circle" as const,
+        title: "Uranus",
+        href: "/html/image-maps/uranus",
+      },
+      {
+        coords: "242,155,40",
+        shape: "circle" as const,
+        title: "Neptune",
+        href: "/html/image-maps/neptune",
+      },
+      {
+        coords: "552,185,18",
+        shape: "circle" as const,
+        title: "Pluto",
+        href: "/html/image-maps/pluto",
+      },
     ],
     computerParts: [
-      { coords: "130,95,320,280", shape: "rect" as const, title: "CPU", href: "/html/image-maps/cpu" },
-      { coords: "590,75,687,330", shape: "rect" as const, title: "RAM", href: "/html/image-maps/ram" },
-      { coords: "145,360,525,560", shape: "rect" as const, title: "GPU", href: "/html/image-maps/gpu" },
-      { coords: "140,650,680,1125", shape: "rect" as const, title: "Motherboard", href: "/html/image-maps/motherboard" }
+      {
+        coords: "130,95,320,280",
+        shape: "rect" as const,
+        title: "CPU",
+        href: "/html/image-maps/cpu",
+      },
+      {
+        coords: "590,75,687,330",
+        shape: "rect" as const,
+        title: "RAM",
+        href: "/html/image-maps/ram",
+      },
+      {
+        coords: "145,360,525,560",
+        shape: "rect" as const,
+        title: "GPU",
+        href: "/html/image-maps/gpu",
+      },
+      {
+        coords: "140,650,680,1125",
+        shape: "rect" as const,
+        title: "Motherboard",
+        href: "/html/image-maps/motherboard",
+      },
     ],
     smartphone: [
-      { coords: "250,290,610,875", shape: "rect" as const, title: "Screen", href: "/html/image-maps/screen" },
-      { coords: "430,920,35", shape: "circle" as const, title: "Home Button", href: "/html/image-maps/home" },
-      { coords: "440,140,620,170", shape: "rect" as const, title: "Speaker", href: "/html/image-maps/speaker" },
-      { coords: "215,160,35", shape: "circle" as const, title: "Camera", href: "/html/image-maps/camera" }
-    ]
+      {
+        coords: "250,290,610,875",
+        shape: "rect" as const,
+        title: "Screen",
+        href: "/html/image-maps/screen",
+      },
+      {
+        coords: "430,920,35",
+        shape: "circle" as const,
+        title: "Home Button",
+        href: "/html/image-maps/home",
+      },
+      {
+        coords: "440,140,620,170",
+        shape: "rect" as const,
+        title: "Speaker",
+        href: "/html/image-maps/speaker",
+      },
+      {
+        coords: "215,160,35",
+        shape: "circle" as const,
+        title: "Camera",
+        href: "/html/image-maps/camera",
+      },
+    ],
   };
 
-  const renderClickableArea = (area: ClickableArea, imageWidth: number, imageHeight: number) => {
+  const renderClickableArea = (
+    area: ClickableArea,
+  ) => {
     const scaleX = 1;
     const scaleY = 1;
 
-    if (area.shape === 'circle') {
-      const [cx, cy, r] = area.coords.split(',').map(Number);
+    if (area.shape === "circle") {
+      const [cx, cy, r] = area.coords.split(",").map(Number);
       return (
         <a
           key={area.title}
           href={area.href}
           className="absolute border-2 border-blue-400 bg-blue-200 bg-opacity-20 rounded-full transition-opacity duration-300 hover:bg-opacity-40"
           style={{
-            left: `${(cx * scaleX) - (r * scaleX)}px`,
-            top: `${(cy * scaleY) - (r * scaleY)}px`,
+            left: `${cx * scaleX - r * scaleX}px`,
+            top: `${cy * scaleY - r * scaleY}px`,
             width: `${r * 2 * scaleX}px`,
             height: `${r * 2 * scaleY}px`,
-            opacity: showAreas ? 0.6 : 0
+            opacity: showAreas ? 0.6 : 0,
           }}
           title={area.title}
           onClick={(e) => {
@@ -262,7 +376,7 @@ const handleOpenEditor = (code: string) => {
         />
       );
     } else {
-      const [x1, y1, x2, y2] = area.coords.split(',').map(Number);
+      const [x1, y1, x2, y2] = area.coords.split(",").map(Number);
       return (
         <a
           key={area.title}
@@ -273,7 +387,7 @@ const handleOpenEditor = (code: string) => {
             top: `${y1 * scaleY}px`,
             width: `${(x2 - x1) * scaleX}px`,
             height: `${(y2 - y1) * scaleY}px`,
-            opacity: showAreas ? 0.6 : 0
+            opacity: showAreas ? 0.6 : 0,
           }}
           title={area.title}
           onClick={(e) => {
@@ -287,7 +401,11 @@ const handleOpenEditor = (code: string) => {
     }
   };
 
-  const renderCodeExample = (htmlCode: string, cssCode: string, name: string) => {
+  const renderCodeExample = (
+    htmlCode: string,
+    cssCode: string,
+    name: string
+  ) => {
     return (
       <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mb-6">
         <div className="flex border-b border-gray-200 dark:border-gray-700">
@@ -313,7 +431,8 @@ const handleOpenEditor = (code: string) => {
             style={{
               fontSize: 13,
               backgroundColor: "#f8fafc",
-              fontFamily: "ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace",
+              fontFamily:
+                "ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace",
             }}
             className="dark:bg-gray-900 dark:text-gray-200"
             readOnly
@@ -322,13 +441,17 @@ const handleOpenEditor = (code: string) => {
 
         <div className="flex justify-end gap-2 p-3 bg-gray-50 dark:bg-gray-800">
           <button
-            onClick={() => handleOpenEditor(`${htmlCode}\n\n<style>${cssCode}</style>`)}
+            onClick={() =>
+              handleOpenEditor(`${htmlCode}\n\n<style>${cssCode}</style>`)
+            }
             className="text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center"
           >
             <FaPlay className="inline mr-1" size={10} /> Try
           </button>
           <button
-            onClick={() => copyToClipboard(activeTab === "html" ? htmlCode : cssCode, name)}
+            onClick={() =>
+              copyToClipboard(activeTab === "html" ? htmlCode : cssCode, name)
+            }
             className="text-xs px-2 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center"
           >
             {copied === name ? (
@@ -400,7 +523,7 @@ area:hover {
     },
     {
       id: "computerParts",
-      title: "Computer Parts Map", 
+      title: "Computer Parts Map",
       description: "Interactive diagram of computer components",
       html: `<!-- Computer Parts Image Map -->
 <div class="relative mx-auto max-w-[600px] my-8">
@@ -433,7 +556,7 @@ area:hover {
     {
       id: "smartphone",
       title: "Smartphone Map",
-      description: "Interactive smartphone interface map", 
+      description: "Interactive smartphone interface map",
       html: `<!-- Smartphone Image Map -->
 <div class="relative mx-auto max-w-[300px] my-8">
   <img
@@ -465,7 +588,7 @@ area:hover {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
+    <div>
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 mb-2">
           HTML Image Maps Guide
@@ -489,20 +612,20 @@ area:hover {
         <div className="flex flex-wrap gap-2 mb-4">
           <button
             onClick={toggleMapping}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${isMapping ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${isMapping ? "bg-red-500 hover:bg-red-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
           >
             <FaRuler />
-            {isMapping ? 'Exit Coordinate Finder' : 'Enable Coordinate Finder'}
+            {isMapping ? "Exit Coordinate Finder" : "Enable Coordinate Finder"}
           </button>
-          
+
           <button
             onClick={() => setShowAreas(!showAreas)}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${showAreas ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-500 hover:bg-gray-600 text-white'}`}
+            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${showAreas ? "bg-green-500 hover:bg-green-600 text-white" : "bg-gray-500 hover:bg-gray-600 text-white"}`}
           >
             {showAreas ? <FaEye /> : <FaEyeSlash />}
-            {showAreas ? 'Hide Clickable Areas' : 'Show Clickable Areas'}
+            {showAreas ? "Hide Clickable Areas" : "Show Clickable Areas"}
           </button>
-          
+
           {isMapping && coordinates.step === 2 && (
             <button
               onClick={resetCoordinates}
@@ -513,28 +636,32 @@ area:hover {
             </button>
           )}
         </div>
-        
+
         {isMapping && (
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-              {coordinates.step === 0 && "Click on the image to set circle center"}
+              {coordinates.step === 0 &&
+                "Click on the image to set circle center"}
               {coordinates.step === 1 && "Now click to set the edge point"}
-              {coordinates.step === 2 && "Circle coordinates defined! You can edit them below."}
+              {coordinates.step === 2 &&
+                "Circle coordinates defined! You can edit them below."}
             </p>
-            
+
             {coordinates.step === 2 && (
               <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg border">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Circle Coordinates</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                    Circle Coordinates
+                  </h4>
                   <button
                     onClick={handleEditToggle}
-                    className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${isEditing ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-500 hover:bg-gray-600 text-white'}`}
+                    className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${isEditing ? "bg-green-500 hover:bg-green-600 text-white" : "bg-gray-500 hover:bg-gray-600 text-white"}`}
                   >
                     {isEditing ? <FaSave /> : <FaEdit />}
-                    {isEditing ? 'Save' : 'Edit'}
+                    {isEditing ? "Save" : "Edit"}
                   </button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -544,7 +671,9 @@ area:hover {
                       <input
                         type="text"
                         value={editableCoords.centerX}
-                        onChange={(e) => handleInputChange('centerX', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("centerX", e.target.value)
+                        }
                         className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     ) : (
@@ -553,7 +682,7 @@ area:hover {
                       </div>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Center Y
@@ -562,7 +691,9 @@ area:hover {
                       <input
                         type="text"
                         value={editableCoords.centerY}
-                        onChange={(e) => handleInputChange('centerY', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("centerY", e.target.value)
+                        }
                         className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     ) : (
@@ -571,7 +702,7 @@ area:hover {
                       </div>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Radius
@@ -580,7 +711,9 @@ area:hover {
                       <input
                         type="text"
                         value={editableCoords.radius}
-                        onChange={(e) => handleInputChange('radius', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("radius", e.target.value)
+                        }
                         className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     ) : (
@@ -590,7 +723,7 @@ area:hover {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     <span className="font-medium">Coordinates:</span>
@@ -598,12 +731,14 @@ area:hover {
                       {getCurrentCoordinates()}
                     </code>
                   </div>
-                  
-                  <button 
+
+                  <button
                     className="bg-blue-500 text-white px-3 py-1 rounded text-sm flex items-center gap-1 hover:bg-blue-600"
-                    onClick={() => copyToClipboard(getCurrentCoordinates(), 'coords')}
+                    onClick={() =>
+                      copyToClipboard(getCurrentCoordinates(), "coords")
+                    }
                   >
-                    {copied === 'coords' ? (
+                    {copied === "coords" ? (
                       <>
                         <FaCheck /> Copied!
                       </>
@@ -630,7 +765,9 @@ area:hover {
               <FaImage className="text-blue-500" />
               {example.title}
             </h2>
-            <FaChevronDown className={`transition-transform ${expandedSections[example.id] ? "rotate-180" : ""}`} />
+            <FaChevronDown
+              className={`transition-transform ${expandedSections[example.id] ? "rotate-180" : ""}`}
+            />
           </button>
 
           {expandedSections[example.id] && (
@@ -643,62 +780,64 @@ area:hover {
               </div>
               <div className="p-4">
                 {renderCodeExample(example.html, example.css, example.title)}
-                
+
                 <div className="mt-6">
-                  <h4 className="text-sm font-medium mb-3 px-2">Live Preview</h4>
+                  <h4 className="text-sm font-medium mb-3 px-2">
+                    Live Preview
+                  </h4>
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900 relative">
                     {example.id === "solarSystem" && (
                       <div className="relative">
-                        <img
+                        <Image
                           src="/images/html/Solar-system.png"
                           alt="Solar system diagram"
                           useMap="#solarsystem"
-                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? 'cursor-crosshair' : 'cursor-default'}`}
-                          width="800"
-                          height="600"
-                          ref={imgRef}
+                          width={800}
+                          height={600}
                           onClick={handleImageClick}
+                          ref={imgRef}
+                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? "cursor-crosshair" : "cursor-default"}`}
                         />
-                        
+
                         {/* Render clickable areas */}
-                        {clickableAreas.solarSystem.map((area) => 
-                          renderClickableArea(area, 800, 600)
+                        {clickableAreas.solarSystem.map((area) =>
+                          renderClickableArea(area)
                         )}
                       </div>
                     )}
-                    
+
                     {example.id === "computerParts" && (
                       <div className="relative">
-                        <img
+                        <Image
                           src="/images/html/ComputerParts.png"
                           alt="Computer parts diagram"
                           useMap="#computerparts"
-                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? 'cursor-crosshair' : 'cursor-default'}`}
+                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? "cursor-crosshair" : "cursor-default"}`}
                           width="600"
                           height="500"
                         />
-                        
+
                         {/* Render clickable areas */}
                         {clickableAreas.computerParts.map((area) =>
-                          renderClickableArea(area, 600, 500)
+                          renderClickableArea(area)
                         )}
                       </div>
                     )}
 
                     {example.id === "smartphone" && (
                       <div className="relative">
-                        <img
+                        <Image
                           src="/images/html/Smartphone.png"
                           alt="Smartphone diagram"
                           useMap="#smartphone"
-                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? 'cursor-crosshair' : 'cursor-default'}`}
+                          className={`border-2 border-white rounded-lg w-full h-auto ${isMapping && !isEditing ? "cursor-crosshair" : "cursor-default"}`}
                           width="300"
                           height="600"
                         />
 
                         {/* Render clickable areas */}
                         {clickableAreas.smartphone.map((area) =>
-                          renderClickableArea(area, 300, 600)
+                          renderClickableArea(area)
                         )}
                       </div>
                     )}
@@ -708,7 +847,25 @@ area:hover {
             </div>
           )}
         </section>
+        
       ))}
+
+        {/* Navigation Footer */}
+      <section className="flex justify-between items-center px-4 py-6 border-t border-gray-200 dark:border-gray-700">
+        <Link
+          href="/html/images"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded shadow"
+        >
+          &lt; Previous
+        </Link>
+
+        <Link
+          href="/html/favicon"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded shadow"
+        >
+          Next &gt;
+        </Link>
+      </section>
     </div>
   );
 }

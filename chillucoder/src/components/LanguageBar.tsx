@@ -5,7 +5,6 @@ import {
   FaCss3Alt,
   FaJs,
   FaPython,
-  FaDatabase,
   FaPhp,
   FaJava,
   FaGitAlt,
@@ -30,7 +29,6 @@ import {
   SiMysql,
   SiOpenai,
 } from "react-icons/si";
-import { DiSqllite, DiJavascript } from "react-icons/di";
 import { TbSql } from "react-icons/tb";
 import { BsTerminal } from "react-icons/bs";
 import { AiOutlineDatabase } from "react-icons/ai";

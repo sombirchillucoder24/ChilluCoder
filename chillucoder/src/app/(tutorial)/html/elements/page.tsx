@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCode, FaTags, FaInfoCircle, FaExternalLinkAlt, FaLaptopCode, FaLightbulb, FaLayerGroup, FaQuestionCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaCode, FaTags, FaQuestionCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
@@ -139,7 +139,7 @@ export default function HTMLBasicsPage() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="">
       {/* Enhanced Header with Learning Progress */}
       <header className="mb-8 relative">
         <div className="flex items-center justify-between mb-2">

@@ -280,33 +280,33 @@ const handleOpenEditor = () => {
     }
   ];
 
-  const globalAttributes = [
-    { 
-      name: "data-*", 
-      description: "Custom data attributes for JavaScript",
-      example: `<div data-user-id="123"></div>`
-    },
-    { 
-      name: "aria-*", 
-      description: "Accessibility attributes",
-      example: `<button aria-label="Close">X</button>`
-    },
-    { 
-      name: "hidden", 
-      description: "Hides element from display",
-      example: `<div hidden>Not visible</div>`
-    },
-    { 
-      name: "tabindex", 
-      description: "Controls keyboard navigation",
-      example: `<div tabindex="0">Focusable</div>`
-    },
-    { 
-      name: "contenteditable", 
-      description: "Makes element editable",
-      example: `<div contenteditable="true">Edit me</div>`
-    }
-  ];
+  // const globalAttributes = [
+  //   { 
+  //     name: "data-*", 
+  //     description: "Custom data attributes for JavaScript",
+  //     example: `<div data-user-id="123"></div>`
+  //   },
+  //   { 
+  //     name: "aria-*", 
+  //     description: "Accessibility attributes",
+  //     example: `<button aria-label="Close">X</button>`
+  //   },
+  //   { 
+  //     name: "hidden", 
+  //     description: "Hides element from display",
+  //     example: `<div hidden>Not visible</div>`
+  //   },
+  //   { 
+  //     name: "tabindex", 
+  //     description: "Controls keyboard navigation",
+  //     example: `<div tabindex="0">Focusable</div>`
+  //   },
+  //   { 
+  //     name: "contenteditable", 
+  //     description: "Makes element editable",
+  //     example: `<div contenteditable="true">Edit me</div>`
+  //   }
+  // ];
 
   const elementSpecificAttributes = [
     {

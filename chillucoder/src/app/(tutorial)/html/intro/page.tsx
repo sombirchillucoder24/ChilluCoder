@@ -4,8 +4,6 @@ import {
   FaInfoCircle,
   FaHistory,
   FaCode,
-  FaGlobe,
-  FaLaptopCode,
   FaTags,
   FaCopy,
   FaLightbulb,
@@ -82,7 +80,7 @@ const copyToClipboard = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div>
       {/* Page Header */}
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500 mb-3">
@@ -155,7 +153,7 @@ const copyToClipboard = () => {
           <div className="space-y-4 text-gray-700 dark:text-gray-300">
             <p>
               HTML was created by <strong>Tim Berners-Lee</strong> in 1991 while
-              working at CERN. The first version had just 18 elements. Today's
+              working at CERN. The first version had just 18 elements. Today&apos;s
               HTML5 includes over 100 elements.
             </p>
 
@@ -286,7 +284,7 @@ const copyToClipboard = () => {
                       <td className="py-2">
                         <code>&lt;body&gt;</code>
                       </td>
-                      <td className="py-2">Defines the document's body</td>
+                      <td className="py-2">Defines the document&apos;s body</td>
                     </tr>
                     <tr>
                       <td className="py-2">
@@ -426,7 +424,7 @@ const copyToClipboard = () => {
                 Self-Closing Tags
               </h3>
               <p className="dark:text-blue-100">
-                Some tags don't need closing tags. These are called void
+                Some tags don&apos;t need closing tags. These are called void
                 elements:
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -572,7 +570,7 @@ const copyToClipboard = () => {
                     Add a new paragraph with <code>&lt;p&gt;</code> tags
                   </li>
                   <li>
-                    Insert an image with <code>&lt;img src="..."&gt;</code>
+                    Insert an image with <code>&lt;img src=&quot;...&quot;&gt;</code>
                   </li>
                 </ul>
               </div>
@@ -586,7 +584,7 @@ const copyToClipboard = () => {
             Ready to Continue?
           </h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6">
-            Now that you understand what HTML is, let's explore how to work with
+            Now that you understand what HTML is, let&apos;s explore how to work with
             it:
           </p>
           <div className="grid sm:grid-cols-2 gap-4">

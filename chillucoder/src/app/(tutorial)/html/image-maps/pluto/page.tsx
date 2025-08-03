@@ -255,11 +255,11 @@ export default function PlutoBlog() {
         <div className="grid md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-purple-200/30 dark:border-gray-600">
             <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">Tiny but Mighty</h4>
-            <p>Pluto is smaller than Earth's Moon but has five moons of its own and a complex, active geology that rivals much larger worlds.</p>
+            <p>Pluto is smaller than Earth&apos;s Moon but has five moons of its own and a complex, active geology that rivals much larger worlds.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-purple-200/30 dark:border-gray-600">
             <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">Extreme Distance</h4>
-            <p>Sunlight takes over 5 hours to reach Pluto. From Pluto's surface, the Sun appears as just a bright star in the sky.</p>
+            <p>Sunlight takes over 5 hours to reach Pluto. From Pluto&apos;s surface, the Sun appears as just a bright star in the sky.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-purple-200/30 dark:border-gray-600">
             <h4 className="font-bold text-red-600 dark:text-red-400 mb-2">Historic Discovery</h4>
@@ -271,11 +271,11 @@ export default function PlutoBlog() {
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-purple-200/30 dark:border-gray-600">
             <h4 className="font-bold text-pink-600 dark:text-pink-400 mb-2">Double Planet</h4>
-            <p>Pluto and Charon orbit around a point in space between them - they're more like a double planet than a planet and moon.</p>
+            <p>Pluto and Charon orbit around a point in space between them - they&apos;re more like a double planet than a planet and moon.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-purple-200/30 dark:border-gray-600">
             <h4 className="font-bold text-teal-600 dark:text-teal-400 mb-2">Changing Seasons</h4>
-            <p>A person born during Pluto's winter would be 62 years old before experiencing spring - each season lasts over 60 Earth years!</p>
+            <p>A person born during Pluto&apos;s winter would be 62 years old before experiencing spring - each season lasts over 60 Earth years!</p>
           </div>
         </div>
       </div>

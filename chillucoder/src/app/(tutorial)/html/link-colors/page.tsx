@@ -1,17 +1,12 @@
 "use client";
 
 import {
-  FaLink,
-  FaExternalLinkAlt,
   FaBookmark,
   FaCopy,
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaArrowLeft,
-  FaArrowRight,
   FaInfoCircle,
-  FaCode,
   FaPalette,
   FaExpand,
   FaCompress,
@@ -222,7 +217,7 @@ a:active {
   };
 
   return (
-    <main className="max-w-6xl mx-auto p-4 md:p-6">
+    <main>
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 mb-2">
           Mastering HTML Link Colors: A Comprehensive Guide
@@ -263,7 +258,7 @@ a:active {
         <div className="space-y-4 text-gray-700 dark:text-gray-300">
           <p>
             In web design, <strong>link colors serve as visual signposts</strong>, guiding users through your content. 
-            Properly styled links don't just look good—they significantly impact usability, accessibility, 
+            Properly styled links don&apos;t just look good—they significantly impact usability, accessibility, 
             and conversion rates. This guide explores professional techniques for implementing effective 
             link styling that balances aesthetic appeal with functional requirements.
           </p>
@@ -291,7 +286,7 @@ a:active {
           </section>
 
           <p>
-            Throughout this guide, we'll explore both fundamental concepts and advanced techniques, 
+            Throughout this guide, we&apos;ll explore both fundamental concepts and advanced techniques, 
             complete with interactive examples you can test directly in our live editor.
           </p>
         </div>
@@ -361,7 +356,7 @@ a:active {
               <p className="text-gray-600 dark:text-gray-400">
                 When styling link states, follow the LVHA order: <strong>L</strong>ink, <strong>V</strong>isited,
                 <strong>H</strong>over, <strong>A</strong>ctive. This ensures proper cascade of styles. 
-                A common mnemonic is "LoVe HAte".
+                A common mnemonic is &quot;LoVe HAte&quot;.
               </p>
               <div className="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm">
                 <code>a:link → a:visited → a:hover → a:active</code>

@@ -263,7 +263,7 @@ export default function UranusBlog() {
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-cyan-200/30 dark:border-gray-600">
             <h4 className="font-bold text-teal-600 dark:text-teal-400 mb-2">Invisible Rings</h4>
-            <p>Uranus's rings are so dark they reflect only 2% of sunlight - they're nearly invisible and were only discovered in 1977.</p>
+            <p>Uranus&apos;s rings are so dark they reflect only 2% of sunlight - they&apos;re nearly invisible and were only discovered in 1977.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-cyan-200/30 dark:border-gray-600">
             <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">Literary Moons</h4>
@@ -271,11 +271,11 @@ export default function UranusBlog() {
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-cyan-200/30 dark:border-gray-600">
             <h4 className="font-bold text-green-600 dark:text-green-400 mb-2">Magnetic Mystery</h4>
-            <p>Uranus's magnetic field is tilted 59° from its rotation axis and offset from the center - completely unlike any other planet's magnetic field.</p>
+            <p>Uranus&apos;s magnetic field is tilted 59° from its rotation axis and offset from the center - completely unlike any other planet&apos;s magnetic field.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-cyan-200/30 dark:border-gray-600">
             <h4 className="font-bold text-indigo-600 dark:text-indigo-400 mb-2">Ice Giant</h4>
-            <p>Despite being called an ice giant, Uranus's interior reaches 5,000°C - hotter than the Sun's surface, but still considered "icy" by planetary standards.</p>
+            <p>Despite being called an ice giant, Uranus&apos;s interior reaches 5,000°C - hotter than the Sun&apos;s surface, but still considered &quot;icy&quot; by planetary standards.</p>
           </div>
         </div>
       </div>
@@ -283,8 +283,8 @@ export default function UranusBlog() {
       <div className="mt-12 bg-gradient-to-br from-blue-100/60 to-cyan-100/60 dark:from-gray-800/60 dark:to-blue-800/30 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-blue-200/40 dark:border-gray-600">
         <h3 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">The Voyager 2 Legacy</h3>
         <div className="text-center space-y-4 text-gray-700 dark:text-gray-300">
-          <p className="text-lg">Voyager 2's 1986 flyby remains our only close-up look at Uranus, providing nearly all our detailed knowledge of this ice giant.</p>
-          <p>The spacecraft discovered 10 new moons, confirmed the ring system, and revealed the planet's unusual magnetic field configuration.</p>
+          <p className="text-lg">Voyager 2&apos;s 1986 flyby remains our only close-up look at Uranus, providing nearly all our detailed knowledge of this ice giant.</p>
+          <p>The spacecraft discovered 10 new moons, confirmed the ring system, and revealed the planet&apos;s unusual magnetic field configuration.</p>
           <p className="font-semibold text-cyan-600 dark:text-cyan-400">Despite being visited only once, Uranus continues to surprise us with its unique sideways orientation and extreme seasonal changes.</p>
         </div>
       </div>
@@ -298,7 +298,7 @@ export default function UranusBlog() {
           </div>
           <div className="text-center">
             <h4 className="text-xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">Spring/Fall Equinox</h4>
-            <p className="text-gray-700 dark:text-gray-300">The Sun shines equally on both hemispheres, and Uranus appears to spin "normally" like other planets. This occurs only twice during the 84-year orbital period.</p>
+            <p className="text-gray-700 dark:text-gray-300">The Sun shines equally on both hemispheres, and Uranus appears to spin &quot;normally&quot; like other planets. This occurs only twice during the 84-year orbital period.</p>
           </div>
         </div>
       </div>

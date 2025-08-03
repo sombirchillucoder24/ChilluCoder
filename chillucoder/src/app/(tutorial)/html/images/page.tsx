@@ -2,17 +2,12 @@
 
 import {
   FaImage,
-  FaCamera,
-  FaPalette,
   FaMobileAlt,
   FaGlobe,
   FaCopy,
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaArrowLeft,
-  FaArrowRight,
-  FaInfoCircle,
   FaCode,
   FaHashtag,
 } from "react-icons/fa";
@@ -20,19 +15,20 @@ import { useState, useEffect } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // Using Unsplash images for reliable responsive examples
 const IMAGE_PATHS = {
   landscape: "/images/html/ABeautifulLandscape.png",
   portrait: "/images/html/APortraitImage.png",
   product: "/images/html/ProductShot.png",
-  abstract: "/images/AbstractArt.png",
+  abstract: "/images/html/AbstractArt.png",
   logo: "/images/html/CompanyLogo.png",
-  small: "/images/html/SmallImage.png ",
-  medium: "/images/html/MediumImage.png ",
-  large: "/images/html/LargeImage.png ",
-  desktop: "/images/html/DesktopVersion.png ",
-  mobile: "/images/html/MobileVersion.png ",
+  small: "/images/html/SmallImage.png",
+  medium: "/images/html/MediumImage.png",
+  large: "/images/html/LargeImage.png",
+  desktop: "/images/html/DesktopVersion.png",
+  mobile: "/images/html/MobileVersion.png",
 };
 
 export default function HTMLImagesPage() {
@@ -83,8 +79,8 @@ export default function HTMLImagesPage() {
   const renderCodeExample = (
     htmlCode: string,
     cssCode: string,
-    jsCode = "",
-    name: string
+    name: string,
+    jsCode?: string
   ) => {
     return (
       <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mb-6">
@@ -129,15 +125,15 @@ export default function HTMLImagesPage() {
               activeTab === "html"
                 ? htmlCode
                 : activeTab === "css"
-                  ? cssCode
-                  : jsCode
+                ? cssCode
+                : jsCode || ""
             }
             language={
               activeTab === "html"
                 ? "html"
                 : activeTab === "css"
-                  ? "css"
-                  : "javascript"
+                ? "css"
+                : "javascript"
             }
             padding={12}
             style={{
@@ -155,7 +151,9 @@ export default function HTMLImagesPage() {
           <button
             onClick={() =>
               handleOpenEditor(
-                `${htmlCode}\n\n<style>${cssCode}</style>\n\n<script>${jsCode}</script>`
+                `${htmlCode}\n\n<style>${cssCode}</style>${
+                  jsCode ? `\n\n<script>${jsCode}</script>` : ""
+                }`
               )
             }
             className="text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
@@ -168,8 +166,8 @@ export default function HTMLImagesPage() {
                 activeTab === "html"
                   ? htmlCode
                   : activeTab === "css"
-                    ? cssCode
-                    : jsCode,
+                  ? cssCode
+                  : jsCode || "",
                 name
               )
             }
@@ -490,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
+    <div>
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 mb-2">
           HTML Images Guide
@@ -529,20 +527,26 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <img 
+            <Image 
               src={IMAGE_PATHS.landscape} 
               alt="Landscape example" 
+              width={300}
+              height={200}
               className="rounded-lg h-full object-cover"
             />
             <div className="grid gap-2">
-              <img 
+              <Image 
                 src={IMAGE_PATHS.portrait} 
                 alt="Portrait example" 
+                width={150}
+                height={150}
                 className="rounded-lg h-32 object-cover"
               />
-              <img 
+              <Image 
                 src={IMAGE_PATHS.product} 
                 alt="Product example" 
+                width={150}
+                height={150}
                 className="rounded-lg h-32 object-cover"
               />
             </div>
@@ -580,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   </p>
                 </div>
                 <div className="p-4">
-                  {renderCodeExample(item.html, item.css, "", item.title)}
+                  {renderCodeExample(item.html, item.css, item.title)}
                   <div className="mt-2 text-xs text-green-600 dark:text-green-400">
                     <strong>Usage:</strong> {item.usage}
                   </div>
@@ -646,7 +650,6 @@ document.addEventListener("DOMContentLoaded", function() {
                   {renderCodeExample(
                     example.html,
                     example.css,
-                    "",
                     example.title
                   )}
                   <div className="mt-2 text-xs text-green-600 dark:text-green-400">
@@ -700,8 +703,8 @@ document.addEventListener("DOMContentLoaded", function() {
                   {renderCodeExample(
                     practice.html,
                     practice.css,
-                    practice.js,
-                    practice.title
+                    practice.title,
+                    practice.js
                   )}
                   <div className="mt-2 text-xs text-blue-600 dark:text-blue-400">
                     <strong>Why this matters:</strong> {practice.explanation}
@@ -751,7 +754,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   </p>
                 </div>
                 <div className="p-4">
-                  {renderCodeExample(item.html, item.css, item.js, item.title)}
+                  {renderCodeExample(item.html, item.css, item.title)}
                   <div className="mt-2 text-xs text-green-600 dark:text-green-400">
                     <strong>Use Case:</strong> {item.useCase}
                   </div>
@@ -917,7 +920,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </section>
 
       {/* Navigation Footer */}
-      <section className="flex justify-between items-center px-4 py-6 border-t">
+      <section className="flex justify-between items-center px-4 py-6 border-t border-gray-200 dark:border-gray-700">
         <Link
           href="/html/link-bookmarks"
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded shadow"

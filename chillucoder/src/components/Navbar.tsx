@@ -3,14 +3,16 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false) // Track when component is mounted
   const pathname = usePathname()
 
   useEffect(() => {
+    setMounted(true) // Component is now mounted on client
     const handleScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -23,26 +25,25 @@ export function Navbar() {
     { name: 'Exercises', path: '/exercises' },
   ]
 
+  // Only apply scroll effects after mounting
+  const navbarClasses = [
+    'sticky top-0 z-50 transition-all duration-300',
+    mounted && scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-2' : 'bg-white py-3'
+  ].filter(Boolean).join(' ')
+
   return (
-    <div
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-2' : 'bg-white py-3'
-      }`}
-    >
+    <div className={navbarClasses}>
       <div className="container mx-auto px-4 flex justify-between items-center">
-        {/* Logo with subtle hover effect */}
+        {/* Logo - Removed initial motion to prevent hydration issues */}
         <Link href="/" className="group">
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className="flex items-center gap-1"
-          >
+          <div className="flex items-center gap-1">
             <div className="w-8 h-8 bg-[#04AA6D] rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">ch</span>
             </div>
             <span className="text-xl font-bold text-gray-800 group-hover:text-[#04AA6D] transition-colors">
               chillucoder
             </span>
-          </motion.div>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -56,7 +57,7 @@ export function Navbar() {
               }`}
             >
               {item.name}
-              {pathname === item.path && (
+              {pathname === item.path && mounted && (
                 <motion.div 
                   className="absolute bottom-0 left-0 w-full h-0.5 bg-[#04AA6D]"
                   layoutId="underline"
@@ -65,13 +66,16 @@ export function Navbar() {
               )}
             </Link>
           ))}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-[#04AA6D] text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition-all"
-          >
-            Get Started
-          </motion.button>
+          {mounted && (
+            <motion.button
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-[#04AA6D] text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition-all"
+            >
+              Get Started
+            </motion.button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -99,35 +103,37 @@ export function Navbar() {
         </motion.button>
       </div>
 
-      {/* Mobile Navigation */}
-      {open && (
-        <motion.div 
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          className="md:hidden bg-white border-t border-gray-100"
-        >
-          <div className="px-4 py-2 space-y-2">
-            {navItems.map((item) => (
-              <Link 
-                key={item.path} 
-                href={item.path}
-                onClick={() => setOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === item.path 
-                    ? 'bg-[#04AA6D]/10 text-[#04AA6D]' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <button className="w-full bg-[#04AA6D] text-white px-4 py-3 rounded-lg text-sm font-medium mt-2">
-              Get Started
-            </button>
-          </div>
-        </motion.div>
-      )}
+      {/* Mobile Navigation - Wrapped in AnimatePresence */}
+      <AnimatePresence>
+        {open && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+          >
+            <div className="px-4 py-2 space-y-2">
+              {navItems.map((item) => (
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  onClick={() => setOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === item.path 
+                      ? 'bg-[#04AA6D]/10 text-[#04AA6D]' 
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              <button className="w-full bg-[#04AA6D] text-white px-4 py-3 rounded-lg text-sm font-medium mt-2">
+                Get Started
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

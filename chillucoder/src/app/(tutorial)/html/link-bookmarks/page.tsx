@@ -2,17 +2,13 @@
 
 import {
   FaLink,
-  FaBookmark,
   FaCopy,
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaArrowLeft,
-  FaArrowRight,
   FaInfoCircle,
   FaCode,
   FaHashtag,
-  FaArrowUp,
   FaMousePointer,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
@@ -358,7 +354,7 @@ export default function HTMLLinkBookmarksPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
+    <div>
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 mb-2">
           HTML Link Bookmarks Guide
@@ -385,13 +381,13 @@ export default function HTMLLinkBookmarksPage() {
           <p>
             HTML bookmarks (also called fragment identifiers or anchor links)
             allow you to create links that jump to specific sections of a
-            webpage. They're essential for:
+            webpage. They&apos;re essential for:
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li>Creating table of contents navigation</li>
             <li>Linking to specific content sections</li>
             <li>Improving user experience on long pages</li>
-            <li>Creating "Back to top" functionality</li>
+            <li>Creating &quot;Back to top&quot; functionality</li>
             <li>Building single-page application navigation</li>
           </ul>
           <p>

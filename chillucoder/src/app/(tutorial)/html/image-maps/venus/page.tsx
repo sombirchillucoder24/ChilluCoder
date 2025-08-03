@@ -152,7 +152,7 @@ export default function VenusBlog() {
     <div className="max-w-5xl mx-auto p-6 bg-gradient-to-b from-orange-50/30 to-yellow-50/30 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <header className="text-center mb-12">
         <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-4">
-          Venus: Earth's Mysterious Twin
+          Venus: Earth&apos;s Mysterious Twin
         </h1>
         <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
           Unveiling the secrets of our planetary neighbor - the hottest, most volcanic, and most mysterious world in our solar system
@@ -231,7 +231,7 @@ export default function VenusBlog() {
           </div>
           <div className="bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm p-6 rounded-xl text-center shadow-md border border-orange-200/30 dark:border-gray-600">
             <div className="text-3xl font-bold text-purple-500 mb-2">92x</div>
-            <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">Earth's Pressure</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">Earth&apos;s Pressure</div>
           </div>
           <div className="bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm p-6 rounded-xl text-center shadow-md border border-orange-200/30 dark:border-gray-600">
             <div className="text-3xl font-bold text-orange-500 mb-2">96.5%</div>
@@ -257,7 +257,7 @@ export default function VenusBlog() {
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-orange-200/30 dark:border-gray-600">
             <h4 className="font-bold text-red-600 dark:text-red-400 mb-2">Hellish Surface</h4>
-            <p>Venus's surface conditions are so extreme they would crush, melt, and dissolve a human in seconds.</p>
+            <p>Venus&apos;s surface conditions are so extreme they would crush, melt, and dissolve a human in seconds.</p>
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-orange-200/30 dark:border-gray-600">
             <h4 className="font-bold text-yellow-600 dark:text-yellow-400 mb-2">Bright Beauty</h4>
@@ -265,7 +265,7 @@ export default function VenusBlog() {
           </div>
           <div className="bg-white/50 dark:bg-gray-800/50 p-6 rounded-xl border border-orange-200/30 dark:border-gray-600">
             <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">Time Warp</h4>
-            <p>If you lived on Venus, you'd experience only 1.92 Venus days per Venus year - time moves strangely there!</p>
+            <p>If you lived on Venus, you&apos;d experience only 1.92 Venus days per Venus year - time moves strangely there!</p>
           </div>
         </div>
       </div>

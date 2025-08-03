@@ -48,7 +48,7 @@ export default function SunFactsBlog() {
             Why the Sun Matters
           </h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">
-            The Sun is the ultimate source of energy for Earth's climate system and is essential for life as we know it. Without its heat and light, Earth would be a frozen, lifeless rock.
+            The Sun is the ultimate source of energy for Earth&apos;s climate system and is essential for life as we know it. Without its heat and light, Earth would be a frozen, lifeless rock.
           </p>
           <ul className="space-y-3 text-gray-600 dark:text-gray-400">
             <li className="flex items-start">

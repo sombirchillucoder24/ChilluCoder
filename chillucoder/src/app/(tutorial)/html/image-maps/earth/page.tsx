@@ -171,11 +171,11 @@ export default function EarthBlog() {
             </div>
           ))}
         </div>
-      )}
+      )} 
 
       {/* Earth Visualization */}
       <div className="mt-12 bg-gradient-to-r from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-xl">
-        <h2 className="text-2xl font-bold text-center mb-8">Earth's Layers Visualization</h2>
+        <h2 className="text-2xl font-bold text-center mb-8">Earth&apos;s Layers Visualization</h2>
         <div className="max-w-md mx-auto relative">
           <div className="relative w-full aspect-square">
             {/* Crust */}
@@ -215,7 +215,7 @@ export default function EarthBlog() {
           <div className="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
             <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-2">Water World</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              If Earth's surface were perfectly smooth, water would cover it uniformly to a depth of 2.7 km.
+              If Earth&apos;s surface were perfectly smooth, water would cover it uniformly to a depth of 2.7 km.
             </p>
           </div>
           <div className="p-4 bg-green-50 dark:bg-gray-700 rounded-lg">
@@ -227,7 +227,7 @@ export default function EarthBlog() {
           <div className="p-4 bg-amber-50 dark:bg-gray-700 rounded-lg">
             <h3 className="font-bold text-amber-600 dark:text-amber-400 mb-2">Dense Core</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Earth's inner core is as hot as the Sun's surface but remains solid due to extreme pressure.
+              Earth&apos;s inner core is as hot as the Sun&apos;s surface but remains solid due to extreme pressure.
             </p>
           </div>
           <div className="p-4 bg-purple-50 dark:bg-gray-700 rounded-lg">

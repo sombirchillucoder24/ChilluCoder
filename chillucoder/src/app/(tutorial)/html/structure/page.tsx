@@ -102,7 +102,7 @@ export default function HTMLStructurePage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div>
       {/* Hero Section */}
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-emerald-500 mb-4">

@@ -47,9 +47,9 @@ export const sidebarData = {
     {
       group: "HTML Lists",
       items: [
-        { title: "Ordered List", href: "/html/ol" },
-        { title: "Unordered List", href: "/html/ul" },
-        { title: "Description List", href: "/html/dl" },
+        { title: "Ordered List", href: "/html/ordered-list" },
+        { title: "Unordered List", href: "/html/unordered-list" },
+        { title: "Description List", href: "/html/description-list" },
       ],
     },
     {

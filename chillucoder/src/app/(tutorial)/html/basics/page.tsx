@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCode, FaTags, FaInfoCircle, FaExternalLinkAlt, FaLaptopCode, FaLightbulb } from "react-icons/fa";
+import { FaCode, FaTags, FaInfoCircle, FaLaptopCode, FaLightbulb } from "react-icons/fa";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 
@@ -125,7 +125,7 @@ const exampleCode = (code: string) => (
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="">
       {/* Page Header */}
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500 mb-3">
@@ -186,8 +186,8 @@ const exampleCode = (code: string) => (
           <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
             <h3 className="font-bold mb-2 dark:text-blue-200">Critical Components:</h3>
             <ul className="list-disc pl-5 space-y-1 dark:text-blue-100">
-              <li><code>lang="en"</code> - Specifies language for accessibility</li>
-              <li><code>charset="UTF-8"</code> - Ensures proper character encoding</li>
+              <li><code>lang=&quot;en&quot;</code> - Specifies language for accessibility</li>
+              <li><code>charset=&quot;UTF-8&quot;</code> - Ensures proper character encoding</li>
               <li>Viewport meta tag - Makes site mobile-friendly</li>
               <li>Semantic structure - Helps search engines understand content</li>
             </ul>
@@ -205,7 +205,7 @@ const exampleCode = (code: string) => (
         </div>
         <div className="space-y-4 text-gray-700 dark:text-gray-300">
           <p>
-            These are the building blocks you'll use in nearly every project:
+            These are the building blocks you&apos;ll use in nearly every project:
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -339,7 +339,7 @@ const exampleCode = (code: string) => (
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Apply what you've learned in our interactive playground:
+              Apply what you&apos;ve learned in our interactive playground:
             </p>
             <ul className="list-disc pl-5 space-y-2 mb-6 text-gray-700 dark:text-gray-300">
               <li>Experiment with all basic tags</li>

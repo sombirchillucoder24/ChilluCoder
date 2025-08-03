@@ -8,8 +8,6 @@ import {
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaArrowLeft,
-  FaArrowRight,
 } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
@@ -485,7 +483,7 @@ aria-describedby="w3c-def">W3C</abbr> sets web standards.</p>
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6">
+    <div>
       <header className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 mb-2">
           Advanced HTML Quotation Techniques
@@ -731,7 +729,7 @@ aria-describedby="w3c-def">W3C</abbr> sets web standards.</p>
                     Testing Your Markup
                   </h4>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
-                    Use Google's{" "}
+                    Use Google&apos;s{" "}
                     <a
                       href="https://search.google.com/test/rich-results"
                       className="underline"
@@ -743,7 +741,7 @@ aria-describedby="w3c-def">W3C</abbr> sets web standards.</p>
                   </p>
                   <p className="text-xs text-yellow-600 dark:text-yellow-400">
                     Note: While Schema.org is widely supported, rich snippet
-                    display is at the search engine's discretion.
+                    display is at the search engine&apos;s discretion.
                   </p>
                 </div>
               </div>

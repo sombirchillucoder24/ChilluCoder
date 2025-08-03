@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import prettier from "prettier/standalone";
 import parserHtml from "prettier/plugins/html";
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import Link from 'next/link';
 import Swal from "sweetalert2";
 import Head from "next/head";
 
@@ -12,7 +13,7 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
   const [formatted, setFormatted] = useState("");
   const [isFormatting, setIsFormatting] = useState(false);
   const [isLiveBlinking, setIsLiveBlinking] = useState(true);
-  const [showAds, setShowAds] = useState(true);
+  // const [showAds, setShowAds] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   const defaultHTML =
@@ -110,7 +111,7 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
       setCode(pretty);
       setFormatted(pretty);
       localStorage.setItem("html-code", pretty);
-    } catch (e) {
+    } catch {
       setCode(rawCode);
       setFormatted(rawCode);
     } finally {
@@ -164,9 +165,9 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="bg-[#282A35] text-white p-4 sticky top-0 z-50 text-center">
-        <a href="/" className="text-xl font-bold">
+        <Link href="/" className="text-xl font-bold">
           Another compilor (Click here!)
-        </a>
+        </Link>
       </div>
 
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 to-blue-50 overflow-auto">
@@ -221,9 +222,7 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          <div
-            className={`${showAds && !isMobile ? "w-3/4" : "w-full"} flex flex-col`}
-          >
+          <div className={`${!isMobile ? "w-3/4" : "w-full"} flex flex-col`}>
             <div className="flex-1 overflow-auto p-4 bg-white max-h-150">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-purple-700 font-semibold">🛠️ Editor</h2>

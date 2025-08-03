@@ -38,9 +38,9 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-green-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Learn to Code</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">Learn With ChilluCoder</h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            With the world's largest web developer site. Start coding today!
+            With the world&apos;s largest web developer site. Start coding today!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a 
@@ -148,7 +148,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h2 className="text-2xl font-bold">chillucoder<span className="text-green-400">.com</span></h2>
-              <p className="text-gray-400 mt-2">The world's largest web developer site</p>
+              <p className="text-gray-400 mt-2">The world&apos;s largest web developer site</p>
             </div>
             <div className="flex space-x-6">
               <a href="#" className="hover:text-green-400">About</a>
