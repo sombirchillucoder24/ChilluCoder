@@ -96,13 +96,13 @@ export const sidebarData = {
         { title: "HTML5 Structural Tags", href: "/html/html5-structure" },
       ],
     },
-    {
-      group: "HTML Graphics",
-      items: [
-        { title: "Canvas", href: "/html/canvas" },
-        { title: "SVG", href: "/html/svg" },
-      ],
-    },
+    // {
+    //   group: "HTML Graphics",
+    //   items: [
+    //     { title: "Canvas", href: "/html/canvas" },
+    //     { title: "SVG", href: "/html/svg" },
+    //   ],
+    // },
     {
       group: "HTML Advanced",
       items: [

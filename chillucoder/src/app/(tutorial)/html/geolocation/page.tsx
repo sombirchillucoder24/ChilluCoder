@@ -7,63 +7,66 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function HTMLGeolocationTutorial() {
-    const router = useRouter();
-    const [copied, setCopied] = useState<string | null>(null);
-    const [expandedSections, setExpandedSections] = useState<
-        Record<string, boolean>
-    >({
-        basics: true,
-        examples: true,
-        advanced: true,
-    });
+  const router = useRouter();
+  const [copied, setCopied] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({
+    basics: true,
+    examples: true,
+    advanced: true,
+  });
 
-    const toggleSection = (section: string) => {
-        setExpandedSections((prev) => ({
-            ...prev,
-            [section]: !prev[section],
-        }));
-    };
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
-    const copyToClipboard = (text: string, name: string) => {
-        navigator.clipboard.writeText(text);
-        setCopied(name);
-        setTimeout(() => setCopied(null), 2000);
-    };
+  const copyToClipboard = (text: string, name: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(name);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
-    const handleOpenEditor = (code: string) => {
-        try {
-            localStorage.setItem("html-code", code);
-            router.push("/compilers/html-editor");
-        } catch (error) {
-            console.error("Error saving to localStorage:", error);
-            alert("Could not open editor. Please try again.");
-        }
-    };
+  const handleOpenEditor = (code: string) => {
+    try {
+      localStorage.setItem("html-code", code);
+      router.push("/compilers/html-editor");
+    } catch (error) {
+      console.error("Error saving to localStorage:", error);
+      alert("Could not open editor. Please try again.");
+    }
+  };
 
-    return (
-        <div className="container mx-auto px-4 py-8">
-            <header className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2">
-                    HTML Geolocation API Tutorial
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                    Learn how to access a user's geographical location using the browser's Geolocation API
-                </p>
-            </header>
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <header className="mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2">
+          HTML Geolocation API Tutorial
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          Learn how to access a user's geographical location using the browser's
+          Geolocation API
+        </p>
+      </header>
 
-            {/* Introduction */}
-            <section className="mb-8 bg-blue-50 dark:bg-gray-800 p-6 rounded-lg border border-blue-200 dark:border-gray-700">
-                <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">
-                    Introduction to Geolocation
-                </h2>
-                <p className="mb-4 text-gray-700 dark:text-gray-300">
-                    The Geolocation API allows web applications to access the geographical location of the user (with their permission). This can be used to provide location-aware content, maps, and more.
-                </p>
+      {/* Introduction */}
+      <section className="mb-8 bg-blue-50 dark:bg-gray-800 p-6 rounded-lg border border-blue-200 dark:border-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">
+          Introduction to Geolocation
+        </h2>
+        <p className="mb-4 text-gray-700 dark:text-gray-300">
+          The Geolocation API allows web applications to access the geographical
+          location of the user (with their permission). This can be used to
+          provide location-aware content, maps, and more.
+        </p>
 
-                <div className="bg-white dark:bg-gray-900 p-4 rounded-lg mb-4">
-                    <h3 className="font-bold mb-2">Basic Geolocation Example:</h3>
-                    <CodeEditor
-                        value={`if ("geolocation" in navigator) {
+        <div className="bg-white dark:bg-gray-900 p-4 rounded-lg mb-4">
+          <h3 className="font-bold mb-2">Basic Geolocation Example:</h3>
+          <CodeEditor
+            value={`if ("geolocation" in navigator) {
   navigator.geolocation.getCurrentPosition((position) => {
     console.log("Latitude:", position.coords.latitude);
     console.log("Longitude:", position.coords.longitude);
@@ -71,38 +74,45 @@ export default function HTMLGeolocationTutorial() {
 } else {
   console.log("Geolocation is not supported by this browser.");
 }`}
-                        language="javascript"
-                        style={{
-                            fontSize: 14,
-                            backgroundColor: "#f8fafc",
-                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                        }}
-                        className="rounded-lg"
-                    />
-                    <div className="flex gap-2 mt-2">
-                        <button
-                            onClick={() => copyToClipboard(`if ("geolocation" in navigator) {
+            language="javascript"
+            style={{
+              fontSize: 14,
+              backgroundColor: "#f8fafc",
+              fontFamily:
+                "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            }}
+            className="rounded-lg"
+          />
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() =>
+                copyToClipboard(
+                  `if ("geolocation" in navigator) {
   navigator.geolocation.getCurrentPosition((position) => {
     console.log("Latitude:", position.coords.latitude);
     console.log("Longitude:", position.coords.longitude);
   });
 } else {
   console.log("Geolocation is not supported by this browser.");
-}`, "basic geolocation")}
-                            className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                        >
-                            {copied === "basic geolocation" ? (
-                                <>
-                                    <FaCheck className="text-green-500" /> Copied!
-                                </>
-                            ) : (
-                                <>
-                                    <FaCopy /> Copy
-                                </>
-                            )}
-                        </button>
-                        <button
-                            onClick={() => handleOpenEditor(`<!DOCTYPE html>
+}`,
+                  "basic geolocation"
+                )
+              }
+              className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              {copied === "basic geolocation" ? (
+                <>
+                  <FaCheck className="text-green-500" /> Copied!
+                </>
+              ) : (
+                <>
+                  <FaCopy /> Copy
+                </>
+              )}
+            </button>
+            <button
+              onClick={() =>
+                handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Basic Geolocation Example</title>
@@ -129,44 +139,48 @@ export default function HTMLGeolocationTutorial() {
     }
   </script>
 </body>
-</html>`)}
-                            className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                        >
-                            <FaPlay size={12} /> Try it
-                        </button>
-                    </div>
-                </div>
-            </section>
+</html>`)
+              }
+              className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+            >
+              <FaPlay size={12} /> Try it
+            </button>
+          </div>
+        </div>
+      </section>
 
-            {/* Basic Examples */}
-            <section className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                        Basic Geolocation Examples
-                    </h2>
-                    <button
-                        onClick={() => toggleSection("basics")}
-                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                    >
-                        <FaChevronDown
-                            className={`transition-transform ${expandedSections.basics ? "rotate-180" : ""}`}
-                        />
-                    </button>
-                </div>
+      {/* Basic Examples */}
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Basic Geolocation Examples
+          </h2>
+          <button
+            onClick={() => toggleSection("basics")}
+            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            <FaChevronDown
+              className={`transition-transform ${expandedSections.basics ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
 
-                {expandedSections.basics && (
-                    <div className="space-y-6">
-                        {/* Example 1: Get Current Position */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">1. Get Current Position</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    The most common use of the Geolocation API is to get the user's current position.
-                                </p>
+        {expandedSections.basics && (
+          <div className="space-y-6">
+            {/* Example 1: Get Current Position */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">
+                  1. Get Current Position
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  The most common use of the Geolocation API is to get the
+                  user's current position.
+                </p>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`function showPosition(position) {
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`function showPosition(position) {
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
   
@@ -193,19 +207,21 @@ function getLocation() {
     alert("Geolocation is not supported by this browser.");
   }
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Get Current Position</title>
@@ -240,13 +256,16 @@ function getLocation() {
     }
   </script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`function showPosition(position) {
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `function showPosition(position) {
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
   
@@ -272,34 +291,38 @@ function getLocation() {
   } else {
     alert("Geolocation is not supported by this browser.");
   }
-}`, "get position")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "get position" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+}`,
+                        "get position"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "get position" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                        {/* Example 2: Watch Position */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">2. Watch Position</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    Use <code>watchPosition()</code> to continuously track the user's position as they move.
-                                </p>
+            {/* Example 2: Watch Position */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">2. Watch Position</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Use <code>watchPosition()</code> to continuously track the
+                  user's position as they move.
+                </p>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`let watchId = null;
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`let watchId = null;
 
 function startTracking() {
   if (navigator.geolocation) {
@@ -337,19 +360,21 @@ function stopTracking() {
     document.getElementById("tracking").innerHTML = "Tracking stopped.";
   }
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Watch Position</title>
@@ -400,13 +425,16 @@ function stopTracking() {
     }
   </script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`let watchId = null;
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `let watchId = null;
 
 function startTracking() {
   if (navigator.geolocation) {
@@ -443,34 +471,38 @@ function stopTracking() {
     watchId = null;
     document.getElementById("tracking").innerHTML = "Tracking stopped.";
   }
-}`, "watch position")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "watch position" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+}`,
+                        "watch position"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "watch position" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                        {/* Example 3: Error Handling */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">3. Error Handling</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    Proper error handling is essential for a good user experience with geolocation.
-                                </p>
+            {/* Example 3: Error Handling */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">3. Error Handling</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Proper error handling is essential for a good user experience
+                  with geolocation.
+                </p>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`function handleLocationError(error) {
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`function handleLocationError(error) {
   let errorMessage = "Unknown error occurred";
   
   switch(error.code) {
@@ -513,19 +545,21 @@ function getLocationWithErrorHandling() {
       "Geolocation is not supported by this browser.";
   }
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Geolocation Error Handling</title>
@@ -580,13 +614,16 @@ function getLocationWithErrorHandling() {
     }
   </script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`function handleLocationError(error) {
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `function handleLocationError(error) {
   let errorMessage = "Unknown error occurred";
   
   switch(error.code) {
@@ -628,55 +665,61 @@ function getLocationWithErrorHandling() {
     document.getElementById("error").innerHTML = 
       "Geolocation is not supported by this browser.";
   }
-}`, "error handling")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "error handling" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </section>
-
-            {/* Advanced Techniques */}
-            <section className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                        Advanced Geolocation Techniques
-                    </h2>
-                    <button
-                        onClick={() => toggleSection("advanced")}
-                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                    >
-                        <FaChevronDown
-                            className={`transition-transform ${expandedSections.advanced ? "rotate-180" : ""}`}
-                        />
-                    </button>
+}`,
+                        "error handling"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "error handling" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
 
-                {expandedSections.advanced && (
-                    <div className="space-y-6">
-                        {/* Example 1: Geolocation with Maps */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">1. Geolocation with Maps</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    Combine the Geolocation API with mapping libraries like Google Maps or Leaflet.
-                                </p>
+      {/* Advanced Techniques */}
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Advanced Geolocation Techniques
+          </h2>
+          <button
+            onClick={() => toggleSection("advanced")}
+            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            <FaChevronDown
+              className={`transition-transform ${expandedSections.advanced ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`function initMap() {
+        {expandedSections.advanced && (
+          <div className="space-y-6">
+            {/* Example 1: Geolocation with Maps */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">
+                  1. Geolocation with Maps
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Combine the Geolocation API with mapping libraries like Google
+                  Maps or Leaflet.
+                </p>
+
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`function initMap() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -721,19 +764,21 @@ function loadGoogleMaps() {
   script.async = true;
   document.head.appendChild(script);
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Geolocation with Google Maps</title>
@@ -785,13 +830,16 @@ function loadGoogleMaps() {
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`function initMap() {
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `function initMap() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -835,34 +883,40 @@ function loadGoogleMaps() {
   script.defer = true;
   script.async = true;
   document.head.appendChild(script);
-}`, "maps")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "maps" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+}`,
+                        "maps"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "maps" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                        {/* Example 2: Calculating Distance */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">2. Calculating Distance Between Points</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    Calculate the distance between two geographic points using the Haversine formula.
-                                </p>
+            {/* Example 2: Calculating Distance */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">
+                  2. Calculating Distance Between Points
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Calculate the distance between two geographic points using the
+                  Haversine formula.
+                </p>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`function calculateDistance(lat1, lon1, lat2, lon2) {
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Earth's radius in km
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
@@ -906,19 +960,21 @@ function showDistanceToLocation(targetLat, targetLon) {
     alert("Geolocation is not supported by this browser.");
   }
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Distance Calculator</title>
@@ -973,13 +1029,16 @@ function showDistanceToLocation(targetLat, targetLon) {
     }
   </script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`function calculateDistance(lat1, lon1, lat2, lon2) {
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Earth's radius in km
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
@@ -1022,34 +1081,40 @@ function showDistanceToLocation(targetLat, targetLon) {
   } else {
     alert("Geolocation is not supported by this browser.");
   }
-}`, "distance")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "distance" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+}`,
+                        "distance"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "distance" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                        {/* Example 3: Geolocation Permissions */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div className="p-4 bg-white dark:bg-gray-800">
-                                <h3 className="font-bold text-lg mb-2">3. Managing Permissions</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                                    Check and manage geolocation permissions for better user experience.
-                                </p>
+            {/* Example 3: Geolocation Permissions */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <h3 className="font-bold text-lg mb-2">
+                  3. Managing Permissions
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Check and manage geolocation permissions for better user
+                  experience.
+                </p>
 
-                                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                                    <CodeEditor
-                                        value={`// Check if geolocation is supported and permissions
+                <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                  <CodeEditor
+                    value={`// Check if geolocation is supported and permissions
 async function checkGeolocationPermission() {
   if (!navigator.geolocation) {
     return "unsupported";
@@ -1110,19 +1175,21 @@ function getLocation() {
     }
   );
 }`}
-                                        language="javascript"
-                                        style={{
-                                            fontSize: 14,
-                                            backgroundColor: "#f8fafc",
-                                            fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                                        }}
-                                        className="rounded-lg"
-                                    />
-                                </div>
+                    language="javascript"
+                    style={{
+                      fontSize: 14,
+                      backgroundColor: "#f8fafc",
+                      fontFamily:
+                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    }}
+                    className="rounded-lg"
+                  />
+                </div>
 
-                                <div className="flex gap-2 mb-2">
-                                    <button
-                                        onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Geolocation Permissions</title>
@@ -1199,13 +1266,16 @@ function getLocation() {
     }
   </script>
 </body>
-</html>`)}
-                                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                    >
-                                        <FaPlay size={12} /> Try it
-                                    </button>
-                                    <button
-                                        onClick={() => copyToClipboard(`// Check if geolocation is supported and permissions
+</html>`)
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    <FaPlay size={12} /> Try it
+                  </button>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `// Check if geolocation is supported and permissions
 async function checkGeolocationPermission() {
   if (!navigator.geolocation) {
     return "unsupported";
@@ -1265,226 +1335,272 @@ function getLocation() {
       // Handle error
     }
   );
-}`, "permissions")}
-                                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-                                    >
-                                        {copied === "permissions" ? (
-                                            <>
-                                                <FaCheck className="text-green-500" /> Copied!
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaCopy /> Copy Code
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </section>
-
-            {/* API Reference */}
-            <section className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                        Geolocation API Reference
-                    </h2>
-                    <button
-                        onClick={() => toggleSection("reference")}
-                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                    >
-                        <FaChevronDown
-                            className={`transition-transform ${expandedSections.reference ? "rotate-180" : ""}`}
-                        />
-                    </button>
+}`,
+                        "permissions"
+                      )
+                    }
+                    className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    {copied === "permissions" ? (
+                      <>
+                        <FaCheck className="text-green-500" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy /> Copy Code
+                      </>
+                    )}
+                  </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
 
-                {expandedSections.reference && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead className="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Method/Property
-                                        </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Description
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                navigator.geolocation.getCurrentPosition()
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            Gets the device's current location (one-time request)
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                navigator.geolocation.watchPosition()
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            Watches the device's location and calls a callback when it changes
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                navigator.geolocation.clearWatch()
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            Stops watching the device's location
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.latitude
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The latitude in decimal degrees
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.longitude
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The longitude in decimal degrees
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.accuracy
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The accuracy of position in meters
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.altitude
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The altitude in meters above sea level (if available)
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.speed
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The speed in meters per second (if available)
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.coords.heading
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The heading as degrees clockwise from North (if available)
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                Position.timestamp
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            The time when the position was acquired
-                                        </td>
-                                    </tr>
-                                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                                                PositionError
-                                            </code>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                                            Error object returned when geolocation fails
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
-            </section>
-
-            {/* Best Practices */}
-            <section className="mb-8 bg-green-50 dark:bg-gray-800 p-6 rounded-lg border border-green-200 dark:border-gray-700">
-                <h2 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-400">Best Practices</h2>
-                <div className="space-y-4">
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">1. Request Permission Appropriately</h3>
-                        <p className="text-gray-700 dark:text-gray-300">
-                            Only request geolocation access when the user expects it (e.g., after clicking a "Find Near Me" button). Don't request it on page load without context.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">2. Provide Fallbacks</h3>
-                        <p className="text-gray-700 dark:text-gray-300">
-                            Always handle cases where geolocation is denied or unavailable. Provide manual location input options when possible.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">3. Optimize for Accuracy vs Battery</h3>
-                        <p className="text-gray-700 dark:text-gray-300">
-                            Use <code>enableHighAccuracy: true</code> only when needed (e.g., for navigation). For general location purposes, the default is usually sufficient and better for battery life.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">4. Handle Errors Gracefully</h3>
-                        <p className="text-gray-700 dark:text-gray-300">
-                            Provide clear error messages when location access fails and explain how the user can enable it if they want to.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">5. Consider Privacy</h3>
-                        <p className="text-gray-700 dark:text-gray-300">
-                            Be transparent about how you'll use location data and consider implementing a privacy policy that addresses location tracking.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Conclusion */}
-            <section className="bg-blue-50 dark:bg-gray-800 p-6 rounded-lg border border-blue-200 dark:border-gray-700">
-                <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">Conclusion</h2>
-                <p className="mb-4 text-gray-700 dark:text-gray-300">
-                    The Geolocation API is a powerful tool for creating location-aware web applications. With proper implementation and consideration for user privacy, you can create engaging experiences that respond to the user's physical location.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                    <Link href="/compilers/html-editor" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                        Try HTML Editor
-                    </Link>
-                    <Link href="/tutorials/html" className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                        More HTML Tutorials
-                    </Link>
-                </div>
-            </section>
+      {/* API Reference */}
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Geolocation API Reference
+          </h2>
+          <button
+            onClick={() => toggleSection("reference")}
+            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            <FaChevronDown
+              className={`transition-transform ${expandedSections.reference ? "rotate-180" : ""}`}
+            />
+          </button>
         </div>
-    );
+
+        {expandedSections.reference && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Method/Property
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Description
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        navigator.geolocation.getCurrentPosition()
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      Gets the device's current location (one-time request)
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        navigator.geolocation.watchPosition()
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      Watches the device's location and calls a callback when it
+                      changes
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        navigator.geolocation.clearWatch()
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      Stops watching the device's location
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.latitude
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The latitude in decimal degrees
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.longitude
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The longitude in decimal degrees
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.accuracy
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The accuracy of position in meters
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.altitude
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The altitude in meters above sea level (if available)
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.speed
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The speed in meters per second (if available)
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.coords.heading
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The heading as degrees clockwise from North (if available)
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        Position.timestamp
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      The time when the position was acquired
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
+                        PositionError
+                      </code>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      Error object returned when geolocation fails
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Best Practices */}
+      <section className="mb-8 bg-green-50 dark:bg-gray-800 p-6 rounded-lg border border-green-200 dark:border-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-400">
+          Best Practices
+        </h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-bold text-lg mb-2">
+              1. Request Permission Appropriately
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              Only request geolocation access when the user expects it (e.g.,
+              after clicking a "Find Near Me" button). Don't request it on page
+              load without context.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg mb-2">2. Provide Fallbacks</h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              Always handle cases where geolocation is denied or unavailable.
+              Provide manual location input options when possible.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg mb-2">
+              3. Optimize for Accuracy vs Battery
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              Use <code>enableHighAccuracy: true</code> only when needed (e.g.,
+              for navigation). For general location purposes, the default is
+              usually sufficient and better for battery life.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg mb-2">
+              4. Handle Errors Gracefully
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              Provide clear error messages when location access fails and
+              explain how the user can enable it if they want to.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg mb-2">5. Consider Privacy</h3>
+            <p className="text-gray-700 dark:text-gray-300">
+              Be transparent about how you'll use location data and consider
+              implementing a privacy policy that addresses location tracking.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Conclusion */}
+      <section className="bg-blue-50 dark:bg-gray-800 p-6 rounded-lg border border-blue-200 dark:border-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">
+          Conclusion
+        </h2>
+        <p className="mb-4 text-gray-700 dark:text-gray-300">
+          The Geolocation API is a powerful tool for creating location-aware web
+          applications. With proper implementation and consideration for user
+          privacy, you can create engaging experiences that respond to the
+          user's physical location.
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <Link
+            href="/compilers/html-editor"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Try HTML Editor
+          </Link>
+          <Link
+            href="/tutorials/html"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            More HTML Tutorials
+          </Link>
+        </div>
+      </section>
+
+      {/* Continue Learning */}
+      <section className="flex justify-between items-center px-4 py-6 border-t mt-5">
+        <Link
+          href="/html/svg"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded shadow"
+        >
+          &lt; Previous (Svg)
+        </Link>
+        <Link
+          href="/html/drag-drop"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded shadow"
+        >
+          Next (Drag-Drop) &gt;
+        </Link>
+      </section>
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-// app/layout.tsx
 "use client"
 import './globals.css'
 import { Inter } from 'next/font/google'
@@ -7,9 +6,10 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { LoadingProvider } from '@/context/LoadingContext'
 import { ChilluLoader } from '@/components/ChilluLoader'
 import { useLoading } from '@/context/LoadingContext'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const inter = Inter({ subsets: ['latin'] })
-
 
 interface RootLayoutProps {
   children: ReactNode
@@ -34,12 +34,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   )
 }
 
-// app/layout.tsx
 function LayoutWithLoader({ children }: { children: ReactNode }) {
   const { isLoading, stopLoading } = useLoading()
 
   useEffect(() => {
-    // Hide loader when page is ready
     const handleLoad = () => stopLoading()
     
     if (document.readyState === 'complete') {
@@ -55,30 +53,19 @@ function LayoutWithLoader({ children }: { children: ReactNode }) {
       {isLoading && <ChilluLoader />}
       <div className={isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}>
         {children}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </>
   )
 }
-
-// import "./globals.css";
-// import { Inter } from "next/font/google";
-// import { ReactNode } from "react";
-// import { ThemeProvider } from "@/components/ThemeProvider";
-
-// const inter = Inter({ subsets: ["latin"] });
-
-// interface RootLayoutProps {
-//   children: ReactNode;
-// }
-
-// export default function RootLayout({ children }: RootLayoutProps) {
-//   return (
-//     <html lang="en" suppressHydrationWarning>
-//       <body className={inter.className}>
-//         <ThemeProvider attribute="class" defaultTheme="system">
-//           <body className={inter.className}>{children}</body>
-//         </ThemeProvider>
-//       </body>
-//     </html>
-//   );
-// }

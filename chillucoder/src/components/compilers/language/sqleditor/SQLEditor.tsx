@@ -1,7 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Download, Upload, Play, Database, RefreshCw, Plus, Trash2, Save, FileText, Import, AlertCircle, History, Zap, Columns, Table } from 'lucide-react';
-import Editor from '@monaco-editor/react';
-import * as monaco from 'monaco-editor';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Download,
+  Upload,
+  Play,
+  Database,
+  RefreshCw,
+  Plus,
+  Trash2,
+  Save,
+  FileText,
+  Import,
+  AlertCircle,
+  History,
+  Zap,
+  Columns,
+  Table,
+} from "lucide-react";
+import Editor from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 // Type definitions
 interface DatabaseItem {
@@ -35,37 +53,39 @@ interface QueryHistoryItem {
 // IndexedDB helper functions
 const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('SQLiteEditorDB', 2);
-    
+    const request = indexedDB.open("SQLiteEditorDB", 2);
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
-    
+
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
-      
-      if (!db.objectStoreNames.contains('databases')) {
-        const dbStore = db.createObjectStore('databases', { keyPath: 'id' });
-        dbStore.createIndex('name', 'name', { unique: false });
-      }
-      
-      if (!db.objectStoreNames.contains('queries')) {
-        const queryStore = db.createObjectStore('queries', { keyPath: 'id' });
-        queryStore.createIndex('name', 'name', { unique: false });
+
+      if (!db.objectStoreNames.contains("databases")) {
+        const dbStore = db.createObjectStore("databases", { keyPath: "id" });
+        dbStore.createIndex("name", "name", { unique: false });
       }
 
-      if (!db.objectStoreNames.contains('history')) {
-        const historyStore = db.createObjectStore('history', { keyPath: 'id' });
-        historyStore.createIndex('executedAt', 'executedAt', { unique: false });
+      if (!db.objectStoreNames.contains("queries")) {
+        const queryStore = db.createObjectStore("queries", { keyPath: "id" });
+        queryStore.createIndex("name", "name", { unique: false });
+      }
+
+      if (!db.objectStoreNames.contains("history")) {
+        const historyStore = db.createObjectStore("history", { keyPath: "id" });
+        historyStore.createIndex("executedAt", "executedAt", { unique: false });
       }
     };
   });
 };
 
-const saveDatabaseToIndexedDB = async (database: DatabaseItem): Promise<void> => {
+const saveDatabaseToIndexedDB = async (
+  database: DatabaseItem
+): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['databases'], 'readwrite');
-  const store = transaction.objectStore('databases');
-  
+  const transaction = db.transaction(["databases"], "readwrite");
+  const store = transaction.objectStore("databases");
+
   return new Promise((resolve, reject) => {
     const request = store.put(database);
     request.onsuccess = () => resolve();
@@ -75,9 +95,9 @@ const saveDatabaseToIndexedDB = async (database: DatabaseItem): Promise<void> =>
 
 const loadDatabasesFromIndexedDB = async (): Promise<DatabaseItem[]> => {
   const db = await openDB();
-  const transaction = db.transaction(['databases'], 'readonly');
-  const store = transaction.objectStore('databases');
-  
+  const transaction = db.transaction(["databases"], "readonly");
+  const store = transaction.objectStore("databases");
+
   return new Promise((resolve, reject) => {
     const request = store.getAll();
     request.onsuccess = () => resolve(request.result);
@@ -87,9 +107,9 @@ const loadDatabasesFromIndexedDB = async (): Promise<DatabaseItem[]> => {
 
 const deleteDatabaseFromIndexedDB = async (id: string): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['databases'], 'readwrite');
-  const store = transaction.objectStore('databases');
-  
+  const transaction = db.transaction(["databases"], "readwrite");
+  const store = transaction.objectStore("databases");
+
   return new Promise((resolve, reject) => {
     const request = store.delete(id);
     request.onsuccess = () => resolve();
@@ -99,9 +119,9 @@ const deleteDatabaseFromIndexedDB = async (id: string): Promise<void> => {
 
 const saveQueryToIndexedDB = async (query: QueryItem): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['queries'], 'readwrite');
-  const store = transaction.objectStore('queries');
-  
+  const transaction = db.transaction(["queries"], "readwrite");
+  const store = transaction.objectStore("queries");
+
   return new Promise((resolve, reject) => {
     const request = store.put(query);
     request.onsuccess = () => resolve();
@@ -111,9 +131,9 @@ const saveQueryToIndexedDB = async (query: QueryItem): Promise<void> => {
 
 const loadQueriesFromIndexedDB = async (): Promise<QueryItem[]> => {
   const db = await openDB();
-  const transaction = db.transaction(['queries'], 'readonly');
-  const store = transaction.objectStore('queries');
-  
+  const transaction = db.transaction(["queries"], "readonly");
+  const store = transaction.objectStore("queries");
+
   return new Promise((resolve, reject) => {
     const request = store.getAll();
     request.onsuccess = () => resolve(request.result);
@@ -123,9 +143,9 @@ const loadQueriesFromIndexedDB = async (): Promise<QueryItem[]> => {
 
 const deleteQueryFromIndexedDB = async (id: string): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['queries'], 'readwrite');
-  const store = transaction.objectStore('queries');
-  
+  const transaction = db.transaction(["queries"], "readwrite");
+  const store = transaction.objectStore("queries");
+
   return new Promise((resolve, reject) => {
     const request = store.delete(id);
     request.onsuccess = () => resolve();
@@ -133,11 +153,13 @@ const deleteQueryFromIndexedDB = async (id: string): Promise<void> => {
   });
 };
 
-const saveHistoryItemToIndexedDB = async (historyItem: QueryHistoryItem): Promise<void> => {
+const saveHistoryItemToIndexedDB = async (
+  historyItem: QueryHistoryItem
+): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['history'], 'readwrite');
-  const store = transaction.objectStore('history');
-  
+  const transaction = db.transaction(["history"], "readwrite");
+  const store = transaction.objectStore("history");
+
   return new Promise((resolve, reject) => {
     const request = store.put(historyItem);
     request.onsuccess = () => resolve();
@@ -145,16 +167,18 @@ const saveHistoryItemToIndexedDB = async (historyItem: QueryHistoryItem): Promis
   });
 };
 
-const loadHistoryFromIndexedDB = async (limit = 50): Promise<QueryHistoryItem[]> => {
+const loadHistoryFromIndexedDB = async (
+  limit = 50
+): Promise<QueryHistoryItem[]> => {
   const db = await openDB();
-  const transaction = db.transaction(['history'], 'readonly');
-  const store = transaction.objectStore('history');
-  const index = store.index('executedAt');
-  
+  const transaction = db.transaction(["history"], "readonly");
+  const store = transaction.objectStore("history");
+  const index = store.index("executedAt");
+
   return new Promise((resolve, reject) => {
-    const request = index.openCursor(null, 'prev');
+    const request = index.openCursor(null, "prev");
     const historyItems: QueryHistoryItem[] = [];
-    
+
     request.onsuccess = (event) => {
       const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
       if (cursor && historyItems.length < limit) {
@@ -164,16 +188,16 @@ const loadHistoryFromIndexedDB = async (limit = 50): Promise<QueryHistoryItem[]>
         resolve(historyItems);
       }
     };
-    
+
     request.onerror = () => reject(request.error);
   });
 };
 
 const clearHistoryFromIndexedDB = async (): Promise<void> => {
   const db = await openDB();
-  const transaction = db.transaction(['history'], 'readwrite');
-  const store = transaction.objectStore('history');
-  
+  const transaction = db.transaction(["history"], "readwrite");
+  const store = transaction.objectStore("history");
+
   return new Promise((resolve, reject) => {
     const request = store.clear();
     request.onsuccess = () => resolve();
@@ -182,26 +206,35 @@ const clearHistoryFromIndexedDB = async (): Promise<void> => {
 };
 
 export default function SQLEditor() {
-  const [sql, setSql] = useState('SELECT * FROM sqlite_master;');
+  const [sql, setSql] = useState(
+    "SELECT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%';"
+  );
   const [result, setResult] = useState<QueryResult | null>(null);
   const [databases, setDatabases] = useState<DatabaseItem[]>([]);
   const [queries, setQueries] = useState<QueryItem[]>([]);
   const [history, setHistory] = useState<QueryHistoryItem[]>([]);
-  const [currentDatabase, setCurrentDatabase] = useState('');
-  const [newDbName, setNewDbName] = useState('');
-  const [queryName, setQueryName] = useState('');
+  const [currentDatabase, setCurrentDatabase] = useState("");
+  const [newDbName, setNewDbName] = useState("");
+  const [queryName, setQueryName] = useState("");
   const [showCreateDb, setShowCreateDb] = useState(false);
+  const [showTableModal, setShowTableModal] = useState(false);
+  const [tableSql, setTableSql] = useState("");
   const [showSaveQuery, setShowSaveQuery] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [activeTab, setActiveTab] = useState<'editor' | 'databases' | 'queries'>('editor');
+  const [activeTab, setActiveTab] = useState<
+    "editor" | "databases" | "queries"
+  >("editor");
   const [isExecuting, setIsExecuting] = useState(false);
   const [SQL, setSQL] = useState<any>(null);
   const [dbInstance, setDbInstance] = useState<any>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editorReady, setEditorReady] = useState(false);
-  const [activeResultTab, setActiveResultTab] = useState<'results' | 'schema'>('results');
+  const [activeResultTab, setActiveResultTab] = useState<"results" | "schema">(
+    "results"
+  );
   const [schemaInfo, setSchemaInfo] = useState<any[]>([]);
+  const [tables, setTables] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryFileInputRef = useRef<HTMLInputElement>(null);
@@ -211,22 +244,26 @@ export default function SQLEditor() {
   // Load data from IndexedDB
   const loadDataFromIndexedDB = async () => {
     try {
-      const [loadedDatabases, loadedQueries, loadedHistory] = await Promise.all([
-        loadDatabasesFromIndexedDB(),
-        loadQueriesFromIndexedDB(),
-        loadHistoryFromIndexedDB()
-      ]);
-      
+      const [loadedDatabases, loadedQueries, loadedHistory] = await Promise.all(
+        [
+          loadDatabasesFromIndexedDB(),
+          loadQueriesFromIndexedDB(),
+          loadHistoryFromIndexedDB(),
+        ]
+      );
+
       setDatabases(loadedDatabases);
       setQueries(loadedQueries);
       setHistory(loadedHistory);
-      
+
       if (loadedDatabases.length > 0) {
-        const defaultDb = loadedDatabases.find(db => db.id === 'default') || loadedDatabases[0];
+        const defaultDb =
+          loadedDatabases.find((db) => db.id === "default") ||
+          loadedDatabases[0];
         setCurrentDatabase(defaultDb.id);
       }
     } catch (err) {
-      console.error('Failed to load data from IndexedDB:', err);
+      console.error("Failed to load data from IndexedDB:", err);
       setError(`Failed to load saved data: ${(err as Error).message}`);
     }
   };
@@ -237,53 +274,55 @@ export default function SQLEditor() {
       try {
         setIsInitializing(true);
         setError(null);
-        
+
         // Load SQL.js from CDN
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
-        
+        const script = document.createElement("script");
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js";
+
         script.onload = async () => {
           try {
             // @ts-ignore - SQL will be available globally after script loads
             const SQL = await window.initSqlJs({
-              locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+              locateFile: (file: string) =>
+                `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
             });
-            
+
             setSQL(SQL);
             await loadDataFromIndexedDB();
-            
+
             const loadedDatabases = await loadDatabasesFromIndexedDB();
             if (loadedDatabases.length === 0) {
               await createDefaultDatabase(SQL);
             }
-            
+
             setIsInitializing(false);
           } catch (err) {
-            console.error('SQL.js initialization error:', err);
+            console.error("SQL.js initialization error:", err);
             setError(`SQL.js initialization failed: ${(err as Error).message}`);
             setIsInitializing(false);
           }
         };
-        
+
         script.onerror = () => {
-          setError('Failed to load SQL.js from CDN');
+          setError("Failed to load SQL.js from CDN");
           setIsInitializing(false);
         };
-        
+
         document.head.appendChild(script);
-        
+
         return () => {
           if (document.head.contains(script)) {
             document.head.removeChild(script);
           }
         };
       } catch (err) {
-        console.error('Initialization error:', err);
+        console.error("Initialization error:", err);
         setError(`Initialization failed: ${(err as Error).message}`);
         setIsInitializing(false);
       }
     }
-    
+
     initialize();
   }, []);
 
@@ -291,15 +330,16 @@ export default function SQLEditor() {
   useEffect(() => {
     if (!SQL || !currentDatabase) return;
 
-    const db = databases.find(db => db.id === currentDatabase);
+    const db = databases.find((db) => db.id === currentDatabase);
     if (db) {
       try {
         const newDb = new SQL.Database(db.data);
         setDbInstance(newDb);
         setError(null);
         loadSchemaInfo(newDb);
+        loadTables(newDb);
       } catch (err) {
-        console.error('Database initialization error:', err);
+        console.error("Database initialization error:", err);
         setError(`Failed to load database: ${(err as Error).message}`);
       }
     }
@@ -312,22 +352,46 @@ export default function SQLEditor() {
         SELECT type, name, tbl_name, sql 
         FROM sqlite_master 
         WHERE name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
         ORDER BY type, name;
       `);
-      
+
       if (result.length > 0) {
-        setSchemaInfo(result[0].values.map((row: any) => ({
-          type: row[0],
-          name: row[1],
-          tbl_name: row[2],
-          sql: row[3]
-        })));
+        setSchemaInfo(
+          result[0].values.map((row: any) => ({
+            type: row[0],
+            name: row[1],
+            tbl_name: row[2],
+            sql: row[3],
+          }))
+        );
       } else {
         setSchemaInfo([]);
       }
     } catch (err) {
-      console.error('Failed to load schema info:', err);
+      console.error("Failed to load schema info:", err);
       setSchemaInfo([]);
+    }
+  };
+
+  // Load tables for the current database
+  const loadTables = (db: any) => {
+    try {
+      const result = db.exec(`
+        SELECT name FROM sqlite_master 
+        WHERE type = 'table' 
+        AND name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
+      `);
+
+      if (result.length > 0) {
+        setTables(result[0].values.map((row: any) => row[0]));
+      } else {
+        setTables([]);
+      }
+    } catch (err) {
+      console.error("Failed to load tables:", err);
+      setTables([]);
     }
   };
 
@@ -335,8 +399,8 @@ export default function SQLEditor() {
   const saveDatabaseToStorage = async (db: DatabaseItem) => {
     try {
       await saveDatabaseToIndexedDB(db);
-      setDatabases(prev => {
-        const filtered = prev.filter(d => d.id !== db.id);
+      setDatabases((prev) => {
+        const filtered = prev.filter((d) => d.id !== db.id);
         return [...filtered, db];
       });
     } catch (err) {
@@ -347,9 +411,9 @@ export default function SQLEditor() {
   const deleteDatabaseFromStorage = async (id: string) => {
     try {
       await deleteDatabaseFromIndexedDB(id);
-      const updatedDatabases = databases.filter(db => db.id !== id);
+      const updatedDatabases = databases.filter((db) => db.id !== id);
       setDatabases(updatedDatabases);
-      
+
       if (currentDatabase === id) {
         if (updatedDatabases.length > 0) {
           setCurrentDatabase(updatedDatabases[0].id);
@@ -365,8 +429,8 @@ export default function SQLEditor() {
   const saveQueryToStorage = async (query: QueryItem) => {
     try {
       await saveQueryToIndexedDB(query);
-      setQueries(prev => {
-        const filtered = prev.filter(q => q.id !== query.id);
+      setQueries((prev) => {
+        const filtered = prev.filter((q) => q.id !== query.id);
         return [...filtered, query];
       });
     } catch (err) {
@@ -377,7 +441,7 @@ export default function SQLEditor() {
   const deleteQueryFromStorage = async (id: string) => {
     try {
       await deleteQueryFromIndexedDB(id);
-      setQueries(prev => prev.filter(q => q.id !== id));
+      setQueries((prev) => prev.filter((q) => q.id !== id));
     } catch (err) {
       setError(`Failed to delete query: ${(err as Error).message}`);
     }
@@ -388,22 +452,83 @@ export default function SQLEditor() {
       const historyItem: QueryHistoryItem = {
         id: Date.now().toString(),
         sql: sql,
-        executedAt: new Date().toISOString()
+        executedAt: new Date().toISOString(),
       };
-      
+
       await saveHistoryItemToIndexedDB(historyItem);
-      setHistory(prev => [historyItem, ...prev.slice(0, 49)]);
+      setHistory((prev) => [historyItem, ...prev.slice(0, 49)]);
     } catch (err) {
-      console.error('Failed to save to history:', err);
+      console.error("Failed to save to history:", err);
+    }
+  };
+
+  const getTableCount = (dbId: string): number => {
+    const db = databases.find((d) => d.id === dbId);
+    if (!db) return 0;
+
+    try {
+      const tempDb = new SQL.Database(db.data);
+      const result = tempDb.exec(`
+      SELECT COUNT(*) as count FROM sqlite_master 
+      WHERE type = 'table' 
+      AND name NOT LIKE 'sqlite_%'
+    `);
+      return result[0]?.values[0][0] || 0;
+    } catch (err) {
+      console.error("Error counting tables:", err);
+      return 0;
     }
   };
 
   const clearHistory = async () => {
-    try {
-      await clearHistoryFromIndexedDB();
-      setHistory([]);
-    } catch (err) {
-      setError(`Failed to clear history: ${(err as Error).message}`);
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: "Clear All History?",
+      text: "This will permanently delete all your query history. This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, clear it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      focusCancel: true,
+      customClass: {
+        popup: "dark:bg-gray-800 dark:text-white",
+        confirmButton: "bg-red-600 hover:bg-red-700 text-white",
+        cancelButton: "bg-gray-200 hover:bg-gray-300 text-gray-800",
+      },
+    });
+
+    // If user confirmed
+    if (result.isConfirmed) {
+      try {
+        // Show loading state
+        const toastId = toast.loading("Clearing history...", {
+          position: "bottom-right",
+          theme: "light",
+        });
+
+        // Perform the clear operation
+        await clearHistoryFromIndexedDB();
+        setHistory([]);
+
+        // Show success notification
+        toast.update(toastId, {
+          render: "History cleared successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true,
+        });
+      } catch (err) {
+        // Show error notification
+        toast.error(`Failed to clear history: ${(err as Error).message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
+        setError(`Failed to clear history: ${(err as Error).message}`);
+      }
     }
   };
 
@@ -411,7 +536,7 @@ export default function SQLEditor() {
   const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor;
     setEditorReady(true);
-    
+
     // Add keyboard shortcut for execution
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
       executeSQL();
@@ -420,7 +545,24 @@ export default function SQLEditor() {
 
   // Execute SQL with enhanced support for special commands
   const executeSQL = async () => {
-    if (!sql.trim() || !dbInstance) return;
+    if (!sql.trim() || !dbInstance || !currentDatabase) {
+      setError("No database is currently active");
+      return;
+    }
+
+    // Check if we're trying to query default tables on a non-default database
+    const normalizedSql = sql.trim().toUpperCase();
+    const isQueryingDefaultTables =
+      normalizedSql.includes("USERS") ||
+      normalizedSql.includes("PRODUCTS") ||
+      normalizedSql.includes("DEPARTMENTS");
+
+    if (isQueryingDefaultTables && currentDatabase !== "default") {
+      setError(
+        "Default tables (users, products, departments) are only available in the default database"
+      );
+      return;
+    }
 
     setIsExecuting(true);
     setError(null);
@@ -435,23 +577,23 @@ export default function SQLEditor() {
       await addToHistory(sql);
 
       // Handle special commands that aren't standard SQLite
-      const normalizedSql = sql.trim().toUpperCase();
-      
-      if (normalizedSql === 'SHOW TABLES' || normalizedSql === 'SHOW TABLES;') {
+      if (normalizedSql === "SHOW TABLES" || normalizedSql === "SHOW TABLES;") {
         // MySQL-style SHOW TABLES
         queryResult = dbInstance.exec(`
           SELECT name as Tables FROM sqlite_master 
           WHERE type='table' 
           AND name NOT LIKE 'sqlite_%'
+          ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
           ORDER BY name;
         `);
-      } 
-      else if (normalizedSql.startsWith('DESCRIBE ') || normalizedSql.startsWith('DESC ')) {
+      } else if (
+        normalizedSql.startsWith("DESCRIBE ") ||
+        normalizedSql.startsWith("DESC ")
+      ) {
         // MySQL-style DESCRIBE command
-        const tableName = sql.split(/\s+/)[1].replace(';', '').trim();
+        const tableName = sql.split(/\s+/)[1].replace(";", "").trim();
         queryResult = dbInstance.exec(`PRAGMA table_info(${tableName});`);
-      }
-      else {
+      } else {
         // Standard SQL execution
         queryResult = dbInstance.exec(sql);
         rowsAffected = dbInstance.getRowsModified();
@@ -464,24 +606,25 @@ export default function SQLEditor() {
           result: [],
           columns: [],
           executionTime,
-          rowsAffected
+          rowsAffected,
         });
       } else {
         setResult({
           result: queryResult[0].values,
           columns: queryResult[0].columns,
           executionTime,
-          rowsAffected
+          rowsAffected,
         });
       }
-      
+
       // Refresh schema info after execution
       loadSchemaInfo(dbInstance);
+      loadTables(dbInstance);
       await updateCurrentDatabase();
     } catch (err) {
-      setResult({ 
+      setResult({
         error: `SQL Error: ${(err as Error).message}`,
-        executionTime: 0
+        executionTime: 0,
       });
     } finally {
       setIsExecuting(false);
@@ -495,61 +638,22 @@ export default function SQLEditor() {
     try {
       setError(null);
       const db = new SQL.Database();
-      
-      // Create sample tables
-      db.exec(`
-        CREATE TABLE users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE,
-          age INTEGER,
-          department_id INTEGER
-        );
-        
-        CREATE TABLE products (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          price REAL,
-          category TEXT,
-          stock INTEGER DEFAULT 0
-        );
-        
-        CREATE TABLE departments (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT,
-          budget REAL
-        );
-        
-        INSERT INTO departments (name, budget) VALUES 
-          ('Engineering', 100000),
-          ('Marketing', 75000),
-          ('Sales', 80000);
-          
-        INSERT INTO users (name, email, age, department_id) VALUES
-          ('John Doe', 'john@example.com', 30, 1),
-          ('Jane Smith', 'jane@example.com', 25, 2),
-          ('Bob Johnson', 'bob@example.com', 35, 1),
-          ('Alice Brown', 'alice@example.com', 28, 3);
-          
-        INSERT INTO products (name, price, category, stock) VALUES
-          ('Laptop', 999.99, 'Electronics', 50),
-          ('Book', 19.99, 'Education', 100),
-          ('Coffee Mug', 9.99, 'Home', 200),
-          ('Smartphone', 599.99, 'Electronics', 30);
-      `);
 
+      // Create an empty database (no default tables)
       const newDb: DatabaseItem = {
         id: Date.now().toString(),
         name: newDbName,
         data: db.export(),
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       await saveDatabaseToStorage(newDb);
       setCurrentDatabase(newDb.id);
       setDbInstance(db);
-      setNewDbName('');
+      setNewDbName("");
       setShowCreateDb(false);
+      loadSchemaInfo(db);
+      loadTables(db);
     } catch (err) {
       setError(`Failed to create database: ${(err as Error).message}`);
     }
@@ -559,58 +663,62 @@ export default function SQLEditor() {
   const createDefaultDatabase = async (SQLInstance: any) => {
     try {
       const db = new SQLInstance.Database();
-      
+
+      // Only the default database gets these tables
       db.exec(`
-        CREATE TABLE users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE,
-          age INTEGER,
-          department_id INTEGER
-        );
+      CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE,
+        age INTEGER,
+        department_id INTEGER
+      );
+      
+      CREATE TABLE products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        price REAL,
+        category TEXT,
+        stock INTEGER DEFAULT 0
+      );
+      
+      CREATE TABLE departments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        budget REAL
+      );
+      
+      INSERT INTO departments (name, budget) VALUES 
+        ('Engineering', 100000),
+        ('Marketing', 75000),
+        ('Sales', 80000);
         
-        CREATE TABLE products (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          price REAL,
-          category TEXT,
-          stock INTEGER DEFAULT 0
-        );
+      INSERT INTO users (name, email, age, department_id) VALUES
+        ('John Doe', 'john@example.com', 30, 1),
+        ('Jane Smith', 'jane@example.com', 25, 2),
+        ('Bob Johnson', 'bob@example.com', 35, 1),
+        ('Alice Brown', 'alice@example.com', 28, 3);
         
-        CREATE TABLE departments (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT,
-          budget REAL
-        );
-        
-        INSERT INTO departments (name, budget) VALUES 
-          ('Engineering', 100000),
-          ('Marketing', 75000),
-          ('Sales', 80000);
-          
-        INSERT INTO users (name, email, age, department_id) VALUES
-          ('John Doe', 'john@example.com', 30, 1),
-          ('Jane Smith', 'jane@example.com', 25, 2),
-          ('Bob Johnson', 'bob@example.com', 35, 1),
-          ('Alice Brown', 'alice@example.com', 28, 3);
-          
-        INSERT INTO products (name, price, category, stock) VALUES
-          ('Laptop', 999.99, 'Electronics', 50),
-          ('Book', 19.99, 'Education', 100),
-          ('Coffee Mug', 9.99, 'Home', 200),
-          ('Smartphone', 599.99, 'Electronics', 30);
-      `);
+      INSERT INTO products (name, price, category, stock) VALUES
+        ('Laptop', 999.99, 'Electronics', 50),
+        ('Book', 19.99, 'Education', 100),
+        ('Coffee Mug', 9.99, 'Home', 200),
+        ('Smartphone', 599.99, 'Electronics', 30);
+    `);
 
       const defaultDb: DatabaseItem = {
-        id: 'default',
-        name: 'default',
+        id: "default",
+        name: "default",
         data: db.export(),
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       await saveDatabaseToStorage(defaultDb);
-      setCurrentDatabase('default');
+      setCurrentDatabase("default");
       setDbInstance(db);
+      loadSchemaInfo(db);
+      loadTables(db);
+      setIsInitializing(false);
     } catch (err) {
       setError(`Failed to create default database: ${(err as Error).message}`);
       setIsInitializing(false);
@@ -622,12 +730,12 @@ export default function SQLEditor() {
     if (!currentDatabase || !dbInstance) return;
 
     try {
-      const dbToUpdate = databases.find(db => db.id === currentDatabase);
-      
+      const dbToUpdate = databases.find((db) => db.id === currentDatabase);
+
       if (dbToUpdate) {
         const updatedDb = {
           ...dbToUpdate,
-          data: dbInstance.export()
+          data: dbInstance.export(),
         };
         await saveDatabaseToStorage(updatedDb);
       }
@@ -638,18 +746,30 @@ export default function SQLEditor() {
 
   // Switch between databases
   const switchDatabase = async (dbId: string) => {
-    const db = databases.find(d => d.id === dbId);
-    
+    const db = databases.find((d) => d.id === dbId);
+
     if (db && SQL) {
       try {
+        // Close the current database if it exists
         if (dbInstance) {
           dbInstance.close();
         }
-        
+
+        // Reset the state before loading the new database
+        setResult(null);
+        setSchemaInfo([]);
+        setTables([]);
+        setSql("SELECT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%';");
+
+        // Load the new database
+        const newDb = new SQL.Database(db.data);
         setCurrentDatabase(dbId);
-        setDbInstance(new SQL.Database(db.data));
+        setDbInstance(newDb);
         setError(null);
-        loadSchemaInfo(new SQL.Database(db.data));
+
+        // Load schema and tables for the new database
+        loadSchemaInfo(newDb);
+        loadTables(newDb);
       } catch (err) {
         setError(`Failed to switch database: ${(err as Error).message}`);
       }
@@ -662,11 +782,11 @@ export default function SQLEditor() {
 
     try {
       const exportData = dbInstance.export();
-      const blob = new Blob([exportData], { type: 'application/x-sqlite3' });
+      const blob = new Blob([exportData], { type: "application/x-sqlite3" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${databases.find(db => db.id === currentDatabase)?.name || 'database'}.sqlite`;
+      link.download = `${databases.find((db) => db.id === currentDatabase)?.name || "database"}.sqlite`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -691,24 +811,25 @@ export default function SQLEditor() {
 
         const newDb: DatabaseItem = {
           id: Date.now().toString(),
-          name: file.name.replace('.sqlite', '').replace('.db', ''),
+          name: file.name.replace(".sqlite", "").replace(".db", ""),
           data: db.export(),
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
 
         await saveDatabaseToStorage(newDb);
         setCurrentDatabase(newDb.id);
         setDbInstance(db);
         loadSchemaInfo(db);
+        loadTables(db);
       } catch (err) {
         setError(`Error importing database: ${(err as Error).message}`);
       }
     };
     reader.onerror = () => {
-      setError('Failed to read database file');
+      setError("Failed to read database file");
     };
     reader.readAsArrayBuffer(file);
-    event.target.value = '';
+    event.target.value = "";
   };
 
   // Enhanced export function that preserves all database objects
@@ -720,6 +841,7 @@ export default function SQLEditor() {
       const schema = dbInstance.exec(`
         SELECT type, name, sql FROM sqlite_master
         WHERE name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
         ORDER BY 
           CASE type
             WHEN 'table' THEN 1
@@ -731,8 +853,8 @@ export default function SQLEditor() {
           name;
       `);
 
-      let sqlExport = '';
-      
+      let sqlExport = "";
+
       // Add PRAGMA statements
       sqlExport += "PRAGMA foreign_keys=OFF;\n";
       sqlExport += "BEGIN TRANSACTION;\n\n";
@@ -740,7 +862,8 @@ export default function SQLEditor() {
       // Add schema
       if (schema.length > 0 && schema[0].values) {
         schema[0].values.forEach((row: any) => {
-          if (row[2]) { // sql column
+          if (row[2]) {
+            // sql column
             sqlExport += row[2] + ";\n\n";
           }
         });
@@ -751,6 +874,7 @@ export default function SQLEditor() {
         SELECT name FROM sqlite_master 
         WHERE type = 'table' 
         AND name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
         AND name NOT IN (
           SELECT name FROM sqlite_master 
           WHERE type = 'table' 
@@ -762,13 +886,19 @@ export default function SQLEditor() {
         tables[0].values?.forEach((tableRow: any) => {
           const tableName = tableRow[0];
           const data = dbInstance.exec(`SELECT * FROM ${tableName};`);
-          
+
           if (data.length > 0 && data[0].values) {
             sqlExport += `\n-- Data for table ${tableName}\n`;
             data[0].values.forEach((row: any) => {
-              const values = row.map((val: any) => 
-                val === null ? 'NULL' : typeof val === 'string' ? `'${val.replace(/'/g, "''")}'` : val
-              ).join(', ');
+              const values = row
+                .map((val: any) =>
+                  val === null
+                    ? "NULL"
+                    : typeof val === "string"
+                      ? `'${val.replace(/'/g, "''")}'`
+                      : val
+                )
+                .join(", ");
               sqlExport += `INSERT INTO ${tableName} VALUES (${values});\n`;
             });
           }
@@ -778,11 +908,11 @@ export default function SQLEditor() {
       sqlExport += "\nCOMMIT;\n";
       sqlExport += "PRAGMA foreign_keys=ON;\n";
 
-      const blob = new Blob([sqlExport], { type: 'text/sql' });
+      const blob = new Blob([sqlExport], { type: "text/sql" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${databases.find(db => db.id === currentDatabase)?.name || 'database'}.sql`;
+      link.download = `${databases.find((db) => db.id === currentDatabase)?.name || "database"}.sql`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -802,33 +932,34 @@ export default function SQLEditor() {
       try {
         setError(null);
         const sqlContent = e.target?.result as string;
-        
+
         // Create a new database
         const db = new SQL.Database();
-        
+
         // Execute the SQL script
         db.exec(sqlContent);
 
         const newDb: DatabaseItem = {
           id: Date.now().toString(),
-          name: file.name.replace('.sql', '').replace('.db', ''),
+          name: file.name.replace(".sql", "").replace(".db", ""),
           data: db.export(),
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
 
         await saveDatabaseToStorage(newDb);
         setCurrentDatabase(newDb.id);
         setDbInstance(db);
         loadSchemaInfo(db);
+        loadTables(db);
       } catch (err) {
         setError(`Error importing SQL: ${(err as Error).message}`);
       }
     };
     reader.onerror = () => {
-      setError('Failed to read SQL file');
+      setError("Failed to read SQL file");
     };
     reader.readAsText(file);
-    event.target.value = '';
+    event.target.value = "";
   };
 
   // Save current query
@@ -841,11 +972,11 @@ export default function SQLEditor() {
         id: Date.now().toString(),
         name: queryName,
         sql: sql,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       await saveQueryToStorage(query);
-      setQueryName('');
+      setQueryName("");
       setShowSaveQuery(false);
     } catch (err) {
       setError(`Failed to save query: ${(err as Error).message}`);
@@ -855,7 +986,7 @@ export default function SQLEditor() {
   // Load query into editor
   const loadQuery = (query: QueryItem) => {
     setSql(query.sql);
-    setActiveTab('editor');
+    setActiveTab("editor");
     if (editorRef.current) {
       editorRef.current.setValue(query.sql);
     }
@@ -872,7 +1003,7 @@ export default function SQLEditor() {
 
   // Delete query
   const deleteQuery = async (id: string) => {
-    if (confirm('Are you sure you want to delete this query?')) {
+    if (confirm("Are you sure you want to delete this query?")) {
       try {
         await deleteQueryFromStorage(id);
       } catch (err) {
@@ -885,9 +1016,9 @@ export default function SQLEditor() {
   const exportQuery = (query: QueryItem) => {
     try {
       const dataStr = JSON.stringify(query, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `${query.name}_query.json`;
       document.body.appendChild(link);
@@ -912,29 +1043,81 @@ export default function SQLEditor() {
         const query: QueryItem = {
           ...data,
           id: Date.now().toString(),
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
         await saveQueryToStorage(query);
       } catch (err) {
-        setError('Invalid query file format');
+        setError("Invalid query file format");
       }
     };
     reader.onerror = () => {
-      setError('Failed to read query file');
+      setError("Failed to read query file");
     };
     reader.readAsText(file);
-    event.target.value = '';
+    event.target.value = "";
   };
 
   // Reset default database
   const resetToDefault = async () => {
-    if (confirm('This will reset the default database to its original state. All current data will be lost. Continue?')) {
+    // Show confirmation dialog using SweetAlert2
+    const result = await Swal.fire({
+      title: "Reset Default Database?",
+      text: "This will reset the default database to its original state. All current data will be lost.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reset it!",
+      cancelButtonText: "Cancel",
+      allowOutsideClick: false,
+      backdrop: true,
+      focusConfirm: false,
+      focusCancel: true,
+    });
+
+    // If user confirmed
+    if (result.isConfirmed) {
       try {
-        await deleteDatabaseFromStorage('default');
+        // Show loading toast
+        const toastId = toast.loading("Resetting database...", {
+          position: "bottom-right",
+          autoClose: false,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+
+        // Perform reset operations
+        await deleteDatabaseFromStorage("default");
         if (SQL) {
           await createDefaultDatabase(SQL);
         }
+
+        // Update toast to success
+        toast.update(toastId, {
+          render: "Database reset successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true,
+        });
       } catch (err) {
+        // Show error toast
+        toast.error(`Failed to reset database: ${(err as Error).message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        // Also set error state if needed
         setError(`Failed to reset default database: ${(err as Error).message}`);
       }
     }
@@ -943,26 +1126,39 @@ export default function SQLEditor() {
   // Format SQL in editor
   const formatSQL = () => {
     if (editorRef.current) {
-      const formatted = sql.replace(/\b(SELECT|FROM|WHERE|GROUP BY|HAVING|ORDER BY|LIMIT|JOIN|INNER JOIN|LEFT JOIN|RIGHT JOIN|INSERT INTO|UPDATE|DELETE FROM|CREATE TABLE|CREATE VIEW|CREATE INDEX|ALTER TABLE|DROP TABLE|DROP VIEW|DROP INDEX|BEGIN|COMMIT|ROLLBACK)\b/gi, '\n$1');
+      const formatted = sql.replace(
+        /\b(SELECT|FROM|WHERE|GROUP BY|HAVING|ORDER BY|LIMIT|JOIN|INNER JOIN|LEFT JOIN|RIGHT JOIN|INSERT INTO|UPDATE|DELETE FROM|CREATE TABLE|CREATE VIEW|CREATE INDEX|ALTER TABLE|DROP TABLE|DROP VIEW|DROP INDEX|BEGIN|COMMIT|ROLLBACK)\b/gi,
+        "\n$1"
+      );
       editorRef.current.setValue(formatted);
       setSql(formatted);
     }
   };
 
+  // Create table in current database
+  const createTable = async (tableSql: string) => {
+    if (!dbInstance || !tableSql.trim()) return;
+
+    dbInstance.exec(tableSql);
+    loadSchemaInfo(dbInstance);
+    loadTables(dbInstance);
+    await updateCurrentDatabase();
+  };
+
   // Get sample queries
   const getSampleQueries = () => [
-    'SELECT * FROM users;',
-    'SELECT u.name, d.name as department FROM users u JOIN departments d ON u.department_id = d.id;',
-    'SELECT category, COUNT(*) as product_count, AVG(price) as avg_price FROM products GROUP BY category;',
-    'SELECT * FROM users WHERE age > 25 ORDER BY age DESC;',
-    'UPDATE users SET age = age + 1 WHERE department_id = 1;',
-    'INSERT INTO products (name, price, category, stock) VALUES (\'Tablet\', 299.99, \'Electronics\', 25);',
-    'CREATE TABLE categories (id INT PRIMARY KEY, name VARCHAR(100) NOT NULL, description TEXT);',
-    'CREATE VIEW young_users AS SELECT * FROM users WHERE age < 30;',
-    'PRAGMA table_info(users);',
-    'EXPLAIN QUERY PLAN SELECT * FROM users WHERE age > 25;',
-    'SHOW TABLES;',
-    'DESCRIBE users;'
+    "SELECT * FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';",
+    "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;",
+    "PRAGMA table_info(your_table_name);",
+    "CREATE TABLE example (id INTEGER PRIMARY KEY, name TEXT);",
+    "INSERT INTO example (name) VALUES ('sample data');",
+    "SELECT * FROM example LIMIT 10;",
+    "DROP TABLE example;",
+    "CREATE INDEX idx_name ON example(name);",
+    "EXPLAIN QUERY PLAN SELECT * FROM example WHERE name = 'test';",
+    "BEGIN TRANSACTION; -- start a transaction",
+    "COMMIT; -- commit changes",
+    "ROLLBACK; -- rollback changes",
   ];
 
   if (isInitializing) {
@@ -970,8 +1166,12 @@ export default function SQLEditor() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <Database className="w-16 h-16 mx-auto mb-4 text-blue-600 animate-pulse" />
-          <h1 className="text-2xl font-bold text-gray-800">Initializing SQL Editor</h1>
-          <p className="text-gray-600 mt-2">Loading SQLite engine and saved data...</p>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Initializing SQL Editor
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Loading SQLite engine and saved data...
+          </p>
         </div>
       </div>
     );
@@ -1001,33 +1201,33 @@ export default function SQLEditor() {
 
           <div className="flex space-x-4 mb-4">
             <button
-              onClick={() => setActiveTab('editor')}
+              onClick={() => setActiveTab("editor")}
               className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
-                activeTab === 'editor'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                activeTab === "editor"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
               }`}
             >
               <FileText className="w-4 h-4" />
               <span>SQL Editor</span>
             </button>
             <button
-              onClick={() => setActiveTab('databases')}
+              onClick={() => setActiveTab("databases")}
               className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
-                activeTab === 'databases'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                activeTab === "databases"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
               }`}
             >
               <Database className="w-4 h-4" />
               <span>Databases ({databases.length})</span>
             </button>
             <button
-              onClick={() => setActiveTab('queries')}
+              onClick={() => setActiveTab("queries")}
               className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
-                activeTab === 'queries'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                activeTab === "queries"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
               }`}
             >
               <Save className="w-4 h-4" />
@@ -1040,11 +1240,17 @@ export default function SQLEditor() {
               <div className="flex items-center space-x-4">
                 <span className="flex items-center space-x-2">
                   <Database className="w-5 h-5 text-green-600" />
-                  <span className="font-medium">Current Database: <strong className="text-blue-700">{databases.find(db => db.id === currentDatabase)?.name || 'None'}</strong></span>
+                  <span className="font-medium">
+                    Current Database:{" "}
+                    <strong className="text-blue-700">
+                      {databases.find((db) => db.id === currentDatabase)
+                        ?.name || "None"}
+                    </strong>
+                  </span>
                 </span>
                 {currentDatabase && dbInstance && (
                   <span className="text-sm text-gray-500">
-                    {dbInstance.exec("SELECT count(*) as count FROM sqlite_master WHERE type='table';")[0]?.values?.[0]?.[0] || 0} tables
+                    {tables.length} tables
                   </span>
                 )}
               </div>
@@ -1081,7 +1287,7 @@ export default function SQLEditor() {
                 </button>
                 <button
                   onClick={resetToDefault}
-                  disabled={currentDatabase !== 'default'}
+                  disabled={currentDatabase !== "default"}
                   className="px-2 py-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded text-xs flex items-center space-x-1 text-white transition-colors"
                 >
                   <RefreshCw className="w-3 h-3" />
@@ -1091,12 +1297,13 @@ export default function SQLEditor() {
             </div>
           </div>
         </div>
-
-        {activeTab === 'editor' && (
+        {activeTab === "editor" && (
           <div className="space-y-4">
             <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-gray-700">SQL Query</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  SQL Query
+                </label>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setShowHistory(true)}
@@ -1123,9 +1330,9 @@ export default function SQLEditor() {
                   </button>
                   <button
                     onClick={() => {
-                      setSql('');
+                      setSql("");
                       if (editorRef.current) {
-                        editorRef.current.setValue('');
+                        editorRef.current.setValue("");
                       }
                     }}
                     className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm text-gray-700 transition-colors"
@@ -1134,26 +1341,26 @@ export default function SQLEditor() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="w-full h-60 border border-gray-300 rounded-lg overflow-hidden">
                 <Editor
                   height="100%"
                   defaultLanguage="sql"
                   value={sql}
-                  onChange={(value) => setSql(value || '')}
+                  onChange={(value) => setSql(value || "")}
                   onMount={handleEditorDidMount}
                   options={{
                     minimap: { enabled: false },
                     scrollBeyondLastLine: false,
                     fontSize: 14,
-                    wordWrap: 'on',
+                    wordWrap: "on",
                     automaticLayout: true,
                     padding: { top: 10 },
                   }}
                   theme="vs"
                 />
               </div>
-              
+
               <div className="flex items-center justify-between mt-4">
                 <button
                   onClick={executeSQL}
@@ -1165,7 +1372,7 @@ export default function SQLEditor() {
                   ) : (
                     <Play className="w-5 h-5" />
                   )}
-                  <span>{isExecuting ? 'Executing...' : 'Execute Query'}</span>
+                  <span>{isExecuting ? "Executing..." : "Execute Query"}</span>
                 </button>
 
                 <div className="text-sm text-gray-500">
@@ -1177,18 +1384,21 @@ export default function SQLEditor() {
             {result && (
               <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-800">Query Results</h3>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Query Results
+                  </h3>
                   <div className="flex items-center space-x-4">
                     {result.executionTime && (
                       <span className="text-sm text-gray-500">
                         {result.executionTime.toFixed(2)} ms
                       </span>
                     )}
-                    {result.rowsAffected !== undefined && result.rowsAffected > 0 && (
-                      <span className="text-sm text-gray-500">
-                        {result.rowsAffected} row(s) affected
-                      </span>
-                    )}
+                    {result.rowsAffected !== undefined &&
+                      result.rowsAffected > 0 && (
+                        <span className="text-sm text-gray-500">
+                          {result.rowsAffected} row(s) affected
+                        </span>
+                      )}
                     {result.result && Array.isArray(result.result) && (
                       <span className="text-sm text-gray-500">
                         {result.result.length} row(s) returned
@@ -1201,8 +1411,12 @@ export default function SQLEditor() {
                   <div className="flex items-start space-x-3 p-3 bg-red-50 border border-red-200 rounded">
                     <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="text-red-600 font-semibold mb-1">SQL Error</div>
-                      <div className="text-red-500 font-mono text-sm">{result.error}</div>
+                      <div className="text-red-600 font-semibold mb-1">
+                        SQL Error
+                      </div>
+                      <div className="text-red-500 font-mono text-sm">
+                        {result.error}
+                      </div>
                     </div>
                   </div>
                 ) : result.result ? (
@@ -1214,7 +1428,10 @@ export default function SQLEditor() {
                             <thead>
                               <tr className="bg-gray-100">
                                 {result.columns?.map((col, index) => (
-                                  <th key={index} className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+                                  <th
+                                    key={index}
+                                    className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700"
+                                  >
                                     {col}
                                   </th>
                                 ))}
@@ -1222,11 +1439,23 @@ export default function SQLEditor() {
                             </thead>
                             <tbody>
                               {result.result.map((row, rowIndex) => (
-                                <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                <tr
+                                  key={rowIndex}
+                                  className={
+                                    rowIndex % 2 === 0
+                                      ? "bg-white"
+                                      : "bg-gray-50"
+                                  }
+                                >
                                   {row.map((cell, cellIndex) => (
-                                    <td key={cellIndex} className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                    <td
+                                      key={cellIndex}
+                                      className="border border-gray-300 px-4 py-2 text-sm text-gray-700"
+                                    >
                                       {cell === null ? (
-                                        <span className="text-gray-400 italic">NULL</span>
+                                        <span className="text-gray-400 italic">
+                                          NULL
+                                        </span>
                                       ) : (
                                         String(cell)
                                       )}
@@ -1245,7 +1474,9 @@ export default function SQLEditor() {
                       )
                     ) : (
                       <div className="p-3 bg-green-50 border border-green-200 rounded">
-                        <div className="text-green-600 font-mono text-sm">{result.result}</div>
+                        <div className="text-green-600 font-mono text-sm">
+                          {result.result}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1255,24 +1486,26 @@ export default function SQLEditor() {
 
             <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-lg font-semibold text-gray-800">Database Schema</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Database Schema
+                </h3>
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => setActiveResultTab('results')}
+                    onClick={() => setActiveResultTab("results")}
                     className={`px-3 py-1 rounded-lg text-sm ${
-                      activeResultTab === 'results'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      activeResultTab === "results"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
                     Results
                   </button>
                   <button
-                    onClick={() => setActiveResultTab('schema')}
+                    onClick={() => setActiveResultTab("schema")}
                     className={`px-3 py-1 rounded-lg text-sm ${
-                      activeResultTab === 'schema'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      activeResultTab === "schema"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
                     Schema
@@ -1280,25 +1513,46 @@ export default function SQLEditor() {
                 </div>
               </div>
 
-              {activeResultTab === 'schema' ? (
+              {activeResultTab === "schema" ? (
                 schemaInfo.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="min-w-full border border-gray-300 rounded">
                       <thead>
                         <tr className="bg-gray-100">
-                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Type</th>
-                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Name</th>
-                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Table</th>
-                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">SQL</th>
+                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+                            Type
+                          </th>
+                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+                            Name
+                          </th>
+                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+                            Table
+                          </th>
+                          <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+                            SQL
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {schemaInfo.map((item, index) => (
-                          <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">{item.type}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">{item.name}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">{item.tbl_name}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700 font-mono whitespace-pre-wrap">{item.sql}</td>
+                          <tr
+                            key={index}
+                            className={
+                              index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                            }
+                          >
+                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                              {item.type}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                              {item.name}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                              {item.tbl_name}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700 font-mono whitespace-pre-wrap">
+                              {item.sql}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -1324,7 +1578,9 @@ export default function SQLEditor() {
                       className="text-left p-2 bg-gray-50 hover:bg-blue-50 rounded text-sm font-mono border border-gray-200 transition-colors"
                       title="Click to load this query"
                     >
-                      {query.length > 50 ? query.substring(0, 50) + '...' : query}
+                      {query.length > 50
+                        ? query.substring(0, 50) + "..."
+                        : query}
                     </button>
                   ))}
                 </div>
@@ -1332,11 +1588,12 @@ export default function SQLEditor() {
             </div>
           </div>
         )}
-
-        {activeTab === 'databases' && (
+        {activeTab === "databases" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-800">Database Management</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Database Management
+              </h2>
               <div className="flex space-x-2">
                 <button
                   onClick={() => setShowCreateDb(true)}
@@ -1357,10 +1614,18 @@ export default function SQLEditor() {
 
             <div className="grid gap-4">
               {databases.map((db) => {
-                const sizeInMB = db.data ? (db.data.byteLength / (1024 * 1024)).toFixed(2) : 0;
+                const sizeInMB = db.data
+                  ? (db.data.byteLength / (1024 * 1024)).toFixed(2)
+                  : 0;
+                const isActive = currentDatabase === db.id;
+                const isDefault = db.id === "default";
+                const createdDate = new Date(db.createdAt).toLocaleDateString();
 
                 return (
-                  <div key={db.id} className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors shadow-sm">
+                  <div
+                    key={db.id}
+                    className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors shadow-sm"
+                  >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">
@@ -1368,54 +1633,69 @@ export default function SQLEditor() {
                             <Database className="w-5 h-5 text-blue-600" />
                             <span>{db.name}</span>
                           </h3>
-                          {currentDatabase === db.id && (
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">ACTIVE</span>
+                          {isActive && (
+                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                              ACTIVE
+                            </span>
                           )}
-                          {db.id === 'default' && (
-                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">DEFAULT</span>
+                          {isDefault && (
+                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                              DEFAULT
+                            </span>
                           )}
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500 mb-3">
                           <div>
                             <div className="text-gray-700 font-medium">
-                              {dbInstance && currentDatabase === db.id 
-                                ? dbInstance.exec("SELECT count(*) as count FROM sqlite_master WHERE type='table';")[0]?.values?.[0]?.[0] || 0
-                                : 'N/A'}
+                              {db.data ? getTableCount(db.id) : "0"}
                             </div>
                             <div>Tables</div>
                           </div>
                           <div>
-                            <div className="text-gray-700 font-medium">{sizeInMB} MB</div>
+                            <div className="text-gray-700 font-medium">
+                              {sizeInMB} MB
+                            </div>
                             <div>Size</div>
                           </div>
                           <div>
-                            <div className="text-gray-700 font-medium">{new Date(db.createdAt).toLocaleDateString()}</div>
+                            <div className="text-gray-700 font-medium">
+                              {createdDate}
+                            </div>
                             <div>Created</div>
                           </div>
                           <div>
                             <div className="text-gray-700 font-medium">
-                              {db.data ? 'Ready' : 'Corrupted'}
+                              {db.data ? "Ready" : "Corrupted"}
                             </div>
                             <div>Status</div>
                           </div>
                         </div>
-
-                        {currentDatabase === db.id && dbInstance && (
+                        {isActive && (
                           <div className="text-sm">
                             <details>
                               <summary className="cursor-pointer text-gray-500 hover:text-gray-700">
                                 View tables
                               </summary>
                               <div className="mt-2 bg-gray-50 p-2 rounded">
-                                {dbInstance.exec(`
-                                  SELECT name FROM sqlite_master 
-                                  WHERE type='table' 
-                                  AND name NOT LIKE 'sqlite_%'
-                                  ORDER BY name;
-                                `)[0]?.values?.map((row: any) => (
-                                  <div key={row[0]} className="font-mono text-sm">{row[0]}</div>
-                                ))}
+                                {tables.length > 0 ? (
+                                  <ul className="space-y-1">
+                                    {tables.map((table, index) => (
+                                      <li
+                                        key={index}
+                                        className="font-mono text-sm"
+                                      >
+                                        {index + 1}. {table}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <div className="text-gray-400 italic">
+                                    {isDefault
+                                      ? "Default tables (users, products, departments) are hidden"
+                                      : "No tables - create some!"}
+                                  </div>
+                                )}
                               </div>
                             </details>
                           </div>
@@ -1423,19 +1703,36 @@ export default function SQLEditor() {
                       </div>
 
                       <div className="flex space-x-2 ml-4">
-                        {currentDatabase !== db.id && (
+                        {!isActive && (
                           <button
                             onClick={() => switchDatabase(db.id)}
                             className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm text-white transition-colors"
+                            title="Switch to this database"
                           >
                             Switch
+                          </button>
+                        )}
+                        {isActive && (
+                          <button
+                            onClick={() => {
+                              setTableSql("CREATE TABLE ");
+                              setShowTableModal(true);
+                            }}
+                            className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-lg text-sm text-white transition-colors"
+                            title="Create new table"
+                          >
+                            <Plus className="w-4 h-4" />
                           </button>
                         )}
                         <button
                           onClick={() => deleteDatabaseFromStorage(db.id)}
                           className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-lg text-sm flex items-center space-x-1 text-white transition-colors"
-                          disabled={db.id === 'default'}
-                          title={db.id === 'default' ? 'Cannot delete default database' : 'Delete database'}
+                          disabled={isDefault}
+                          title={
+                            isDefault
+                              ? "Cannot delete default database"
+                              : "Delete database"
+                          }
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -1447,11 +1744,12 @@ export default function SQLEditor() {
             </div>
           </div>
         )}
-
-        {activeTab === 'queries' && (
+        {activeTab === "queries" && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-800">Saved Queries</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Saved Queries
+              </h2>
               <button
                 onClick={() => queryFileInputRef.current?.click()}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center space-x-2 text-white shadow-md transition-colors"
@@ -1470,7 +1768,10 @@ export default function SQLEditor() {
             ) : (
               <div className="grid gap-4">
                 {queries.map((query) => (
-                  <div key={query.id} className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors shadow-sm">
+                  <div
+                    key={query.id}
+                    className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors shadow-sm"
+                  >
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold flex items-center space-x-2 mb-2 text-gray-800">
@@ -1482,7 +1783,9 @@ export default function SQLEditor() {
                         </p>
                         <div className="bg-gray-50 p-3 rounded border border-gray-200 overflow-hidden">
                           <pre className="text-sm font-mono text-gray-700 whitespace-pre-wrap break-all">
-                            {query.sql.length > 200 ? query.sql.substring(0, 200) + '...' : query.sql}
+                            {query.sql.length > 200
+                              ? query.sql.substring(0, 200) + "..."
+                              : query.sql}
                           </pre>
                         </div>
                       </div>
@@ -1517,11 +1820,53 @@ export default function SQLEditor() {
           </div>
         )}
 
+        {showTableModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg p-6 max-w-2xl w-full">
+              <h2 className="text-xl font-bold mb-4">Create New Table</h2>
+              <textarea
+                value={tableSql}
+                onChange={(e) => setTableSql(e.target.value)}
+                className="w-full h-40 p-3 border border-gray-300 rounded mb-4 font-mono text-sm"
+                placeholder="CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"
+              />
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowTableModal(false)}
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!tableSql.trim()) {
+                      alert("Please enter a CREATE TABLE statement");
+                      return;
+                    }
+                    try {
+                      await createTable(tableSql);
+                      setShowTableModal(false);
+                      // Optional: Show toast notification
+                      // toast.success('Table created successfully');
+                    } catch (err) {
+                      alert(`Error: ${(err as Error).message}`);
+                    }
+                  }}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+                >
+                  Create Table
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Create Database Modal */}
         {showCreateDb && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <div className="bg-white p-6 rounded-lg max-w-md w-full border border-gray-300 shadow-xl">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Create New Database</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                Create New Database
+              </h3>
               <input
                 type="text"
                 value={newDbName}
@@ -1529,9 +1874,9 @@ export default function SQLEditor() {
                 placeholder="Database name"
                 className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && newDbName.trim()) {
+                  if (e.key === "Enter" && newDbName.trim()) {
                     createDatabase();
-                  } else if (e.key === 'Escape') {
+                  } else if (e.key === "Escape") {
                     setShowCreateDb(false);
                   }
                 }}
@@ -1558,9 +1903,11 @@ export default function SQLEditor() {
 
         {/* Save Query Modal */}
         {showSaveQuery && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <div className="bg-white p-6 rounded-lg max-w-md w-full border border-gray-300 shadow-xl">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Save Query</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                Save Query
+              </h3>
               <input
                 type="text"
                 value={queryName}
@@ -1568,9 +1915,9 @@ export default function SQLEditor() {
                 placeholder="Query name"
                 className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && queryName.trim()) {
+                  if (e.key === "Enter" && queryName.trim()) {
                     saveCurrentQuery();
-                  } else if (e.key === 'Escape') {
+                  } else if (e.key === "Escape") {
                     setShowSaveQuery(false);
                   }
                 }}
@@ -1578,7 +1925,8 @@ export default function SQLEditor() {
               />
               <div className="text-sm text-gray-500 mb-4">
                 <div className="font-mono bg-gray-50 p-2 rounded border max-h-32 overflow-y-auto text-gray-700">
-                  {sql.substring(0, 200)}{sql.length > 200 ? '...' : ''}
+                  {sql.substring(0, 200)}
+                  {sql.length > 200 ? "..." : ""}
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
@@ -1602,14 +1950,21 @@ export default function SQLEditor() {
 
         {/* Query History Modal */}
         {showHistory && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <div className="bg-white p-6 rounded-lg max-w-2xl w-full border border-gray-300 shadow-xl max-h-[80vh] flex flex-col">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Query History</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Query History
+                </h3>
                 <div className="flex space-x-2">
                   <button
                     onClick={clearHistory}
-                    className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-lg text-sm text-white transition-colors"
+                    disabled={history.length === 0}
+                    className={`px-3 py-1 rounded-lg text-sm text-white transition-colors ${
+                      history.length === 0
+                        ? "bg-red-400 cursor-not-allowed"
+                        : "bg-red-600 hover:bg-red-700"
+                    }`}
                   >
                     Clear History
                   </button>
@@ -1630,13 +1985,15 @@ export default function SQLEditor() {
                 ) : (
                   <div className="space-y-2">
                     {history.map((item) => (
-                      <div 
-                        key={item.id} 
+                      <div
+                        key={item.id}
                         className="p-3 bg-gray-50 hover:bg-blue-50 rounded-lg border border-gray-200 cursor-pointer transition-colors"
                         onClick={() => loadHistoryItem(item)}
                       >
                         <div className="text-sm font-mono text-gray-700 whitespace-pre-wrap break-all mb-1">
-                          {item.sql.length > 100 ? item.sql.substring(0, 100) + '...' : item.sql}
+                          {item.sql.length > 100
+                            ? item.sql.substring(0, 100) + "..."
+                            : item.sql}
                         </div>
                         <div className="text-xs text-gray-500">
                           {new Date(item.executedAt).toLocaleString()}
