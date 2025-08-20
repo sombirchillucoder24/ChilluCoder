@@ -10,7 +10,7 @@ import {
   FaChevronDown,
   FaCode,
 } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,11 @@ export default function HTMLAudioPage() {
   const handlePlayPause = (id: string) => {
     const audio = audioRefs.current[id];
     if (audio) {
-      audio.paused ? audio.play() : audio.pause();
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
     }
   };
 
@@ -62,11 +66,23 @@ export default function HTMLAudioPage() {
 
   const handleOpenEditor = (code: string) => {
     try {
-      localStorage.setItem("html-code", code);
+      // Use sessionStorage instead of localStorage for better practice
+      sessionStorage.setItem("html-code", code);
       router.push("/compilers/html-editor");
     } catch (error) {
-      console.error("Error saving to localStorage:", error);
+      console.error("Error saving to sessionStorage:", error);
       alert("Could not open editor. Please try again.");
+    }
+  };
+
+  const setupAudioRef = (el: HTMLAudioElement | null, id: string) => {
+    if (el) {
+      audioRefs.current[id] = el;
+      el.onplay = () => console.log("Audio started playing");
+      el.onpause = () => console.log("Audio paused");
+      el.onended = () => console.log("Audio finished playing");
+    } else {
+      delete audioRefs.current[id]; // Fixed: Use delete instead of setting to null
     }
   };
 
@@ -83,7 +99,7 @@ export default function HTMLAudioPage() {
         <div className="flex items-center justify-center p-4 bg-gray-100 rounded">
           <audio
             controls
-            ref={(el) => (audioRefs.current["basic-audio"] = el)}
+            ref={(el) => setupAudioRef(el, "basic-audio")}
             className="w-full"
           >
             <source src={audioFiles.mp3} type="audio/mpeg" />
@@ -106,7 +122,7 @@ export default function HTMLAudioPage() {
         <div className="flex items-center justify-center p-4 bg-gray-100 rounded">
           <audio
             controls
-            ref={(el) => (audioRefs.current["multiple-sources"] = el)}
+            ref={(el) => setupAudioRef(el, "multiple-sources")}
             className="w-full"
           >
             <source src={audioFiles.ogg} type="audio/ogg" />
@@ -134,7 +150,7 @@ export default function HTMLAudioPage() {
       preview: (
         <div className="flex flex-col items-center p-4 bg-gray-100 rounded">
           <audio
-            ref={(el) => (audioRefs.current["custom-controls"] = el)}
+            ref={(el) => setupAudioRef(el, "custom-controls")}
             className="mb-4"
           >
             <source src={audioFiles.mp3} type="audio/mpeg" />
@@ -178,7 +194,7 @@ export default function HTMLAudioPage() {
             controls
             loop
             muted
-            ref={(el) => (audioRefs.current["audio-attributes"] = el)}
+            ref={(el) => setupAudioRef(el, "audio-attributes")}
             className="w-full"
           >
             <source src={audioFiles.mp3} type="audio/mpeg" />
@@ -204,7 +220,7 @@ export default function HTMLAudioPage() {
       preview: (
         <div className="p-4 bg-gray-100 rounded">
           <audio
-            ref={(el) => (audioRefs.current["background-audio"] = el)}
+            ref={(el) => setupAudioRef(el, "background-audio")}
             loop
             className="hidden"
           >
@@ -213,7 +229,9 @@ export default function HTMLAudioPage() {
           <button
             onClick={() => {
               const audio = audioRefs.current["background-audio"];
-              if (audio) audio.play();
+              if (audio) {
+                audio.play().catch(console.error);
+              }
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mb-2"
           >
@@ -252,14 +270,7 @@ export default function HTMLAudioPage() {
         <div className="flex flex-col items-center p-4 bg-gray-100 rounded">
           <audio
             controls
-            ref={(el) => {
-              audioRefs.current["audio-events"] = el;
-              if (el) {
-                el.onplay = () => console.log("Audio started playing");
-                el.onpause = () => console.log("Audio paused");
-                el.onended = () => console.log("Audio finished playing");
-              }
-            }}
+            ref={(el) => setupAudioRef(el, "audio-events")}
             className="w-full mb-4"
           >
             <source src={audioFiles.mp3} type="audio/mpeg" />
@@ -737,7 +748,7 @@ export default function HTMLAudioPage() {
               <li>Include fallback content for unsupported browsers</li>
               <li>Provide transcripts for spoken audio content</li>
               <li>Allow users to control volume and mute audio</li>
-              <li>Don't autoplay audio without user consent</li>
+              <li>Don&apos;t autoplay audio without user consent</li>
             </ul>
           </div>
           <div>
@@ -749,7 +760,8 @@ export default function HTMLAudioPage() {
                 Use appropriate audio formats (MP3 for broad compatibility)
               </li>
               <li>
-                Consider using <code>preload="metadata"</code> for large files
+                Consider using <code>preload=&quot;metadata&quot;</code> for
+                large files
               </li>
               <li>Optimize audio files for web (bitrate, length)</li>
               <li>Use CDN for audio files if serving to many users</li>

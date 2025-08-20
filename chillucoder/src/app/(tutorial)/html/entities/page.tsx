@@ -8,14 +8,11 @@ import {
   FaPlay,
   FaInfoCircle,
   FaSearch,
-  FaHashtag,
-  FaCopyright,
   FaQuoteLeft,
   FaLessThan,
   FaGreaterThan,
 } from "react-icons/fa";
 import { useState } from "react";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -159,7 +156,7 @@ export default function HtmlEntitiesPage() {
           About HTML Entities
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          HTML entities are used to display reserved characters and symbols that either aren't available on keyboards or have special meaning in HTML. 
+          HTML entities are used to display reserved characters and symbols that either aren&apos;t available on keyboards or have special meaning in HTML. 
           They begin with an ampersand (<code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&amp;</code>) and end with a semicolon (<code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">;</code>).
         </p>
         <div className="flex items-center gap-4 mb-4">
@@ -304,7 +301,7 @@ export default function HtmlEntitiesPage() {
                 </div>
                 <div className="bg-blue-50 dark:bg-gray-700 border-l-4 border-blue-500 p-4">
                   <p className="text-blue-700 dark:text-blue-400">
-                    <strong>Important:</strong> Always declare <code className="bg-blue-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">&lt;meta charset="UTF-8"&gt;</code> in your HTML to ensure proper character rendering.
+                    <strong>Important:</strong> Always declare <code className="bg-blue-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">&lt;meta charset=&quot;UTF-8&quot;&gt;</code> in your HTML to ensure proper character rendering.
                   </p>
                 </div>
               </div>
@@ -386,10 +383,10 @@ export default function HtmlEntitiesPage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Always escape reserved HTML characters (&lt;, &gt;, &amp;, ", ')</li>
+              <li>Always escape reserved HTML characters (&lt;, &gt;, &amp;, &quot;, &apos;)</li>
               <li>Use named entities when available for better readability</li>
               <li>Use numeric entities for obscure or less common characters</li>
               <li>Declare UTF-8 character encoding in your HTML</li>
@@ -399,14 +396,14 @@ export default function HtmlEntitiesPage() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't copy-paste special characters directly (use entities)</li>
+              <li>Don&apos;t copy-paste special characters directly (use entities)</li>
               <li>Avoid using entities for styling (use CSS instead)</li>
-              <li>Don't overuse non-breaking spaces for layout</li>
+              <li>Don&apos;t overuse non-breaking spaces for layout</li>
               <li>Avoid mixing entity formats unnecessarily</li>
-              <li>Don't forget to close entities with semicolons</li>
+              <li>Don&apos;t forget to close entities with semicolons</li>
               <li>Avoid using obscure entities that may not render consistently</li>
             </ul>
           </div>

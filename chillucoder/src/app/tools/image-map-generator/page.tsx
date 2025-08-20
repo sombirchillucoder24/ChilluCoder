@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 
 type ShapeType = 'rect' | 'circle' | 'poly';
 
@@ -26,12 +26,12 @@ const ImageMapCreator = () => {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [liveCoords, setLiveCoords] = useState<number[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
+  // const imageRef = useRef<HTMLImageElement>(null);
   const animationFrameRef = useRef<number>(0);
   const lastMousePos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Modern color palette
-  const colors = {
+const colors = useMemo(
+  () => ({
     primary: '#6366f1',
     secondary: '#8b5cf6',
     accent: '#ec4899',
@@ -39,8 +39,11 @@ const ImageMapCreator = () => {
     card: '#334155',
     text: '#f8fafc',
     error: '#ef4444',
-    success: '#10b981'
-  };
+    success: '#10b981',
+  }),
+  []
+);
+
 
   // Get accurate mouse position relative to canvas
   const getCanvasCoordinates = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -532,12 +535,12 @@ const ImageMapCreator = () => {
     );
   };
 
-  const generateImageMap = () =>
-    `<map name="image-map">\n` +
-    shapes.map(s =>
-      `  <area shape="${s.type}" coords="${s.coords.join(',')}" href="${s.href}" title="${s.title}" alt="${s.title || s.type + ' area'}" />`
-    ).join('\n') +
-    `\n</map>`;
+  // const generateImageMap = () =>
+  //   `<map name="image-map">\n` +
+  //   shapes.map(s =>
+  //     `  <area shape="${s.type}" coords="${s.coords.join(',')}" href="${s.href}" title="${s.title}" alt="${s.title || s.type + ' area'}" />`
+  //   ).join('\n') +
+  //   `\n</map>`;
 
   useEffect(() => {
     if (!canvasRef.current || !image) return;

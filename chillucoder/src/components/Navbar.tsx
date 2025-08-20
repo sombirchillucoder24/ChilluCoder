@@ -21,8 +21,8 @@ export function Navbar() {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Tutorials', path: '/tutorials' },
-    { name: 'Examples', path: '/examples' },
-    { name: 'Exercises', path: '/exercises' },
+    // { name: 'Examples', path: '/examples' },
+    // { name: 'Exercises', path: '/exercises' },
   ]
 
   // Only apply scroll effects after mounting

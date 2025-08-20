@@ -8,9 +8,8 @@ import {
   FaCopy,
   FaCheck,
   FaChevronDown,
-  FaCode,
 } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -51,7 +50,11 @@ export default function HTMLVideoTutorial() {
   const handlePlayPause = (id: string) => {
     const video = videoRefs.current[id];
     if (video) {
-      video.paused ? video.play() : video.pause();
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
     }
   };
 
@@ -65,12 +68,14 @@ export default function HTMLVideoTutorial() {
   const handleFullscreen = (id: string) => {
     const video = videoRefs.current[id];
     if (video) {
+      // Modern browsers support requestFullscreen without vendor prefixes
       if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+        video.requestFullscreen().catch((err) => {
+          console.log(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        // Fallback message for very old browsers (extremely rare now)
+        alert("Fullscreen is not supported in this browser");
       }
     }
   };
@@ -102,9 +107,15 @@ export default function HTMLVideoTutorial() {
           Introduction to HTML Video
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          The HTML <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">&lt;video&gt;</code> element allows you to embed video content directly in your web pages. It supports multiple video formats and provides built-in controls for playback.
+          The HTML{" "}
+          <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">
+            &lt;video&gt;
+          </code>{" "}
+          element allows you to embed video content directly in your web pages.
+          It supports multiple video formats and provides built-in controls for
+          playback.
         </p>
-        
+
         <div className="bg-white dark:bg-gray-900 p-4 rounded-lg mb-4">
           <h3 className="font-bold mb-2">Basic Syntax:</h3>
           <CodeEditor
@@ -116,16 +127,22 @@ export default function HTMLVideoTutorial() {
             style={{
               fontSize: 14,
               backgroundColor: "#f8fafc",
-              fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+              fontFamily:
+                "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
             }}
             className="rounded-lg"
           />
           <div className="flex gap-2 mt-2">
             <button
-              onClick={() => copyToClipboard(`<video controls>
+              onClick={() =>
+                copyToClipboard(
+                  `<video controls>
   <source src="movie.mp4" type="video/mp4">
   Your browser does not support the video tag.
-</video>`, "basic video")}
+</video>`,
+                  "basic video"
+                )
+              }
               className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
             >
               {copied === "basic video" ? (
@@ -139,7 +156,8 @@ export default function HTMLVideoTutorial() {
               )}
             </button>
             <button
-              onClick={() => handleOpenEditor(`<!DOCTYPE html>
+              onClick={() =>
+                handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Basic Video Example</title>
@@ -150,7 +168,8 @@ export default function HTMLVideoTutorial() {
     Your browser does not support the video tag.
   </video>
 </body>
-</html>`)}
+</html>`)
+              }
               className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
             >
               <FaPlay size={12} /> Try it
@@ -180,26 +199,31 @@ export default function HTMLVideoTutorial() {
             {/* Example 1: Basic Video */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <div className="p-4 bg-white dark:bg-gray-800">
-                <h3 className="font-bold text-lg mb-2">1. Basic Video Player</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  1. Basic Video Player
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   The simplest way to embed a video with default controls.
                 </p>
-                
+
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex justify-center">
                   <video
                     controls
                     width="600"
-                    ref={(el) => (videoRefs.current["basic-video"] = el)}
+                    ref={(el) => {
+                      videoRefs.current["basic-video"] = el;
+                    }}
                     className="w-full max-w-full"
                   >
                     <source src={videoFiles.mp4} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
                   <button
-                    onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Basic Video</title>
@@ -210,16 +234,22 @@ export default function HTMLVideoTutorial() {
     Your browser does not support the video tag.
   </video>
 </body>
-</html>`)}
+</html>`)
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     <FaPlay size={12} /> Try it
                   </button>
                   <button
-                    onClick={() => copyToClipboard(`<video controls width="600">
+                    onClick={() =>
+                      copyToClipboard(
+                        `<video controls width="600">
   <source src="${videoFiles.mp4}" type="video/mp4">
   Your browser does not support the video tag.
-</video>`, "basic video")}
+</video>`,
+                        "basic video"
+                      )
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     {copied === "basic video" ? (
@@ -233,7 +263,7 @@ export default function HTMLVideoTutorial() {
                     )}
                   </button>
                 </div>
-                
+
                 <CodeEditor
                   value={`<video controls width="600">
   <source src="${videoFiles.mp4}" type="video/mp4">
@@ -243,7 +273,8 @@ export default function HTMLVideoTutorial() {
                   style={{
                     fontSize: 14,
                     backgroundColor: "#f8fafc",
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                   }}
                   className="rounded-lg"
                 />
@@ -253,16 +284,20 @@ export default function HTMLVideoTutorial() {
             {/* Example 2: Multiple Sources */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <div className="p-4 bg-white dark:bg-gray-800">
-                <h3 className="font-bold text-lg mb-2">2. Multiple Video Sources</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  2. Multiple Video Sources
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Provide multiple formats for better browser compatibility.
                 </p>
-                
+
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex justify-center">
                   <video
                     controls
                     width="600"
-                    ref={(el) => (videoRefs.current["multiple-sources"] = el)}
+                    ref={(el) => {
+                      videoRefs.current["multiple-sources"] = el;
+                    }}
                     className="w-full max-w-full"
                   >
                     <source src={videoFiles.webm} type="video/webm" />
@@ -271,10 +306,11 @@ export default function HTMLVideoTutorial() {
                     Your browser does not support the video tag.
                   </video>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
                   <button
-                    onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Multiple Sources</title>
@@ -287,18 +323,24 @@ export default function HTMLVideoTutorial() {
     Your browser does not support the video tag.
   </video>
 </body>
-</html>`)}
+</html>`)
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     <FaPlay size={12} /> Try it
                   </button>
                   <button
-                    onClick={() => copyToClipboard(`<video controls width="600">
+                    onClick={() =>
+                      copyToClipboard(
+                        `<video controls width="600">
   <source src="${videoFiles.webm}" type="video/webm">
   <source src="${videoFiles.mp4}" type="video/mp4">
   <source src="${videoFiles.ogv}" type="video/ogg">
   Your browser does not support the video tag.
-</video>`, "multiple sources")}
+</video>`,
+                        "multiple sources"
+                      )
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     {copied === "multiple sources" ? (
@@ -312,7 +354,7 @@ export default function HTMLVideoTutorial() {
                     )}
                   </button>
                 </div>
-                
+
                 <CodeEditor
                   value={`<video controls width="600">
   <source src="${videoFiles.webm}" type="video/webm">
@@ -324,7 +366,8 @@ export default function HTMLVideoTutorial() {
                   style={{
                     fontSize: 14,
                     backgroundColor: "#f8fafc",
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                   }}
                   className="rounded-lg"
                 />
@@ -334,27 +377,32 @@ export default function HTMLVideoTutorial() {
             {/* Example 3: Video with Poster */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <div className="p-4 bg-white dark:bg-gray-800">
-                <h3 className="font-bold text-lg mb-2">3. Video with Poster Image</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  3. Video with Poster Image
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Show a preview image before the video plays.
                 </p>
-                
+
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex justify-center">
                   <video
                     controls
                     width="600"
                     poster={videoFiles.poster}
-                    ref={(el) => (videoRefs.current["poster-video"] = el)}
+                    ref={(el) => {
+                      videoRefs.current["poster-video"] = el;
+                    }}
                     className="w-full max-w-full"
                   >
                     <source src={videoFiles.mp4} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
                   <button
-                    onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Video with Poster</title>
@@ -365,16 +413,22 @@ export default function HTMLVideoTutorial() {
     Your browser does not support the video tag.
   </video>
 </body>
-</html>`)}
+</html>`)
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     <FaPlay size={12} /> Try it
                   </button>
                   <button
-                    onClick={() => copyToClipboard(`<video controls width="600" poster="${videoFiles.poster}">
+                    onClick={() =>
+                      copyToClipboard(
+                        `<video controls width="600" poster="${videoFiles.poster}">
   <source src="${videoFiles.mp4}" type="video/mp4">
   Your browser does not support the video tag.
-</video>`, "poster video")}
+</video>`,
+                        "poster video"
+                      )
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     {copied === "poster video" ? (
@@ -388,7 +442,7 @@ export default function HTMLVideoTutorial() {
                     )}
                   </button>
                 </div>
-                
+
                 <CodeEditor
                   value={`<video controls width="600" poster="${videoFiles.poster}">
   <source src="${videoFiles.mp4}" type="video/mp4">
@@ -398,7 +452,8 @@ export default function HTMLVideoTutorial() {
                   style={{
                     fontSize: 14,
                     backgroundColor: "#f8fafc",
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                   }}
                   className="rounded-lg"
                 />
@@ -449,7 +504,8 @@ export default function HTMLVideoTutorial() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Shows the default video controls (play/pause, volume, etc.)
+                      Shows the default video controls (play/pause, volume,
+                      etc.)
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
@@ -464,7 +520,8 @@ export default function HTMLVideoTutorial() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Video starts playing as soon as it's ready (may be blocked by browsers)
+                      Video starts playing as soon as it&apos;s ready (may be
+                      blocked by browsers)
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
@@ -513,7 +570,7 @@ export default function HTMLVideoTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;video poster="image.jpg"&gt;
+                        &lt;video poster=&quot;image.jpg&quot;&gt;
                       </code>
                     </td>
                   </tr>
@@ -524,11 +581,12 @@ export default function HTMLVideoTutorial() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Specifies if/how the video should be loaded when page loads (auto, metadata, none)
+                      Specifies if/how the video should be loaded when page
+                      loads (auto, metadata, none)
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;video preload="auto"&gt;
+                        &lt;video preload=&quot;auto&quot;&gt;
                       </code>
                     </td>
                   </tr>
@@ -543,7 +601,7 @@ export default function HTMLVideoTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;video width="600"&gt;
+                        &lt;video width=&quot;600&quot;&gt;
                       </code>
                     </td>
                   </tr>
@@ -558,7 +616,7 @@ export default function HTMLVideoTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;video height="400"&gt;
+                        &lt;video height=&quot;400&quot;&gt;
                       </code>
                     </td>
                   </tr>
@@ -590,16 +648,21 @@ export default function HTMLVideoTutorial() {
             {/* Custom Controls */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <div className="p-4 bg-white dark:bg-gray-800">
-                <h3 className="font-bold text-lg mb-2">Custom Video Controls</h3>
+                <h3 className="font-bold text-lg mb-2">
+                  Custom Video Controls
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Create your own controls using JavaScript instead of the default browser controls.
+                  Create your own controls using JavaScript instead of the
+                  default browser controls.
                 </p>
-                
+
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
                   <video
                     width="600"
                     poster={videoFiles.poster}
-                    ref={(el) => (videoRefs.current["custom-controls"] = el)}
+                    ref={(el) => {
+                      videoRefs.current["custom-controls"] = el;
+                    }}
                     className="w-full max-w-full mb-4"
                   >
                     <source src={videoFiles.mp4} type="video/mp4" />
@@ -641,10 +704,11 @@ export default function HTMLVideoTutorial() {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
                   <button
-                    onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Custom Video Controls</title>
@@ -680,13 +744,16 @@ export default function HTMLVideoTutorial() {
     </button>
   </div>
 </body>
-</html>`)}
+</html>`)
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     <FaPlay size={12} /> Try it
                   </button>
                   <button
-                    onClick={() => copyToClipboard(`<!DOCTYPE html>
+                    onClick={() =>
+                      copyToClipboard(
+                        `<!DOCTYPE html>
 <html>
 <head>
   <title>Custom Video Controls</title>
@@ -722,7 +789,10 @@ export default function HTMLVideoTutorial() {
     </button>
   </div>
 </body>
-</html>`, "custom controls")}
+</html>`,
+                        "custom controls"
+                      )
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     {copied === "custom controls" ? (
@@ -736,7 +806,7 @@ export default function HTMLVideoTutorial() {
                     )}
                   </button>
                 </div>
-                
+
                 <CodeEditor
                   value={`<!DOCTYPE html>
 <html>
@@ -779,7 +849,8 @@ export default function HTMLVideoTutorial() {
                   style={{
                     fontSize: 14,
                     backgroundColor: "#f8fafc",
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                   }}
                   className="rounded-lg"
                 />
@@ -793,12 +864,14 @@ export default function HTMLVideoTutorial() {
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Add subtitles/captions to your videos for accessibility.
                 </p>
-                
+
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
                   <video
                     controls
                     width="600"
-                    ref={(el) => (videoRefs.current["captions-video"] = el)}
+                    ref={(el) => {
+                      videoRefs.current["captions-video"] = el;
+                    }}
                     className="w-full max-w-full"
                   >
                     <source src={videoFiles.mp4} type="video/mp4" />
@@ -813,10 +886,11 @@ export default function HTMLVideoTutorial() {
                     Note: This example requires a WebVTT file for captions
                   </p>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
                   <button
-                    onClick={() => handleOpenEditor(`<!DOCTYPE html>
+                    onClick={() =>
+                      handleOpenEditor(`<!DOCTYPE html>
 <html>
 <head>
   <title>Video with Captions</title>
@@ -827,13 +901,16 @@ export default function HTMLVideoTutorial() {
     <track kind="subtitles" src="captions.vtt" srclang="en" label="English">
   </video>
 </body>
-</html>`)}
+</html>`)
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
                   >
                     <FaPlay size={12} /> Try it
                   </button>
                   <button
-                    onClick={() => copyToClipboard(`<!DOCTYPE html>
+                    onClick={() =>
+                      copyToClipboard(
+                        `<!DOCTYPE html>
 <html>
 <head>
   <title>Video with Captions</title>
@@ -844,7 +921,10 @@ export default function HTMLVideoTutorial() {
     <track kind="subtitles" src="captions.vtt" srclang="en" label="English">
   </video>
 </body>
-</html>`, "captions video")}
+</html>`,
+                        "captions video"
+                      )
+                    }
                     className="flex items-center gap-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     {copied === "captions video" ? (
@@ -858,7 +938,7 @@ export default function HTMLVideoTutorial() {
                     )}
                   </button>
                 </div>
-                
+
                 <CodeEditor
                   value={`<!DOCTYPE html>
 <html>
@@ -876,7 +956,8 @@ export default function HTMLVideoTutorial() {
                   style={{
                     fontSize: 14,
                     backgroundColor: "#f8fafc",
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                    fontFamily:
+                      "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                   }}
                   className="rounded-lg"
                 />
@@ -891,7 +972,7 @@ export default function HTMLVideoTutorial() {
         <h2 className="text-2xl font-bold mb-4 text-yellow-800 dark:text-yellow-200">
           Video Best Practices
         </h2>
-        
+
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-2">Accessibility</h3>
@@ -899,16 +980,21 @@ export default function HTMLVideoTutorial() {
               <li>Always provide controls for video playback</li>
               <li>Include captions/subtitles for spoken content</li>
               <li>Provide audio descriptions when needed</li>
-              <li>Don't autoplay videos with sound (it's often blocked anyway)</li>
+              <li>
+                Don&apos;t autoplay videos with sound (it&apos;s often blocked
+                anyway)
+              </li>
               <li>Ensure sufficient color contrast for any custom controls</li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-bold text-lg mb-2">Performance</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use MP4 format for broadest compatibility (H.264 codec)</li>
-              <li>Optimize video files (compression, appropriate resolution)</li>
+              <li>
+                Optimize video files (compression, appropriate resolution)
+              </li>
               <li>Use poster images for faster perceived loading</li>
               <li>Consider lazy loading for videos below the fold</li>
               <li>For large videos, consider streaming solutions</li>
@@ -922,11 +1008,15 @@ export default function HTMLVideoTutorial() {
         <h2 className="text-2xl font-bold mb-4 text-green-800 dark:text-green-200">
           Browser Support
         </h2>
-        
+
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          The HTML5 <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">&lt;video&gt;</code> element is supported in all modern browsers:
+          The HTML5{" "}
+          <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">
+            &lt;video&gt;
+          </code>{" "}
+          element is supported in all modern browsers:
         </p>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full bg-white dark:bg-gray-900 rounded-lg">
             <thead>
@@ -965,9 +1055,10 @@ export default function HTMLVideoTutorial() {
             </tbody>
           </table>
         </div>
-        
+
         <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          Note: For widest compatibility, provide multiple formats (MP4 + WebM recommended).
+          Note: For widest compatibility, provide multiple formats (MP4 + WebM
+          recommended).
         </p>
       </section>
 

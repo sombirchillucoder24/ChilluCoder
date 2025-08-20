@@ -1,7 +1,7 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
-import { useState } from "react";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
+import { useState, useRef } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ export default function HTMLDragDropTutorial() {
     basics: true,
     examples: true,
     advanced: true,
+    reference: false
   });
 
   const toggleSection = (section: string) => {
@@ -41,165 +42,197 @@ export default function HTMLDragDropTutorial() {
   };
 
   // Basic Example Preview
-  const BasicExamplePreview = () => (
-    <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
-      <div
-        id="preview-draggable"
-        draggable="true"
-        onDragStart={(e) => {
-          e.dataTransfer.setData("text/plain", "preview-draggable");
-        }}
-        className="w-24 h-24 bg-purple-600 text-white flex items-center justify-center cursor-move rounded-lg mb-4"
-      >
-        Drag me!
-      </div>
-      <div
-        id="preview-droptarget"
-        onDrop={(e) => {
-          e.preventDefault();
-          const draggable = document.getElementById("preview-draggable");
-          if (draggable && e.currentTarget) {
-            e.currentTarget.appendChild(draggable);
-          }
-        }}
-        onDragOver={(e) => e.preventDefault()}
-        className="w-48 h-48 border-2 border-dashed border-gray-400 dark:border-gray-500 flex items-center justify-center rounded-lg"
-      >
-        Drop here
-      </div>
-    </div>
-  );
-
-  // Multiple Items Preview
-  const MultipleItemsPreview = () => (
-    <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
-      <div className="flex gap-2 mb-4">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            id={`preview-item-${i}`}
-            draggable="true"
-            onDragStart={(e) => {
-              e.dataTransfer.setData("text/plain", `preview-item-${i}`);
-              e.currentTarget.style.opacity = "0.4";
-            }}
-            onDragEnd={(e) => {
-              e.currentTarget.style.opacity = "1";
-            }}
-            className="w-20 h-20 bg-purple-600 text-white flex items-center justify-center cursor-move rounded-lg"
-          >
-            Item {i}
-          </div>
-        ))}
-      </div>
-      <div
-        id="preview-droptarget-multi"
-        onDrop={(e) => {
-          e.preventDefault();
-          const id = e.dataTransfer.getData("text/plain");
-          const draggable = document.getElementById(id);
-          if (draggable && e.currentTarget) {
-            e.currentTarget.appendChild(draggable);
-            draggable.style.opacity = "1";
-          }
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.currentTarget.style.borderColor = "#8b5cf6";
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault();
-          e.currentTarget.style.borderColor = "#9ca3af";
-        }}
-        className="w-64 h-32 border-2 border-dashed border-gray-400 dark:border-gray-500 flex flex-wrap items-start justify-start p-2 gap-2 rounded-lg"
-      >
-        Drop items here
-      </div>
-    </div>
-  );
-
-  // Sortable List Preview
-  const SortableListPreview = () => {
-    const [items, setItems] = useState([
-      "Item 1",
-      "Item 2",
-      "Item 3",
-      "Item 4",
-    ]);
-
-    const handleDragStart = (e: React.DragEvent, index: number) => {
-      e.dataTransfer.setData("text/plain", index.toString());
-      e.currentTarget.classList.add("dragging");
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
+  const BasicExamplePreview = () => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
-      const list = e.currentTarget as HTMLElement;
-      const draggingItem = list.querySelector(".dragging") as HTMLElement;
-      if (!draggingItem) return;
-
-      const afterElement = getDragAfterElement(list, e.clientY);
-      if (afterElement) {
-        list.insertBefore(draggingItem, afterElement);
-      } else {
-        list.appendChild(draggingItem);
+      const draggable = document.getElementById("preview-draggable");
+      if (draggable && e.currentTarget) {
+        e.currentTarget.appendChild(draggable);
       }
-    };
-
-    const getDragAfterElement = (container: HTMLElement, y: number) => {
-      const draggableElements = [
-        ...container.querySelectorAll("li:not(.dragging)"),
-      ] as HTMLElement[];
-
-      return draggableElements.reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-
-          if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-          } else {
-            return closest;
-          }
-        },
-        { offset: Number.NEGATIVE_INFINITY }
-      ).element;
-    };
-
-    const handleDragEnd = (e: React.DragEvent) => {
-      e.currentTarget.classList.remove("dragging");
     };
 
     return (
       <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
-        <ul className="list-none p-0 w-48" onDragOver={handleDragOver}>
-          {items.map((item, index) => (
-            <li
-              key={index}
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragEnd={handleDragEnd}
-              className="p-2 my-1 bg-gray-200 dark:bg-gray-600 rounded cursor-move"
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div
+          id="preview-draggable"
+          draggable="true"
+          onDragStart={(e: React.DragEvent) => {
+            e.dataTransfer.setData("text/plain", "preview-draggable");
+          }}
+          className="w-24 h-24 bg-purple-600 text-white flex items-center justify-center cursor-move rounded-lg mb-4"
+        >
+          Drag me!
+        </div>
+        <div
+          id="preview-droptarget"
+          onDrop={handleDrop}
+          onDragOver={(e: React.DragEvent) => e.preventDefault()}
+          className="w-48 h-48 border-2 border-dashed border-gray-400 dark:border-gray-500 flex items-center justify-center rounded-lg"
+        >
+          Drop here
+        </div>
       </div>
     );
   };
 
+  // Multiple Items Preview
+  const MultipleItemsPreview = () => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const id = e.dataTransfer.getData("text/plain");
+      const draggable = document.getElementById(id);
+      if (draggable && e.currentTarget) {
+        e.currentTarget.appendChild(draggable);
+        (draggable as HTMLElement).style.opacity = "1";
+      }
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.currentTarget.style.borderColor = "#8b5cf6";
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.currentTarget.style.borderColor = "#9ca3af";
+    };
+
+    return (
+      <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
+        <div className="flex gap-2 mb-4">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              id={`preview-item-${i}`}
+              draggable="true"
+              onDragStart={(e: React.DragEvent) => {
+                e.dataTransfer.setData("text/plain", `preview-item-${i}`);
+                (e.currentTarget as HTMLElement).style.opacity = "0.4";
+              }}
+              onDragEnd={(e: React.DragEvent) => {
+                (e.currentTarget as HTMLElement).style.opacity = "1";
+              }}
+              className="w-20 h-20 bg-purple-600 text-white flex items-center justify-center cursor-move rounded-lg"
+            >
+              Item {i}
+            </div>
+          ))}
+        </div>
+        <div
+          id="preview-droptarget-multi"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className="w-64 h-32 border-2 border-dashed border-gray-400 dark:border-gray-500 flex flex-wrap items-start justify-start p-2 gap-2 rounded-lg"
+        >
+          Drop items here
+        </div>
+      </div>
+    );
+  };
+
+// Fixed SortableListPreview component
+const SortableListPreview = () => {
+  // Fix: Properly destructure useState (setItems not needed for DOM manipulation)
+  const [items] = useState([
+    "Item 1",
+    "Item 2", 
+    "Item 3",
+    "Item 4",
+  ]);
+
+  const handleDragStart = (e: React.DragEvent<HTMLLIElement>, index: number) => {
+    e.dataTransfer.setData("text/plain", index.toString());
+    e.currentTarget.classList.add("dragging");
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLUListElement>) => {
+    e.preventDefault();
+    const list = e.currentTarget;
+    const draggingItem = list.querySelector(".dragging") as HTMLLIElement;
+    if (!draggingItem) return;
+
+    const afterElement = getDragAfterElement(list, e.clientY);
+    if (afterElement) {
+      list.insertBefore(draggingItem, afterElement);
+    } else {
+      list.appendChild(draggingItem);
+    }
+  };
+
+  const getDragAfterElement = (container: HTMLElement, y: number) => {
+    const draggableElements = Array.from(
+      container.querySelectorAll("li:not(.dragging)")
+    ) as HTMLElement[];
+
+    return draggableElements.reduce<{ offset: number; element: HTMLElement | null }>(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY, element: null }
+    ).element;
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLLIElement>) => {
+    e.currentTarget.classList.remove("dragging");
+  };
+
+  return (
+    <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
+      <ul className="list-none p-0 w-48" onDragOver={handleDragOver}>
+        {items.map((item, index) => (
+          <li
+            key={index}
+            draggable="true"
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragEnd={handleDragEnd}
+            className="p-2 my-1 bg-gray-200 dark:bg-gray-600 rounded cursor-move"
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
   // File Drop Preview
   const FileDropPreview = () => {
     const [files, setFiles] = useState<File[]>([]);
+    const dropZoneRef = useRef<HTMLDivElement>(null);
 
-    const handleDrop = (e: React.DragEvent) => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      e.currentTarget.style.backgroundColor = "";
+      if (dropZoneRef.current) {
+        dropZoneRef.current.style.backgroundColor = "";
+      }
 
       if (e.dataTransfer.files.length) {
         setFiles(Array.from(e.dataTransfer.files));
+      }
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (dropZoneRef.current) {
+        dropZoneRef.current.style.backgroundColor = "#e9d5ff";
+      }
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (dropZoneRef.current) {
+        dropZoneRef.current.style.backgroundColor = "";
       }
     };
 
@@ -214,17 +247,10 @@ export default function HTMLDragDropTutorial() {
     return (
       <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
         <div
+          ref={dropZoneRef}
           id="preview-dropzone"
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.currentTarget.style.backgroundColor = "#e9d5ff";
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.currentTarget.style.backgroundColor = "";
-          }}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className="w-64 h-32 border-2 border-dashed border-purple-500 rounded-lg flex flex-col items-center justify-center p-4"
         >
@@ -250,8 +276,7 @@ export default function HTMLDragDropTutorial() {
 
   // Custom Drag Image Preview
   const CustomDragImagePreview = () => {
-    const handleDragStart = (e: React.DragEvent) => {
-      // Create a custom drag image
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
       const dragImg = document.createElement("div");
       dragImg.innerHTML = "Custom Drag Image";
       dragImg.style.padding = "10px";
@@ -269,6 +294,14 @@ export default function HTMLDragDropTutorial() {
       setTimeout(() => document.body.removeChild(dragImg), 0);
     };
 
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const draggable = document.getElementById("preview-custom-drag");
+      if (draggable && e.currentTarget) {
+        e.currentTarget.appendChild(draggable);
+      }
+    };
+
     return (
       <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
         <div
@@ -281,14 +314,8 @@ export default function HTMLDragDropTutorial() {
         </div>
         <div
           id="preview-custom-drop"
-          onDrop={(e) => {
-            e.preventDefault();
-            const draggable = document.getElementById("preview-custom-drag");
-            if (draggable && e.currentTarget) {
-              e.currentTarget.appendChild(draggable);
-            }
-          }}
-          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
+          onDragOver={(e: React.DragEvent) => e.preventDefault()}
           className="w-48 h-48 border-2 border-dashed border-gray-400 dark:border-gray-500 flex items-center justify-center rounded-lg"
         >
           Drop here
@@ -298,136 +325,99 @@ export default function HTMLDragDropTutorial() {
   };
 
   // Drag Between Containers Preview
-  const DragBetweenContainersPreview = () => {
-    const [containers, setContainers] = useState([
-      ["Item 1", "Item 2"],
-      ["Item 3", "Item 4"],
-    ]);
+const DragBetweenContainersPreview = () => {
+  const [containers, setContainers] = useState([
+    ["Item 1", "Item 2"],
+    ["Item 3", "Item 4"],
+  ]);
 
-    const handleDragStart = (
-      e: React.DragEvent,
-      containerIndex: number,
-      itemIndex: number
-    ) => {
-      e.dataTransfer.setData(
-        "text/plain",
-        JSON.stringify({
-          containerIndex,
-          itemIndex,
-        })
-      );
-      e.currentTarget.style.opacity = "0.4";
-    };
-
-    const handleDragOver = (
-      e: React.DragEvent,
-      targetContainerIndex: number
-    ) => {
-      e.preventDefault();
-      e.currentTarget.style.backgroundColor = "#e9d5ff";
-
-      const data = e.dataTransfer.getData("text/plain");
-      if (!data) return;
-
-      const { containerIndex: sourceContainerIndex, itemIndex } =
-        JSON.parse(data);
-
-      if (sourceContainerIndex === targetContainerIndex) return;
-
-      const afterElement = getDragAfterElement(
-        e.currentTarget as HTMLElement,
-        e.clientY
-      );
-      if (afterElement) {
-        // Visual feedback only - actual movement handled by onDrop
-      }
-    };
-
-    const handleDrop = (e: React.DragEvent, targetContainerIndex: number) => {
-      e.preventDefault();
-      e.currentTarget.style.backgroundColor = "";
-
-      const data = e.dataTransfer.getData("text/plain");
-      if (!data) return;
-
-      const { containerIndex: sourceContainerIndex, itemIndex } =
-        JSON.parse(data);
-
-      if (sourceContainerIndex === targetContainerIndex) return;
-
-      setContainers((prev) => {
-        const newContainers = [...prev];
-        const [movedItem] = newContainers[sourceContainerIndex].splice(
-          itemIndex,
-          1
-        );
-        newContainers[targetContainerIndex].push(movedItem);
-        return newContainers;
-      });
-    };
-
-    const handleDragLeave = (e: React.DragEvent) => {
-      e.preventDefault();
-      e.currentTarget.style.backgroundColor = "";
-    };
-
-    const handleDragEnd = (e: React.DragEvent) => {
-      e.currentTarget.style.opacity = "1";
-    };
-
-    const getDragAfterElement = (container: HTMLElement, y: number) => {
-      const draggableElements = [
-        ...container.querySelectorAll(".preview-container-item"),
-      ] as HTMLElement[];
-
-      return draggableElements.reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-
-          if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-          } else {
-            return closest;
-          }
-        },
-        { offset: Number.NEGATIVE_INFINITY }
-      ).element;
-    };
-
-    return (
-      <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
-        <div className="flex gap-4">
-          {containers.map((container, containerIndex) => (
-            <div
-              key={containerIndex}
-              className="w-48 min-h-48 border-2 border-purple-500 rounded-lg p-3 bg-white dark:bg-gray-800"
-              onDragOver={(e) => handleDragOver(e, containerIndex)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, containerIndex)}
-            >
-              <h3 className="text-center text-purple-700 dark:text-purple-400 mb-2">
-                Container {containerIndex + 1}
-              </h3>
-              {container.map((item, itemIndex) => (
-                <div
-                  key={itemIndex}
-                  draggable="true"
-                  onDragStart={(e) =>
-                    handleDragStart(e, containerIndex, itemIndex)
-                  }
-                  onDragEnd={handleDragEnd}
-                  className="preview-container-item p-2 my-1 bg-purple-100 dark:bg-purple-900 rounded cursor-move"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    containerIndex: number,
+    itemIndex: number
+  ) => {
+    e.dataTransfer.setData(
+      "text/plain",
+      JSON.stringify({
+        containerIndex,
+        itemIndex,
+      })
     );
+    (e.currentTarget as HTMLElement).style.opacity = "0.4";
   };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    (e.currentTarget as HTMLElement).style.backgroundColor = "#e9d5ff";
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetContainerIndex: number) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).style.backgroundColor = "";
+
+    const data = e.dataTransfer.getData("text/plain");
+    if (!data) return;
+
+    const { containerIndex: sourceContainerIndex, itemIndex } =
+      JSON.parse(data);
+
+    if (sourceContainerIndex === targetContainerIndex) return;
+
+    setContainers((prev) => {
+      const newContainers = [...prev];
+      const [movedItem] = newContainers[sourceContainerIndex].splice(
+        itemIndex,
+        1
+      );
+      newContainers[targetContainerIndex].push(movedItem);
+      return newContainers;
+    });
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    (e.currentTarget as HTMLElement).style.backgroundColor = "";
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    (e.currentTarget as HTMLElement).style.opacity = "1";
+  };
+
+  return (
+    <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded flex flex-col items-center">
+      <div className="flex gap-4">
+        {containers.map((container, containerIndex) => (
+          <div
+            key={containerIndex}
+            className="w-48 min-h-48 border-2 border-purple-500 rounded-lg p-3 bg-white dark:bg-gray-800"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => handleDrop(e, containerIndex)}
+          >
+            <h3 className="text-center text-purple-700 dark:text-purple-400 mb-2">
+              Container {containerIndex + 1}
+            </h3>
+            {container.map((item, itemIndex) => (
+              <div
+                key={itemIndex}
+                draggable="true"
+                onDragStart={(e) =>
+                  handleDragStart(e, containerIndex, itemIndex)
+                }
+                onDragEnd={handleDragEnd}
+                className="preview-container-item p-2 my-1 bg-purple-100 dark:bg-purple-900 rounded cursor-move"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
   // Data Transfer Preview
   const DataTransferPreview = () => {
@@ -440,10 +430,9 @@ export default function HTMLDragDropTutorial() {
     ];
 
     const handleDragStart = (
-      e: React.DragEvent,
+      e: React.DragEvent<HTMLDivElement>,
       product: { id: string; name: string; price: number }
     ) => {
-      // Create custom drag image
       const dragImg = document.createElement("div");
       dragImg.textContent = product.name;
       dragImg.style.padding = "5px 10px";
@@ -456,12 +445,11 @@ export default function HTMLDragDropTutorial() {
       e.dataTransfer.setDragImage(dragImg, 0, 0);
       setTimeout(() => document.body.removeChild(dragImg), 0);
 
-      // Store data
       e.dataTransfer.setData("text/plain", product.id);
       e.dataTransfer.setData("application/json", JSON.stringify(product));
     };
 
-    const handleDrop = (e: React.DragEvent) => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
 
       const productData = e.dataTransfer.getData("application/json");
@@ -493,7 +481,7 @@ export default function HTMLDragDropTutorial() {
         <div
           id="preview-cart"
           onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
+          onDragOver={(e: React.DragEvent) => e.preventDefault()}
           className="w-64 p-4 border-2 border-dashed border-purple-500 rounded-lg"
         >
           <h2 className="text-center mb-2">Shopping Cart</h2>
@@ -1844,7 +1832,7 @@ export default function HTMLDragDropTutorial() {
                   <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-purple-100 dark:bg-purple-900 px-2 py-1 rounded text-sm">
-                        draggable="true"
+                        draggable=&quot;true&quot;
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">

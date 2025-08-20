@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
@@ -532,7 +532,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;svg width="100" height="100"&gt;&lt;/svg&gt;
+                        &lt;svg width=&quot;100&quot; height=&quot;100&quot;&gt;&lt;/svg&gt;
                       </code>
                     </td>
                   </tr>
@@ -547,8 +547,8 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;rect x="10" y="10" width="80" height="60"
-                        fill="blue" /&gt;
+                        &lt;rect x=&quot;10&quot; y=&quot;10&quot; width=&quot;80&quot; height=&quot;60&quot;
+                        fill=&quot;blue&quot; /&gt;
                       </code>
                     </td>
                   </tr>
@@ -563,7 +563,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;circle cx="50" cy="50" r="40" fill="red" /&gt;
+                        &lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; fill=&quot;red&quot; /&gt;
                       </code>
                     </td>
                   </tr>
@@ -578,7 +578,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;ellipse cx="50" cy="50" rx="40" ry="30" fill="green"
+                        &lt;ellipse cx=&quot;50&quot; cy=&quot;50&quot; rx=&quot;40&quot; ry=&quot;30&quot; fill=&quot;green&quot;
                         /&gt;
                       </code>
                     </td>
@@ -594,7 +594,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;line x1="10" y1="10" x2="90" y2="90" stroke="black"
+                        &lt;line x1=&quot;10&quot; y1=&quot;10&quot; x2=&quot;90&quot; y2=&quot;90&quot; stroke=&quot;black&quot;
                         /&gt;
                       </code>
                     </td>
@@ -610,8 +610,8 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;polyline points="10,10 40,40 10,70" fill="none"
-                        stroke="black" /&gt;
+                        &lt;polyline points=&quot;10,10 40,40 10,70&quot; fill=&quot;none&quot;
+                        stroke=&quot;black&quot; /&gt;
                       </code>
                     </td>
                   </tr>
@@ -627,7 +627,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;polygon points="50,10 90,90 10,90" fill="yellow"
+                        &lt;polygon points=&quot;50,10 90,90 10,90&quot; fill=&quot;yellow&quot;
                         /&gt;
                       </code>
                     </td>
@@ -643,7 +643,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;path d="M10 10 L90 10 L90 90 L10 90 Z" fill="blue"
+                        &lt;path d=&quot;M10 10 L90 10 L90 90 L10 90 Z&quot; fill=&quot;blue&quot;
                         /&gt;
                       </code>
                     </td>
@@ -659,8 +659,8 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;text x="10" y="50" font-family="Arial"
-                        font-size="20"&gt;Hello&lt;/text&gt;
+                        &lt;text x=&quot;10&quot; y=&quot;50&quot; font-family=&quot;Arial&quot;
+                        font-size=&quot;20&quot;&gt;Hello&lt;/text&gt;
                       </code>
                     </td>
                   </tr>
@@ -675,7 +675,7 @@ export default function HTMLSVGTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        &lt;g fill="red"&gt;&lt;circle cx="50" cy="50" r="40"
+                        &lt;g fill=&quot;red&quot;&gt;&lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;
                         /&gt;&lt;/g&gt;
                       </code>
                     </td>
@@ -692,7 +692,7 @@ export default function HTMLSVGTutorial() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
                         &lt;defs&gt;&lt;linearGradient
-                        id="grad1"&gt;...&lt;/linearGradient&gt;&lt;/defs&gt;
+                        id=&quot;grad1&quot;&gt;...&lt;/linearGradient&gt;&lt;/defs&gt;
                       </code>
                     </td>
                   </tr>
@@ -1225,7 +1225,7 @@ export default function HTMLSVGTutorial() {
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
           SVG is a powerful tool for creating resolution-independent graphics
-          that can be styled with CSS and animated with JavaScript. It's perfect
+          that can be styled with CSS and animated with JavaScript. It&apos;s perfect
           for icons, logos, charts, and complex illustrations.
         </p>
         <div className="flex flex-wrap gap-4">

@@ -556,9 +556,9 @@ export default function HTMLBordersPage() {
             <ul className="list-disc pl-5 space-y-1 mb-3">
               <li>What are the different border styles available in CSS?</li>
               <li>How would you create a circle using CSS borders?</li>
-              <li>What's the difference between border-collapse values?</li>
+              <li>What&apos;s the difference between border-collapse values?</li>
               <li>How can you create a gradient border in CSS?</li>
-              <li>What's the purpose of the border-image property?</li>
+              <li>What&apos;s the purpose of the border-image property?</li>
             </ul>
             <p className="mb-2">
               <strong>Key Concepts to Remember:</strong>
@@ -989,7 +989,7 @@ export default function HTMLBordersPage() {
                 </p>
               </li>
               <li>
-                <strong>Q:</strong> What's the difference between border-collapse: collapse and separate?
+                <strong>Q:</strong> What&apos;s the difference between border-collapse: collapse and separate?
                 <p className="text-sm mt-1 bg-gray-50 dark:bg-gray-600 p-2 rounded">
                   <strong>A:</strong> Collapse merges adjacent borders into a single border, while separate keeps them distinct (with optional spacing).
                 </p>

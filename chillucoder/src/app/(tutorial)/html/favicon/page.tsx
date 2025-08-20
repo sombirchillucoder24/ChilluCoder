@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from "next/link";
-import { Globe, Code, Image, Smartphone, Monitor, Settings, Star, ChevronDown, ChevronUp } from 'lucide-react';
+import { Globe, Code, Image as ImageIcon, Smartphone, Monitor, Settings, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 const HTMLFaviconsPage: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -150,7 +150,7 @@ const HTMLFaviconsPage: React.FC = () => {
           <div className="text-center mb-6 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-lg">
             <div className="flex justify-center mb-3">
               <div className="bg-gradient-to-r from-yellow-400 to-orange-500 p-3 rounded-xl">
-                <Image className="w-8 h-8 text-white" />
+                <ImageIcon className="w-8 h-8 text-white" />
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -295,7 +295,7 @@ const HTMLFaviconsPage: React.FC = () => {
               >
                 <h2 className="text-sm md:text-base font-bold text-gray-800 flex items-center gap-2">
                   <div className="bg-gradient-to-r from-teal-500 to-cyan-600 p-1.5 rounded-md">
-                    <Image className="w-4 h-4 text-white" />
+                    <ImageIcon  className="w-4 h-4 text-white" />
                   </div>
                   SVG Favicons
                 </h2>

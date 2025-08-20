@@ -1,7 +1,7 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
-import { useState, useRef } from "react";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
+import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -944,7 +944,7 @@ export default function HTMLYouTubeTutorial() {
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use lazy loading for YouTube embeds below the fold</li>
               <li>Consider using placeholder images until user interacts</li>
-              <li>Use the <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">loading="lazy"</code> attribute</li>
+              <li>Use the <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">loading=&quot;lazy&quot;</code> attribute</li>
               <li>Only load videos when needed (click to play)</li>
               <li>Use responsive embeds to prevent layout shifts</li>
             </ul>
@@ -953,7 +953,7 @@ export default function HTMLYouTubeTutorial() {
           <div>
             <h3 className="font-bold text-lg mb-2">User Experience</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Avoid autoplay with sound (it's often blocked anyway)</li>
+              <li>Avoid autoplay with sound (it&apos;s often blocked anyway)</li>
               <li>Provide clear play buttons for click-to-play</li>
               <li>Consider privacy-enhanced mode if needed</li>
               <li>Use <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">rel=0</code> to limit related videos</li>
@@ -970,7 +970,7 @@ export default function HTMLYouTubeTutorial() {
         </h2>
         
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          YouTube embeds can track users even if they don't play the video. Consider these privacy options:
+          YouTube embeds can track users even if they don&apos;t play the video. Consider these privacy options:
         </p>
         
         <div className="bg-white dark:bg-gray-900 p-4 rounded-lg mb-4">

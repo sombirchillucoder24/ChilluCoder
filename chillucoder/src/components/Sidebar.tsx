@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { 
   FaChevronDown, 
-  FaChevronRight, 
   FaTimes,
   FaPlusSquare,
   FaMinusSquare,
@@ -16,6 +15,21 @@ import {
 } from 'react-icons/fa'
 import { sidebarData } from '@/utils/sidebarData'
 
+// Type definitions
+interface SidebarItem {
+  title: string;
+  href: string;
+}
+
+interface SidebarGroup {
+  group: string;
+  items: SidebarItem[];
+}
+
+interface SidebarData {
+  [key: string]: SidebarGroup[];
+}
+
 export function Sidebar({
   isMobile,
   isMobileOpen,
@@ -24,25 +38,26 @@ export function Sidebar({
   collapsed = false,
   toggleSidebarCollapse
 }: {
-  isMobile: boolean
-  isMobileOpen: boolean
-  toggleSidebar: () => void
-  topic?: string
-  collapsed?: boolean
-  toggleSidebarCollapse?: () => void
+  isMobile: boolean;
+  isMobileOpen: boolean;
+  toggleSidebar: () => void;
+  topic?: string;
+  collapsed?: boolean;
+  toggleSidebarCollapse?: () => void;
 }) {
   const pathname = usePathname()
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
-  const contentRef = useRef<HTMLDivElement>(null)
 
-  // Get the sidebar items for the current topic
-  const currentSidebarItems = sidebarData[topic] || []
+  // Get the sidebar items for the current topic - memoized to prevent useEffect dependency issues
+  const currentSidebarItems = useMemo(() => {
+    return (sidebarData as SidebarData)[topic] || []
+  }, [topic])
 
   useEffect(() => {
     // Initialize groups based on current path
-    const initial = currentSidebarItems.reduce((acc, group) => {
+    const initial = currentSidebarItems.reduce((acc: Record<string, boolean>, group: SidebarGroup) => {
       // Expand group if any of its items match current path
-      const shouldExpand = group.items.some(item => 
+      const shouldExpand = group.items.some((item: SidebarItem) => 
         pathname === item.href || pathname.startsWith(item.href + '/')
       )
       acc[group.group] = shouldExpand
@@ -59,21 +74,21 @@ export function Sidebar({
   }
 
   const expandAll = () => {
-    setExpandedGroups(currentSidebarItems.reduce((acc, group) => {
+    setExpandedGroups(currentSidebarItems.reduce((acc: Record<string, boolean>, group: SidebarGroup) => {
       acc[group.group] = true
       return acc
     }, {} as Record<string, boolean>))
   }
 
   const collapseAll = () => {
-    setExpandedGroups(currentSidebarItems.reduce((acc, group) => {
+    setExpandedGroups(currentSidebarItems.reduce((acc: Record<string, boolean>, group: SidebarGroup) => {
       acc[group.group] = false
       return acc
     }, {} as Record<string, boolean>))
   }
 
-  const getTopicIcon = (topicName: string) => {
-    const icons: Record<string, JSX.Element> = {
+  const getTopicIcon = (topicName: string): React.ReactElement => {
+    const icons: Record<string, React.ReactElement> = {
       html: <FaBook className="w-4 h-4" />,
       css: <FaGraduationCap className="w-4 h-4" />,
       javascript: <FaBook className="w-4 h-4" />,
@@ -196,7 +211,7 @@ export function Sidebar({
                   <p className="text-sm">No topics available</p>
                 </div>
               ) : (
-                currentSidebarItems.map((group) => (
+                currentSidebarItems.map((group: SidebarGroup) => (
                   <div key={group.group} className="mb-2">
                     <button
                       onClick={() => toggleGroup(group.group)}
@@ -225,7 +240,7 @@ export function Sidebar({
                       ${expandedGroups[group.group] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
                     `}>
                       <ul className="ml-2 mt-1 space-y-0.5 border-l-2 border-gray-100 dark:border-gray-700 pl-3">
-                        {group.items.map((item) => {
+                        {group.items.map((item: SidebarItem) => {
                           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
                           return (
                             <li key={item.href}>
@@ -261,7 +276,7 @@ export function Sidebar({
           /* Collapsed State Navigation */
           <nav className="h-full overflow-y-auto py-4">
             <div className="px-1 space-y-3">
-              {currentSidebarItems.map((group, index) => (
+              {currentSidebarItems.map((group: SidebarGroup) => (
                 <div 
                   key={group.group} 
                   title={group.group}
@@ -277,7 +292,7 @@ export function Sidebar({
                     {group.group.length > 8 ? group.group.substring(0, 8) + '...' : group.group}
                   </span>
                   {/* Small indicator for active items */}
-                  {group.items.some(item => pathname === item.href || pathname.startsWith(item.href + '/')) && (
+                  {group.items.some((item: SidebarItem) => pathname === item.href || pathname.startsWith(item.href + '/')) && (
                     <div className="w-1 h-1 bg-green-500 rounded-full mt-1 animate-pulse"></div>
                   )}
                 </div>

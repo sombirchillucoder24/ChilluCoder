@@ -630,26 +630,26 @@ export default function HTMLFormElementsPage() {
             </p>
             <ul className="space-y-3 text-gray-700 dark:text-gray-300 text-sm">
               <li>
-                🔤 <code>&lt;input type="text"&gt;</code> – Single-line text
+                🔤 <code>&lt;input type=&quot;text&quot;&gt;</code> – Single-line text
                 input
               </li>
               <li>
-                📧 <code>&lt;input type="email"&gt;</code> – Email input with
+                📧 <code>&lt;input type=&quot;email&quot;&gt;</code> – Email input with
                 built-in validation
               </li>
               <li>
-                🔒 <code>&lt;input type="password"&gt;</code> – Concealed text
+                🔒 <code>&lt;input type=&quot;password&quot;&gt;</code> – Concealed text
                 entry
               </li>
               <li>
-                🔢 <code>&lt;input type="number"&gt;</code> – Numeric input with
+                🔢 <code>&lt;input type=&quot;number&quot;&gt;</code> – Numeric input with
                 increment/decrement buttons
               </li>
               <li>
-                📅 <code>&lt;input type="date"&gt;</code> – Date picker input
+                📅 <code>&lt;input type=&quot;date&quot;gt;</code> – Date picker input
               </li>
               <li>
-                📁 <code>&lt;input type="file"&gt;</code> – File upload control
+                📁 <code>&lt;input type=&quot;file&quot;&gt;</code> – File upload control
               </li>
             </ul>
           </div>
@@ -669,11 +669,11 @@ export default function HTMLFormElementsPage() {
                 <code>&lt;option&gt;</code> choices
               </li>
               <li>
-                🔘 <code>&lt;input type="radio"&gt;</code> – Select one option
+                🔘 <code>&lt;input type=&quot;radio&quot;&gt;</code> – Select one option
                 from a group
               </li>
               <li>
-                ☑️ <code>&lt;input type="checkbox"&gt;</code> – Select multiple
+                ☑️ <code>&lt;input type=&quot;checkbox&quot;&gt;</code> – Select multiple
                 options independently
               </li>
               <li>
@@ -709,11 +709,11 @@ export default function HTMLFormElementsPage() {
               </li>
               <li>
                 🚀 <code>&lt;button&gt;</code> /{" "}
-                <code>&lt;input type="submit"&gt;</code> – Triggers form
+                <code>&lt;input type=&quot;submit&quot;&gt;</code> – Triggers form
                 submission
               </li>
               <li>
-                🖼️ <code>&lt;input type="image"&gt;</code> – Submit button with
+                🖼️ <code>&lt;input type=&quot;image&quot;&gt;</code> – Submit button with
                 a custom image
               </li>
             </ul>

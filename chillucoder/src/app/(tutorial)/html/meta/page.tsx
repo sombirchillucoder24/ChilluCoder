@@ -156,7 +156,7 @@ export default function HTMLMetaTagsPage() {
           What Are Meta Tags?
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          Meta tags provide metadata about your HTML document that isn't displayed
+          Meta tags provide metadata about your HTML document that isn&apos;t displayed
           on the page itself, but is used by browsers, search engines, and social
           media platforms. They influence how your content appears in search
           results, social shares, and even how browsers render your page.
@@ -210,7 +210,7 @@ export default function HTMLMetaTagsPage() {
                 <div>
                   <p className="mb-4 text-gray-700 dark:text-gray-300">
                     The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">charset</code> meta tag
-                    declares the document's character encoding. UTF-8 is the
+                    declares the document&apos;s character encoding. UTF-8 is the
                     standard encoding for the web and supports all Unicode
                     characters.
                   </p>
@@ -326,7 +326,7 @@ export default function HTMLMetaTagsPage() {
                 <div>
                   <p className="mb-4 text-gray-700 dark:text-gray-300">
                     The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">description</code> meta tag
-                    provides a brief summary of your page's content, often used as
+                    provides a brief summary of your page&apos;s content, often used as
                     the preview text in search results.
                   </p>
                   <div className="flex items-center gap-2 mb-3">
@@ -431,7 +431,7 @@ export default function HTMLMetaTagsPage() {
                   <p className="mb-4 text-gray-700 dark:text-gray-300">
                     The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">canonical</code> link tag
                     helps prevent duplicate content issues by specifying the
-                    "master" version of a page.
+                    &quot;master&quot; version of a page.
                   </p>
                   <div className="bg-yellow-50 dark:bg-gray-700 border-l-4 border-yellow-400 p-4">
                     <p className="text-yellow-700 dark:text-yellow-400">
@@ -532,7 +532,7 @@ export default function HTMLMetaTagsPage() {
                 <div>
                   <p className="mb-4 text-gray-700 dark:text-gray-300">
                     Twitter Card tags enhance how your content appears in tweets.
-                    Twitter will fall back to Open Graph tags if these aren't
+                    Twitter will fall back to Open Graph tags if these aren&apos;t
                     present.
                   </p>
                   <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
@@ -546,7 +546,7 @@ export default function HTMLMetaTagsPage() {
                     </li>
                     <li>
                       <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">twitter:creator</code>: Content
-                      creator's @username
+                      creator&apos;s @username
                     </li>
                   </ul>
                 </div>
@@ -651,7 +651,7 @@ export default function HTMLMetaTagsPage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Always include charset and viewport tags</li>
@@ -663,14 +663,14 @@ export default function HTMLMetaTagsPage() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't stuff keywords in meta tags</li>
+              <li>Don&apos;t stuff keywords in meta tags</li>
               <li>Avoid duplicate meta descriptions</li>
-              <li>Don't use misleading titles or descriptions</li>
+              <li>Don&apos;t use misleading titles or descriptions</li>
               <li>Avoid noindex unless absolutely necessary</li>
-              <li>Don't forget to update when content changes</li>
+              <li>Don&apos;t forget to update when content changes</li>
             </ul>
           </div>
         </div>

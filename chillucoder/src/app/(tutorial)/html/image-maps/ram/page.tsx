@@ -5,7 +5,7 @@ import {
   FaBolt,
   FaCopy,
   FaCheck,
-  FaChevronDown,
+  // FaChevronDown,
   FaPlay,
   FaCode,
   FaHashtag,
@@ -35,13 +35,13 @@ interface RAMExample {
 
 export default function RAMArticle() {
   const [copied, setCopied] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    overview: true,
-    types: true,
-    performance: true,
-    optimization: true,
-    troubleshooting: true,
-  });
+  // const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+  //   overview: true,
+  //   types: true,
+  //   performance: true,
+  //   optimization: true,
+  //   troubleshooting: true,
+  // });
   const [activeTab, setActiveTab] = useState<"html" | "css" | "js">("html");
   const [readingTime, setReadingTime] = useState(0);
   const [selectedRAM, setSelectedRAM] = useState<string | null>(null);
@@ -60,12 +60,12 @@ export default function RAMArticle() {
     }
   };
 
-  const toggleSection = (section: string) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  // const toggleSection = (section: string) => {
+  //   setExpandedSections((prev) => ({
+  //     ...prev,
+  //     [section]: !prev[section],
+  //   }));
+  // };
 
   const copyToClipboard = (text: string, name: string) => {
     navigator.clipboard.writeText(text);
@@ -592,7 +592,7 @@ document.addEventListener('DOMContentLoaded', initializeMemory);`,
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            A comprehensive guide to Random Access Memory (RAM) - the high-speed volatile storage that serves as your computer's working space
+            A comprehensive guide to Random Access Memory (RAM) - the high-speed volatile storage that serves as your computer&apos;s working space
           </p>
           <div className="flex items-center justify-center gap-4 mt-4 text-sm text-gray-500">
             <span className="flex items-center gap-1">
@@ -969,7 +969,7 @@ document.addEventListener('DOMContentLoaded', initializeMemory);`,
         {/* Footer */}
         <footer className="text-center py-8 border-t border-gray-200 dark:border-gray-700">
           <p className="text-gray-600 dark:text-gray-400">
-            Understanding RAM is crucial for optimizing system performance. Whether you're building a gaming rig, workstation, or server, 
+            Understanding RAM is crucial for optimizing system performance. Whether you&apos;re building a gaming rig, workstation, or server, 
             choosing the right memory configuration can significantly impact your computing experience.
           </p>
           <div className="flex justify-center gap-4 mt-4">

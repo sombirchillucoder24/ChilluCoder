@@ -9,16 +9,11 @@ import {
   FaInfoCircle,
   FaSearch,
   FaTag,
-  FaHeading,
-  FaParagraph,
-  FaList,
-  FaTable,
   FaImage,
   FaLink,
   FaFileAlt,
 } from "react-icons/fa";
 import { useState } from "react";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -733,7 +728,7 @@ export default function HtmlAttributesReference() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Always use quotes around attribute values</li>
@@ -747,16 +742,16 @@ export default function HtmlAttributesReference() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't use deprecated attributes (like align or bgcolor)</li>
+              <li>Don&apos;t use deprecated attributes (like align or bgcolor)</li>
               <li>Avoid inline styles when possible (use CSS classes)</li>
-              <li>Don't skip required attributes</li>
+              <li>Don&apos;t skip required attributes</li>
               <li>Avoid using the same ID for multiple elements</li>
-              <li>Don't use event attributes for complex logic (use JavaScript instead)</li>
+              <li>Don&apos;t use event attributes for complex logic (use JavaScript instead)</li>
               <li>Avoid unnecessary attributes</li>
-              <li>Don't forget accessibility attributes (alt, aria-*)</li>
+              <li>Don&apos;t forget accessibility attributes (alt, aria-*)</li>
             </ul>
           </div>
         </div>

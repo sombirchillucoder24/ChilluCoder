@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export default function HTMLGeolocationTutorial() {
           HTML Geolocation API Tutorial
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Learn how to access a user's geographical location using the browser's
+          Learn how to access a user&apos;s geographical location using the browser&apos;s
           Geolocation API
         </p>
       </header>
@@ -175,7 +175,7 @@ export default function HTMLGeolocationTutorial() {
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   The most common use of the Geolocation API is to get the
-                  user's current position.
+                  user&apos;s current position.
                 </p>
 
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
@@ -317,7 +317,7 @@ function getLocation() {
                 <h3 className="font-bold text-lg mb-2">2. Watch Position</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Use <code>watchPosition()</code> to continuously track the
-                  user's position as they move.
+                  user&apos;s position as they move.
                 </p>
 
                 <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
@@ -1396,7 +1396,7 @@ function getLocation() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Gets the device's current location (one-time request)
+                      Gets the device&apos;s current location (one-time request)
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -1406,7 +1406,7 @@ function getLocation() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Watches the device's location and calls a callback when it
+                      Watches the device&apos;s location and calls a callback when it
                       changes
                     </td>
                   </tr>
@@ -1417,7 +1417,7 @@ function getLocation() {
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                      Stops watching the device's location
+                      Stops watching the device&apos;s location
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -1519,7 +1519,7 @@ function getLocation() {
             </h3>
             <p className="text-gray-700 dark:text-gray-300">
               Only request geolocation access when the user expects it (e.g.,
-              after clicking a "Find Near Me" button). Don't request it on page
+              after clicking a &quot;Find Near Me&quot; button). Don&apos;t request it on page
               load without context.
             </p>
           </div>
@@ -1552,7 +1552,7 @@ function getLocation() {
           <div>
             <h3 className="font-bold text-lg mb-2">5. Consider Privacy</h3>
             <p className="text-gray-700 dark:text-gray-300">
-              Be transparent about how you'll use location data and consider
+              Be transparent about how you&apos;ll use location data and consider
               implementing a privacy policy that addresses location tracking.
             </p>
           </div>
@@ -1568,7 +1568,7 @@ function getLocation() {
           The Geolocation API is a powerful tool for creating location-aware web
           applications. With proper implementation and consideration for user
           privacy, you can create engaging experiences that respond to the
-          user's physical location.
+          user&apos;s physical location.
         </p>
         <div className="flex flex-wrap gap-4">
           <Link

@@ -498,7 +498,7 @@ a {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <p className="mb-4 text-gray-700 dark:text-gray-300">
-                    Media features test specific characteristics of the user's
+                    Media features test specific characteristics of the user&apos;s
                     device or environment:
                   </p>
                   <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
@@ -930,7 +930,7 @@ a {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-purple-600 dark:text-purple-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use mobile-first approach (min-width queries)</li>
@@ -943,16 +943,16 @@ a {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-purple-600 dark:text-purple-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't target specific devices (focus on features)</li>
+              <li>Don&apos;t target specific devices (focus on features)</li>
               <li>
                 Avoid too many small breakpoints (content should guide you)
               </li>
-              <li>Don't duplicate styles unnecessarily</li>
+              <li>Don&apos;t duplicate styles unnecessarily</li>
               <li>Avoid !important in media queries</li>
-              <li>Don't forget to test both portrait and landscape</li>
+              <li>Don&apos;t forget to test both portrait and landscape</li>
               <li>Avoid hiding important content on smaller screens</li>
             </ul>
           </div>

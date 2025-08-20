@@ -2,14 +2,14 @@
 
 import {
   FaMicrochip,
-  FaServer,
-  FaDesktop,
+  // FaServer,
+  // FaDesktop,
   FaCopy,
   FaCheck,
   FaChevronDown,
   FaPlay,
-  FaCode,
-  FaHashtag,
+  // FaCode,
+  // FaHashtag,
   FaThermometerHalf,
   FaBolt,
   FaClock,

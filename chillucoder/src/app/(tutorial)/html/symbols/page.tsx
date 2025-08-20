@@ -13,7 +13,7 @@ import {
   FaRegCopyright,
 } from "react-icons/fa";
 import { useState } from "react";
-import CodeEditor from "@uiw/react-textarea-code-editor";
+// import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -166,7 +166,7 @@ export default function HtmlSymbolsPage() {
           About HTML Symbols
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          HTML symbols are special characters that aren't readily available on standard keyboards or have special meaning in HTML. 
+          HTML symbols are special characters that aren&apos;t readily available on standard keyboards or have special meaning in HTML. 
           They can be displayed using entity names (like <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&amp;copy;</code>) 
           or entity numbers (like <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&amp;#xA9;</code>).
         </p>
@@ -387,7 +387,7 @@ export default function HtmlSymbolsPage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-indigo-600 dark:text-indigo-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use named entities when available (more readable)</li>
@@ -400,14 +400,14 @@ export default function HtmlSymbolsPage() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-indigo-600 dark:text-indigo-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't copy-paste symbols directly (use entities)</li>
+              <li>Don&apos;t copy-paste symbols directly (use entities)</li>
               <li>Avoid overusing decorative symbols</li>
-              <li>Don't use symbols for critical interface elements</li>
+              <li>Don&apos;t use symbols for critical interface elements</li>
               <li>Avoid mixing symbol types unnecessarily</li>
-              <li>Don't forget to declare UTF-8 charset</li>
+              <li>Don&apos;t forget to declare UTF-8 charset</li>
               <li>Avoid using symbols that may not render consistently</li>
             </ul>
           </div>

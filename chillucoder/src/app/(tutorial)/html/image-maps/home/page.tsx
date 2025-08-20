@@ -38,7 +38,7 @@ export default function HomeButtonPage() {
         </section>
 
         <section className="bg-gray-900 rounded-xl p-8 shadow-lg text-gray-300 leading-relaxed mb-16 text-lg">
-          <h2 className="text-2xl font-semibold text-orange-400 mb-4">Hidden Things You Didn't Know</h2>
+          <h2 className="text-2xl font-semibold text-orange-400 mb-4">Hidden Things You Didn&apos;t Know</h2>
           <ul className="list-disc pl-5 space-y-3">
             <li>
               <strong>Long Press:</strong> Acts as a voice assistant trigger on older Android and iPhones.
@@ -50,7 +50,7 @@ export default function HomeButtonPage() {
               <strong>Customizable via Accessibility:</strong> You can remap actions (e.g., triple tap = camera).
             </li>
             <li>
-              <strong>Haptic Engine:</strong> The button doesn't physically move on newer devices. It simulates a click via vibration.
+              <strong>Haptic Engine:</strong> The button doesn&apos;t physically move on newer devices. It simulates a click via vibration.
             </li>
             <li>
               <strong>Hidden Diagnostic Mode:</strong> Pressing the button + other keys on boot opens internal test modes (Android).

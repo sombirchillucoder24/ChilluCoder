@@ -375,7 +375,7 @@ export default function HTMLSemanticElementsPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">
-                Do's
+                Do&apos;s
               </h3>
               <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-start">
@@ -399,13 +399,13 @@ export default function HTMLSemanticElementsPage() {
 
             <div>
               <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">
-                Don'ts
+                Don&apos;ts
               </h3>
               <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-start">
                   <span className="text-red-500 mr-2">✗</span>
                   <span>
-                    Don't use divs when semantic elements are available
+                    Don&apos;t use divs when semantic elements are available
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -414,7 +414,7 @@ export default function HTMLSemanticElementsPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="text-red-500 mr-2">✗</span>
-                  <span>Don't skip heading levels (e.g., h1 to h3)</span>
+                  <span>Don&apos;t skip heading levels (e.g., h1 to h3)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-red-500 mr-2">✗</span>
@@ -432,7 +432,7 @@ export default function HTMLSemanticElementsPage() {
               Practice Semantic HTML
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-              Apply what you've learned in our interactive HTML editor.
+              Apply what you&apos;ve learned in our interactive HTML editor.
             </p>
             <Link
               href="/compilers/html-editor"

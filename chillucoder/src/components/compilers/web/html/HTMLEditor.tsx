@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import prettier from "prettier/standalone";
 import parserHtml from "prettier/plugins/html";
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import Link from 'next/link';
+// import Link from 'next/link';
 import Swal from "sweetalert2";
 import Head from "next/head";
 
@@ -97,7 +97,7 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
   useEffect(() => {
     const stored = localStorage.getItem("html-code") || defaultHTML;
     formatHTML(stored);
-  }, []);
+  }, [defaultHTML]);
 
   const formatHTML = async (rawCode: string) => {
     setIsFormatting(true);
@@ -164,16 +164,11 @@ export default function HTMLEditor({ htmlCode }: { htmlCode?: string }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="bg-[#282A35] text-white p-4 sticky top-0 z-50 text-center">
-        <Link href="/" className="text-xl font-bold">
-          Another compilor (Click here!)
-        </Link>
-      </div>
 
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 to-blue-50 overflow-auto">
         <div
           id="google-ads-slot"
-          className="h-[120px] w-full p-4 m-1 bg-white border rounded shadow-inner flex items-center justify-center text-gray-400 text-sm"
+          className="h-[120px] w-full p-4 m-1 flex items-center justify-center text-gray-400 text-sm"
           aria-label="Advertisement space"
         ></div>
         <div className="max-h-[200px] text-center border-l bg-amber-50 p-4 text-xl font-semibold text-purple-900 shadow-inner rounded">

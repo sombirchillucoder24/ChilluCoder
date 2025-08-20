@@ -49,7 +49,7 @@ export default function SpeakerPage() {
 
         <section className="bg-gray-900 rounded-xl p-8 shadow-lg text-gray-300 text-lg leading-relaxed">
           <p>
-            A portable speaker is designed to bring music to life wherever you go. Whether you're at the beach, relaxing at home,
+            A portable speaker is designed to bring music to life wherever you go. Whether you&apos;re at the beach, relaxing at home,
             or hosting a small gathering, these compact devices offer big sound without the need for cables or bulky setups.
           </p>
           <p className="mt-4">

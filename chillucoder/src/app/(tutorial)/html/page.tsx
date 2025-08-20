@@ -349,19 +349,19 @@ export default function HtmlMainPage() {
         <div className="grid md:grid-cols-3 gap-6">
           {[
             {
-              name: "Sarah Johnson",
+              name: "Mohit Redhu",
               role: "Web Developer",
               content: "This course transformed my understanding of HTML. The examples are practical and the explanations are crystal clear.",
               rating: 5
             },
             {
-              name: "Mike Chen",
+              name: "Rishav Bharol",
               role: "Frontend Engineer",
               content: "Best HTML course I've taken. The semantic HTML section alone was worth the entire course.",
               rating: 5
             },
             {
-              name: "Emily Davis",
+              name: "Priyanka Chand",
               role: "UI Designer",
               content: "As a designer learning to code, this course made HTML approachable and enjoyable. Highly recommended!",
               rating: 5

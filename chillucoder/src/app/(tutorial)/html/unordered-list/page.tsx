@@ -540,7 +540,7 @@ export default function HTMLUnorderedListPage() {
             <li>Navigation menus and site maps</li>
             <li>Feature lists and product specifications</li>
             <li>Ingredients or item collections</li>
-            <li>Any content where the order of items isn't important</li>
+            <li>Any content where the order of items isn&apos;t important</li>
           </ul>
           <div className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 p-4 rounded-lg">
             <h3 className="font-bold mb-2">Key Features:</h3>

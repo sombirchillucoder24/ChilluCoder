@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import QRCode from 'qrcode';
 import type { QRCodeRenderersOptions } from 'qrcode';
+import NextImage from 'next/image'; // Renamed import to avoid conflict
 
 type QRDataType = 'url' | 'text' | 'email' | 'phone' | 'sms' | 'wifi' | 'contact';
 type LogoShape = 'circle' | 'square' | 'rounded' | 'none';
@@ -46,7 +47,6 @@ const QRCodeGenerator = () => {
   const [error, setError] = useState('');
   const [darkColor, setDarkColor] = useState('#000000');
   const [lightColor, setLightColor] = useState('#FFFFFF');
-  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [logoShape, setLogoShape] = useState<LogoShape>('circle');
   const [logoSize, setLogoSize] = useState(15);
@@ -67,7 +67,6 @@ const QRCodeGenerator = () => {
       return;
     }
 
-    setLogoFile(file);
     setError('');
 
     const reader = new FileReader();
@@ -78,7 +77,6 @@ const QRCodeGenerator = () => {
   };
 
   const removeLogo = () => {
-    setLogoFile(null);
     setLogoPreview(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -185,11 +183,11 @@ const QRCodeGenerator = () => {
         const logoCtx = logoCanvas.getContext('2d');
         if (!logoCtx) throw new Error('Could not get logo canvas context');
 
-        // Draw logo on temporary canvas
-        const logoImg = new Image();
+        // Draw logo on temporary canvas - use native Image constructor
+        const logoImg = new window.Image(); // Use native browser Image constructor
         logoImg.src = logoPreview;
-        await new Promise((resolve) => {
-          logoImg.onload = resolve;
+        await new Promise<void>((resolve) => {
+          logoImg.onload = () => resolve();
         });
 
         // Apply shape mask to logo
@@ -592,9 +590,11 @@ const QRCodeGenerator = () => {
                             logoShape === 'circle' ? 'rounded-full' : 
                             logoShape === 'rounded' ? 'rounded-lg' : ''
                           }`}>
-                            <img
+                            <NextImage
                               src={logoPreview}
                               alt="Logo preview"
+                              width={64}
+                              height={64}
                               className="w-16 h-16 object-cover"
                             />
                           </div>
@@ -740,9 +740,11 @@ const QRCodeGenerator = () => {
               <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Your QR Code</h2>
               <div className="flex justify-center">
                 <div className="p-4 bg-white rounded-lg shadow-inner border border-gray-200">
-                  <img
+                  <NextImage
                     src={qrCode}
                     alt="Generated QR Code"
+                    width={300}
+                    height={300}
                     className="w-full max-w-xs"
                     style={{ backgroundColor: lightColor }}
                   />

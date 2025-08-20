@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function HTMLFormAttributesPage() {
   const [copied, setCopied] = useState<string | null>(null);
@@ -22,7 +22,7 @@ export default function HTMLFormAttributesPage() {
     attributes: true,
     advanced: true,
   });
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleOpenEditor = (code: string) => {
     try {
@@ -174,8 +174,6 @@ export default function HTMLFormAttributesPage() {
                 type="password"
                 id="password"
                 name="password"
-                minLength="8"
-                maxLength="50"
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
@@ -275,7 +273,7 @@ export default function HTMLFormAttributesPage() {
             </div>
             <input type="hidden" name="hidden-field" value="secret-value" />
             <p className="text-sm text-gray-500">
-              (Hidden field with value "secret-value" - not visible but present in form)
+              (Hidden field with value &quot;secret-value&quot; - not visible but present in form)
             </p>
             <button
               type="submit"
@@ -794,13 +792,13 @@ export default function HTMLFormAttributesPage() {
                 <td className="p-2"><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">action</code></td>
                 <td className="p-2">form</td>
                 <td className="p-2">URL where form data is sent</td>
-                <td className="p-2"><code>action="/submit"</code></td>
+                <td className="p-2"><code>action=&quot;/submit&quot;</code></td>
               </tr>
               <tr className="border-b border-gray-200 dark:border-gray-700">
                 <td className="p-2"><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">method</code></td>
                 <td className="p-2">form</td>
                 <td className="p-2">HTTP method (GET, POST)</td>
-                <td className="p-2"><code>method="POST"</code></td>
+                <td className="p-2"><code>method=&quot;POST&quot;</code></td>
               </tr>
               <tr className="border-b border-gray-200 dark:border-gray-700">
                 <td className="p-2"><code className="bg-green-100 dark:bg-green-900 px-1 rounded">required</code></td>
@@ -812,19 +810,19 @@ export default function HTMLFormAttributesPage() {
                 <td className="p-2"><code className="bg-green-100 dark:bg-green-900 px-1 rounded">placeholder</code></td>
                 <td className="p-2">input, textarea</td>
                 <td className="p-2">Hint text for users</td>
-                <td className="p-2"><code>placeholder="Enter name"</code></td>
+                <td className="p-2"><code>placeholder=&quot;Enter name&quot;</code></td>
               </tr>
               <tr className="border-b border-gray-200 dark:border-gray-700">
                 <td className="p-2"><code className="bg-purple-100 dark:bg-purple-900 px-1 rounded">pattern</code></td>
                 <td className="p-2">input</td>
                 <td className="p-2">Regular expression validation</td>
-                <td className="p-2"><code>pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"</code></td>
+                <td className="p-2"><code>pattern=&quot;[0-9]{3}-[0-9]{2}-[0-9]{3}&quot;</code></td>
               </tr>
               <tr className="border-b border-gray-200 dark:border-gray-700">
                 <td className="p-2"><code className="bg-purple-100 dark:bg-purple-900 px-1 rounded">min/max</code></td>
                 <td className="p-2">input (number, date)</td>
                 <td className="p-2">Range constraints</td>
-                <td className="p-2"><code>min="1" max="100"</code></td>
+                <td className="p-2"><code>min=&quot;1&quot; max=&quot;100&quot;</code></td>
               </tr>
               <tr className="border-b border-gray-200 dark:border-gray-700">
                 <td className="p-2"><code className="bg-orange-100 dark:bg-orange-900 px-1 rounded">disabled</code></td>
@@ -859,10 +857,10 @@ export default function HTMLFormAttributesPage() {
                 Use appropriate input types for better validation
               </li>
               <li>
-                Set <code>method="POST"</code> for sensitive data
+                Set <code>method=&quot;POST&quot;</code> for sensitive data
               </li>
               <li>
-                Use <code>enctype="multipart/form-data"</code> for file uploads
+                Use <code>enctype=&quot;multipart/form-data&quot;</code> for file uploads
               </li>
               <li>Implement CSRF protection for form submissions</li>
             </ul>
@@ -902,7 +900,7 @@ export default function HTMLFormAttributesPage() {
               Use pattern attribute with regex for complex validation:
             </p>
             <code className="text-xs bg-gray-100 dark:bg-gray-700 p-2 rounded block">
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8}"
+              pattern=&quot;(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8}&quot;
             </code>
             <p className="text-xs text-gray-500 mt-1">Password with uppercase, lowercase, and number</p>
           </div>
@@ -915,7 +913,7 @@ export default function HTMLFormAttributesPage() {
               Link inputs to forms using form attribute:
             </p>
             <code className="text-xs bg-gray-100 dark:bg-gray-700 p-2 rounded block">
-              &lt;input form="myform" name="field"&gt;
+              &lt;input form=&quot;myform&quot; name=&quot;field&quot;&gt;
             </code>
             <p className="text-xs text-gray-500 mt-1">Input can be outside the form element</p>
           </div>
@@ -928,7 +926,7 @@ export default function HTMLFormAttributesPage() {
               Allow multiple file selection:
             </p>
             <code className="text-xs bg-gray-100 dark:bg-gray-700 p-2 rounded block">
-              &lt;input type="file" multiple accept="image/*"&gt;
+              &lt;input type=&quot;file&quot; multiple accept=&quot;image/*&quot;&gt;
             </code>
             <p className="text-xs text-gray-500 mt-1">Accept multiple image files</p>
           </div>

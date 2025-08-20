@@ -13,7 +13,6 @@ import {
   FaFont,
 } from "react-icons/fa";
 import { useState } from "react";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -429,7 +428,7 @@ export default function HtmlCharsetsPage() {
                   </p>
                   <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
                     <li><code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">Content-Type: text/html; charset=UTF-8</code></li>
-                    <li>Must match the document's actual encoding</li>
+                    <li>Must match the document&apos;s actual encoding</li>
                     <li>Useful for non-HTML files (CSS, JS, etc.)</li>
                     <li>Can be set in server configuration</li>
                   </ul>
@@ -485,14 +484,14 @@ Server: Apache
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
                   <strong>Solution:</strong> Ensure the declared encoding matches the actual file encoding. 
-                  Save files as UTF-8 and declare <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&lt;meta charset="UTF-8"&gt;</code>.
+                  Save files as UTF-8 and declare <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&lt;meta charset=&quot;UTF-8&quot;&gt;</code>.
                 </p>
               </div>
               
               <div>
                 <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">2. Mixed Encoding in Same Page</h4>
                 <p className="text-gray-700 dark:text-gray-300">
-                  <strong>Symptoms:</strong> Some text renders correctly while other parts don't
+                  <strong>Symptoms:</strong> Some text renders correctly while other parts don&apos;t
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
                   <strong>Solution:</strong> Ensure all external resources (CSS, JS) are also UTF-8 encoded. 
@@ -507,7 +506,7 @@ Server: Apache
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
                   <strong>Solution:</strong> The text has been encoded multiple times. Ensure your 
-                  server isn't applying additional encoding transformations.
+                  server isn&apos;t applying additional encoding transformations.
                 </p>
               </div>
               
@@ -534,7 +533,7 @@ Server: Apache
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-green-600 dark:text-green-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Always use UTF-8 for new projects</li>
@@ -547,14 +546,14 @@ Server: Apache
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-green-600 dark:text-green-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't rely on default encodings</li>
+              <li>Don&apos;t rely on default encodings</li>
               <li>Avoid legacy encodings unless necessary</li>
-              <li>Don't mix encodings in the same document</li>
+              <li>Don&apos;t mix encodings in the same document</li>
               <li>Avoid BOM in UTF-8 for web content</li>
-              <li>Don't forget to check external resources</li>
+              <li>Don&apos;t forget to check external resources</li>
               <li>Avoid server-side encoding conversions</li>
             </ul>
           </div>

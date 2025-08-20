@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  FaCode,
   FaCopy,
   FaCheck,
   FaChevronDown,
@@ -548,8 +547,8 @@ export default function HtmlEventsReference() {
           About HTML Events
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
-          HTML events are "things" that happen to HTML elements. When JavaScript
-          is used in HTML pages, JavaScript can "react" on these events. This
+          HTML events are &quot;things&quot; that happen to HTML elements. When JavaScript
+          is used in HTML pages, JavaScript can &quot;react&quot; on these events. This
           reference covers all standard HTML5 event attributes with examples and
           usage information.
         </p>
@@ -755,7 +754,7 @@ export default function HtmlEventsReference() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use event delegation for dynamic elements</li>
@@ -769,17 +768,17 @@ export default function HtmlEventsReference() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't use inline JavaScript in production code</li>
+              <li>Don&apos;t use inline JavaScript in production code</li>
               <li>Avoid attaching too many event listeners to the document</li>
-              <li>Don't block the main thread with heavy event handlers</li>
+              <li>Don&apos;t block the main thread with heavy event handlers</li>
               <li>Avoid using deprecated events like onkeypress</li>
-              <li>Don't rely only on mouse events (consider touch devices)</li>
+              <li>Don&apos;t rely only on mouse events (consider touch devices)</li>
               <li>Avoid nesting too many event handlers</li>
               <li>
-                Don't forget to remove event listeners on component unmount
+                Don&apos;t forget to remove event listeners on component unmount
               </li>
             </ul>
           </div>

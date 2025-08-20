@@ -159,7 +159,7 @@ export default function IframesPage() {
         </h2>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
           Iframes (Inline Frames) allow you to embed another HTML document within
-          your current page. They're commonly used for videos, maps, ads, and
+          your current page. They&apos;re commonly used for videos, maps, ads, and
           third-party widgets.
         </p>
         <div className="flex gap-4">
@@ -239,7 +239,7 @@ export default function IframesPage() {
                       accessibility
                     </li>
                     <li>
-                      <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">loading</code> - "lazy" for
+                      <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">loading</code> - &quot;lazy&quot; for
                       deferred loading
                     </li>
                   </ul>
@@ -384,7 +384,7 @@ export default function IframesPage() {
                   <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
                     <li>Always use the <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">sandbox</code> attribute for untrusted content</li>
                     <li>Include <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">title</code> for accessibility</li>
-                    <li>Use <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">loading="lazy"</code> for performance</li>
+                    <li>Use <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">loading=&quot;lazy&quot;</code> for performance</li>
                     <li>Consider Content Security Policy (CSP) headers</li>
                     <li>Validate all embedded URLs</li>
                   </ul>

@@ -2,7 +2,6 @@
 
 import {
   FaCheckCircle,
-  FaExclamationTriangle,
   FaCode,
   FaCopy,
   FaCheck,

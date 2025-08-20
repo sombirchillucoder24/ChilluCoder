@@ -1,13 +1,11 @@
 "use client";
 
 import {
-  FaCode,
   FaCopy,
   FaCheck,
   FaChevronDown,
   FaPlay,
   FaInfoCircle,
-  FaBook,
 } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";

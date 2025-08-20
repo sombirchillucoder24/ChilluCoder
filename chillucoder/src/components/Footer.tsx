@@ -49,11 +49,11 @@ export function Footer() {
                   About
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/contact" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
                   Contact
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -62,22 +62,22 @@ export function Footer() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Categories</h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link href="/tutorials/javascript" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
+                <Link href="/javascript" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
                   JavaScript
                 </Link>
               </li>
               <li>
-                <Link href="/tutorials/react" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
+                <Link href="/react" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
                   React
                 </Link>
               </li>
               <li>
-                <Link href="/tutorials/nodejs" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
+                <Link href="/node" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
                   Node.js
                 </Link>
               </li>
               <li>
-                <Link href="/tutorials/css" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
+                <Link href="/css" className="text-gray-600 hover:text-gray-900 dark:hover:text-white dark:text-gray-400">
                   CSS
                 </Link>
               </li>

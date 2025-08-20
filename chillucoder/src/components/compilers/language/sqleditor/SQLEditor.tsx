@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback} from "react";
 import {
   Download,
   Upload,
@@ -13,7 +13,6 @@ import {
   AlertCircle,
   History,
   Zap,
-  Columns,
   Table,
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
@@ -37,7 +36,7 @@ interface QueryItem {
 }
 
 interface QueryResult {
-  result?: any[][];
+  result?: unknown[][];
   columns?: string[];
   error?: string;
   executionTime?: number;
@@ -48,6 +47,40 @@ interface QueryHistoryItem {
   id: string;
   sql: string;
   executedAt: string;
+}
+
+// SQL.js types
+interface SQL {
+  Database: new (data?: Uint8Array) => SQLDatabase;
+}
+
+interface SQLDatabase {
+  exec(sql: string): SQLResult[];
+  export(): Uint8Array;
+  close(): void;
+  getRowsModified(): number;
+}
+
+interface SQLResult {
+  columns: string[];
+  values: unknown[][];
+}
+
+// Monaco editor types
+interface MonacoEditor {
+  setValue(value: string): void;
+  addCommand(keybinding: number, callback: () => void): void;
+  getValue(): string;
+}
+
+// Extended Window interface for SQL.js
+declare global {
+  interface Window {
+    initSqlJs: (config: {
+      locateFile: (file: string) => string;
+    }) => Promise<SQL>;
+    SQL: SQL;
+  }
 }
 
 // IndexedDB helper functions
@@ -225,24 +258,78 @@ export default function SQLEditor() {
     "editor" | "databases" | "queries"
   >("editor");
   const [isExecuting, setIsExecuting] = useState(false);
-  const [SQL, setSQL] = useState<any>(null);
-  const [dbInstance, setDbInstance] = useState<any>(null);
+  const [SQL, setSQL] = useState<SQL | null>(null);
+  const [dbInstance, setDbInstance] = useState<SQLDatabase | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [editorReady, setEditorReady] = useState(false);
+  // const [editorReady, setEditorReady] = useState(false);
   const [activeResultTab, setActiveResultTab] = useState<"results" | "schema">(
     "results"
   );
-  const [schemaInfo, setSchemaInfo] = useState<any[]>([]);
+  const [schemaInfo, setSchemaInfo] = useState<
+    Array<{
+      type: string;
+      name: string;
+      tbl_name: string;
+      sql: string;
+    }>
+  >([]);
   const [tables, setTables] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryFileInputRef = useRef<HTMLInputElement>(null);
   const sqlFileInputRef = useRef<HTMLInputElement>(null);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<MonacoEditor | null>(null);
 
+  const loadTables = useCallback((db: SQLDatabase) => {
+    try {
+      const result = db.exec(`
+        SELECT name FROM sqlite_master 
+        WHERE type = 'table' 
+        AND name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
+      `);
+
+      if (result.length > 0) {
+        setTables(result[0].values.map((row: unknown[]) => String(row[0])));
+      } else {
+        setTables([]);
+      }
+    } catch (err) {
+      console.error("Failed to load tables:", err);
+      setTables([]);
+    }
+  }, [currentDatabase]);
+
+  const loadSchemaInfo = useCallback((db: SQLDatabase) => {
+    try {
+      const result = db.exec(`
+        SELECT type, name, tbl_name, sql 
+        FROM sqlite_master 
+        WHERE name NOT LIKE 'sqlite_%'
+        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
+        ORDER BY type, name;
+      `);
+
+      if (result.length > 0) {
+        setSchemaInfo(
+          result[0].values.map((row: unknown[]) => ({
+            type: String(row[0]),
+            name: String(row[1]),
+            tbl_name: String(row[2]),
+            sql: String(row[3]),
+          }))
+        );
+      } else {
+        setSchemaInfo([]);
+      }
+    } catch (err) {
+      console.error("Failed to load schema info:", err);
+      setSchemaInfo([]);
+    }
+  }, [currentDatabase]);
   // Load data from IndexedDB
-  const loadDataFromIndexedDB = async () => {
+const loadDataFromIndexedDB = useCallback(async () => {
     try {
       const [loadedDatabases, loadedQueries, loadedHistory] = await Promise.all(
         [
@@ -266,7 +353,74 @@ export default function SQLEditor() {
       console.error("Failed to load data from IndexedDB:", err);
       setError(`Failed to load saved data: ${(err as Error).message}`);
     }
-  };
+  },[]);
+
+  
+  // Create default database
+const createDefaultDatabase = useCallback(async (SQLInstance: SQL) => {
+    try {
+      const db = new SQLInstance.Database();
+
+      // Only the default database gets these tables
+      db.exec(`
+      CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE,
+        age INTEGER,
+        department_id INTEGER
+      );
+      
+      CREATE TABLE products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        price REAL,
+        category TEXT,
+        stock INTEGER DEFAULT 0
+      );
+      
+      CREATE TABLE departments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        budget REAL
+      );
+      
+      INSERT INTO departments (name, budget) VALUES 
+        ('Engineering', 100000),
+        ('Marketing', 75000),
+        ('Sales', 80000);
+        
+      INSERT INTO users (name, email, age, department_id) VALUES
+        ('John Doe', 'john@example.com', 30, 1),
+        ('Jane Smith', 'jane@example.com', 25, 2),
+        ('Bob Johnson', 'bob@example.com', 35, 1),
+        ('Alice Brown', 'alice@example.com', 28, 3);
+        
+      INSERT INTO products (name, price, category, stock) VALUES
+        ('Laptop', 999.99, 'Electronics', 50),
+        ('Book', 19.99, 'Education', 100),
+        ('Coffee Mug', 9.99, 'Home', 200),
+        ('Smartphone', 599.99, 'Electronics', 30);
+    `);
+
+      const defaultDb: DatabaseItem = {
+        id: "default",
+        name: "default",
+        data: db.export(),
+        createdAt: new Date().toISOString(),
+      };
+
+      await saveDatabaseToStorage(defaultDb);
+      setCurrentDatabase("default");
+      setDbInstance(db);
+      loadSchemaInfo(db);
+      loadTables(db);
+      setIsInitializing(false);
+    } catch (err) {
+      setError(`Failed to create default database: ${(err as Error).message}`);
+      setIsInitializing(false);
+    }
+  }, [loadSchemaInfo, loadTables]);
 
   // Initialize SQL.js from CDN
   useEffect(() => {
@@ -282,7 +436,6 @@ export default function SQLEditor() {
 
         script.onload = async () => {
           try {
-            // @ts-ignore - SQL will be available globally after script loads
             const SQL = await window.initSqlJs({
               locateFile: (file: string) =>
                 `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
@@ -324,7 +477,7 @@ export default function SQLEditor() {
     }
 
     initialize();
-  }, []);
+  }, [loadDataFromIndexedDB, createDefaultDatabase]);
 
   // Initialize database instance when current database changes
   useEffect(() => {
@@ -343,59 +496,7 @@ export default function SQLEditor() {
         setError(`Failed to load database: ${(err as Error).message}`);
       }
     }
-  }, [SQL, currentDatabase, databases]);
-
-  // Load schema information
-  const loadSchemaInfo = (db: any) => {
-    try {
-      const result = db.exec(`
-        SELECT type, name, tbl_name, sql 
-        FROM sqlite_master 
-        WHERE name NOT LIKE 'sqlite_%'
-        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
-        ORDER BY type, name;
-      `);
-
-      if (result.length > 0) {
-        setSchemaInfo(
-          result[0].values.map((row: any) => ({
-            type: row[0],
-            name: row[1],
-            tbl_name: row[2],
-            sql: row[3],
-          }))
-        );
-      } else {
-        setSchemaInfo([]);
-      }
-    } catch (err) {
-      console.error("Failed to load schema info:", err);
-      setSchemaInfo([]);
-    }
-  };
-
-  // Load tables for the current database
-  const loadTables = (db: any) => {
-    try {
-      const result = db.exec(`
-        SELECT name FROM sqlite_master 
-        WHERE type = 'table' 
-        AND name NOT LIKE 'sqlite_%'
-        ${currentDatabase !== "default" ? "AND name NOT IN ('users', 'products', 'departments')" : ""}
-      `);
-
-      if (result.length > 0) {
-        setTables(result[0].values.map((row: any) => row[0]));
-      } else {
-        setTables([]);
-      }
-    } catch (err) {
-      console.error("Failed to load tables:", err);
-      setTables([]);
-    }
-  };
-
-  // Database management functions
+  }, [SQL, currentDatabase, databases, loadSchemaInfo, loadTables]);
   const saveDatabaseToStorage = async (db: DatabaseItem) => {
     try {
       await saveDatabaseToIndexedDB(db);
@@ -464,7 +565,7 @@ export default function SQLEditor() {
 
   const getTableCount = (dbId: string): number => {
     const db = databases.find((d) => d.id === dbId);
-    if (!db) return 0;
+    if (!db || !SQL) return 0;
 
     try {
       const tempDb = new SQL.Database(db.data);
@@ -473,7 +574,21 @@ export default function SQLEditor() {
       WHERE type = 'table' 
       AND name NOT LIKE 'sqlite_%'
     `);
-      return result[0]?.values[0][0] || 0;
+
+      // Extract the numeric value safely
+      const countValue = result[0]?.values?.[0]?.[0];
+
+      // Handle different possible return types
+      if (typeof countValue === "number") {
+        return countValue;
+      } else if (typeof countValue === "object" && countValue !== null) {
+        // If it's an object, try to extract a numeric property
+        const numericValue = Number(Object.values(countValue)[0]);
+        return isNaN(numericValue) ? 0 : numericValue;
+      } else {
+        // Fallback: try to convert to number
+        return Number(countValue) || 0;
+      }
     } catch (err) {
       console.error("Error counting tables:", err);
       return 0;
@@ -533,9 +648,8 @@ export default function SQLEditor() {
   };
 
   // Handle editor mount
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount = (editor: MonacoEditor) => {
     editorRef.current = editor;
-    setEditorReady(true);
 
     // Add keyboard shortcut for execution
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
@@ -569,7 +683,7 @@ export default function SQLEditor() {
 
     try {
       const startTime = performance.now();
-      let queryResult;
+      let queryResult: SQLResult[] = [];
       let rowsAffected = 0;
       let executionTime = 0;
 
@@ -659,71 +773,6 @@ export default function SQLEditor() {
     }
   };
 
-  // Create default database
-  const createDefaultDatabase = async (SQLInstance: any) => {
-    try {
-      const db = new SQLInstance.Database();
-
-      // Only the default database gets these tables
-      db.exec(`
-      CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT UNIQUE,
-        age INTEGER,
-        department_id INTEGER
-      );
-      
-      CREATE TABLE products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        price REAL,
-        category TEXT,
-        stock INTEGER DEFAULT 0
-      );
-      
-      CREATE TABLE departments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        budget REAL
-      );
-      
-      INSERT INTO departments (name, budget) VALUES 
-        ('Engineering', 100000),
-        ('Marketing', 75000),
-        ('Sales', 80000);
-        
-      INSERT INTO users (name, email, age, department_id) VALUES
-        ('John Doe', 'john@example.com', 30, 1),
-        ('Jane Smith', 'jane@example.com', 25, 2),
-        ('Bob Johnson', 'bob@example.com', 35, 1),
-        ('Alice Brown', 'alice@example.com', 28, 3);
-        
-      INSERT INTO products (name, price, category, stock) VALUES
-        ('Laptop', 999.99, 'Electronics', 50),
-        ('Book', 19.99, 'Education', 100),
-        ('Coffee Mug', 9.99, 'Home', 200),
-        ('Smartphone', 599.99, 'Electronics', 30);
-    `);
-
-      const defaultDb: DatabaseItem = {
-        id: "default",
-        name: "default",
-        data: db.export(),
-        createdAt: new Date().toISOString(),
-      };
-
-      await saveDatabaseToStorage(defaultDb);
-      setCurrentDatabase("default");
-      setDbInstance(db);
-      loadSchemaInfo(db);
-      loadTables(db);
-      setIsInitializing(false);
-    } catch (err) {
-      setError(`Failed to create default database: ${(err as Error).message}`);
-      setIsInitializing(false);
-    }
-  };
 
   // Update current database in storage
   const updateCurrentDatabase = async () => {
@@ -782,7 +831,9 @@ export default function SQLEditor() {
 
     try {
       const exportData = dbInstance.export();
-      const blob = new Blob([exportData], { type: "application/x-sqlite3" });
+      const blob = new Blob([exportData.buffer as ArrayBuffer], {
+        type: "application/x-sqlite3",
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -861,14 +912,13 @@ export default function SQLEditor() {
 
       // Add schema
       if (schema.length > 0 && schema[0].values) {
-        schema[0].values.forEach((row: any) => {
+        schema[0].values.forEach((row: unknown[]) => {
           if (row[2]) {
             // sql column
-            sqlExport += row[2] + ";\n\n";
+            sqlExport += String(row[2]) + ";\n\n";
           }
         });
       }
-
       // Add data
       const tables = dbInstance.exec(`
         SELECT name FROM sqlite_master 
@@ -883,20 +933,20 @@ export default function SQLEditor() {
       `);
 
       if (tables.length > 0) {
-        tables[0].values?.forEach((tableRow: any) => {
-          const tableName = tableRow[0];
+        tables[0].values?.forEach((tableRow: unknown[]) => {
+          const tableName = String(tableRow[0]);
           const data = dbInstance.exec(`SELECT * FROM ${tableName};`);
 
           if (data.length > 0 && data[0].values) {
             sqlExport += `\n-- Data for table ${tableName}\n`;
-            data[0].values.forEach((row: any) => {
+            data[0].values.forEach((row: unknown[]) => {
               const values = row
-                .map((val: any) =>
+                .map((val: unknown) =>
                   val === null
                     ? "NULL"
                     : typeof val === "string"
                       ? `'${val.replace(/'/g, "''")}'`
-                      : val
+                      : String(val)
                 )
                 .join(", ");
               sqlExport += `INSERT INTO ${tableName} VALUES (${values});\n`;
@@ -1046,7 +1096,7 @@ export default function SQLEditor() {
           createdAt: new Date().toISOString(),
         };
         await saveQueryToStorage(query);
-      } catch (err) {
+      } catch {
         setError("Invalid query file format");
       }
     };

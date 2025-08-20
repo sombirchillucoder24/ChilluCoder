@@ -10,28 +10,28 @@ import {
   FaGitAlt,
   FaReact,
   FaNodeJs,
-  FaRProject,
-  FaCode,
+  // FaRProject,
+  // FaCode,
 } from "react-icons/fa";
 import {
   SiTypescript,
-  SiMongodb,
+  // SiMongodb,
   SiAngular,
-  SiVuedotjs,
-  SiRust,
-  SiKotlin,
-  SiGo,
-  SiBootstrap,
+  // SiVuedotjs,
+  // SiRust,
+  // SiKotlin,
+  // SiGo,
+  // SiBootstrap,
   SiC,
   SiCplusplus,
   SiSharp,
   SiJquery,
   SiMysql,
-  SiOpenai,
+  // SiOpenai,
 } from "react-icons/si";
 import { TbSql } from "react-icons/tb";
-import { BsTerminal } from "react-icons/bs";
-import { AiOutlineDatabase } from "react-icons/ai";
+// import { BsTerminal } from "react-icons/bs";
+// import { AiOutlineDatabase } from "react-icons/ai";
 
 const topics = [
   {
@@ -64,11 +64,11 @@ const topics = [
     icon: <SiSharp className="text-violet-600" />,
     path: "/csharp",
   },
-  {
-    name: "Bootstrap",
-    icon: <SiBootstrap className="text-purple-500" />,
-    path: "/bootstrap",
-  },
+  // {
+  //   name: "Bootstrap",
+  //   icon: <SiBootstrap className="text-purple-500" />,
+  //   path: "/bootstrap",
+  // },
   {
     name: "React",
     icon: <FaReact className="text-blue-500" />,
@@ -100,40 +100,40 @@ const topics = [
     path: "/angular",
   },
   { name: "Git", icon: <FaGitAlt className="text-orange-600" />, path: "/git" },
-  {
-    name: "MongoDB",
-    icon: <SiMongodb className="text-green-500" />,
-    path: "/mongodb",
-  },
-  { name: "AI", icon: <FaCode className="text-pink-500" />, path: "/ai" },
-  { name: "R", icon: <FaRProject className="text-blue-500" />, path: "/r" },
-  { name: "Go", icon: <SiGo className="text-blue-500" />, path: "/go" },
-  {
-    name: "Kotlin",
-    icon: <SiKotlin className="text-purple-500" />,
-    path: "/kotlin",
-  },
-  {
-    name: "Vue",
-    icon: <SiVuedotjs className="text-green-500" />,
-    path: "/vue",
-  },
-  {
-    name: "GenAI",
-    icon: <SiOpenai className="text-teal-500" />,
-    path: "/genai",
-  },
-  {
-    name: "Data",
-    icon: <AiOutlineDatabase className="text-gray-500" />,
-    path: "/data",
-  },
-  {
-    name: "Bash",
-    icon: <BsTerminal className="text-gray-300" />,
-    path: "/bash",
-  },
-  { name: "Rust", icon: <SiRust className="text-orange-600" />, path: "/rust" },
+  // {
+  //   name: "MongoDB",
+  //   icon: <SiMongodb className="text-green-500" />,
+  //   path: "/mongodb",
+  // },
+  // { name: "AI", icon: <FaCode className="text-pink-500" />, path: "/ai" },
+  // { name: "R", icon: <FaRProject className="text-blue-500" />, path: "/r" },
+  // { name: "Go", icon: <SiGo className="text-blue-500" />, path: "/go" },
+  // {
+  //   name: "Kotlin",
+  //   icon: <SiKotlin className="text-purple-500" />,
+  //   path: "/kotlin",
+  // },
+  // {
+  //   name: "Vue",
+  //   icon: <SiVuedotjs className="text-green-500" />,
+  //   path: "/vue",
+  // },
+  // {
+  //   name: "GenAI",
+  //   icon: <SiOpenai className="text-teal-500" />,
+  //   path: "/genai",
+  // },
+  // {
+  //   name: "Data",
+  //   icon: <AiOutlineDatabase className="text-gray-500" />,
+  //   path: "/data",
+  // },
+  // {
+  //   name: "Bash",
+  //   icon: <BsTerminal className="text-gray-300" />,
+  //   path: "/bash",
+  // },
+  // { name: "Rust", icon: <SiRust className="text-orange-600" />, path: "/rust" },
 ];
 
 const LanguageBar: React.FC = () => {

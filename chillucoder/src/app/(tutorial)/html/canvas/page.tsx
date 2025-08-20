@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
@@ -770,7 +770,7 @@ export default function HTMLCanvasTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        ctx.fillText('Hello', 10, 50);
+                        ctx.fillText(&apos;Hello&apos;, 10, 50);
                       </code>
                     </td>
                   </tr>
@@ -785,7 +785,7 @@ export default function HTMLCanvasTutorial() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded text-sm">
-                        ctx.strokeText('Hello', 10, 50);
+                        ctx.strokeText(&apos;Hello&apos;, 10, 50);
                       </code>
                     </td>
                   </tr>

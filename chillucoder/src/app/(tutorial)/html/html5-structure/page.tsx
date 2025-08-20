@@ -261,7 +261,7 @@ export default function HTML5StructurePage() {
               <p className="mb-4 text-gray-700 dark:text-gray-300">
                 The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&lt;!DOCTYPE html&gt;</code> declaration must be the first line in your HTML5 document. 
                 It tells the browser which version of HTML the page is written in. Unlike previous versions, 
-                HTML5's DOCTYPE is simple and case-insensitive.
+                HTML5&apos;s DOCTYPE is simple and case-insensitive.
               </p>
               <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded">
                 <pre className="text-sm overflow-x-auto">
@@ -295,7 +295,7 @@ export default function HTML5StructurePage() {
                 3. Head Section
               </h3>
               <p className="mb-4 text-gray-700 dark:text-gray-300">
-                The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&lt;head&gt;</code> section contains meta-information about the document that isn't 
+                The <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">&lt;head&gt;</code> section contains meta-information about the document that isn&apos;t 
                 displayed on the page. This includes the title, character set declaration, viewport settings, 
                 stylesheets, scripts, and other metadata.
               </p>
@@ -391,7 +391,7 @@ export default function HTML5StructurePage() {
                 Semantic Layout Example
               </h3>
               <p className="mb-4 text-gray-700 dark:text-gray-300">
-                Here's how you might structure a typical webpage using semantic HTML5 elements:
+                Here&apos;s how you might structure a typical webpage using semantic HTML5 elements:
               </p>
               <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded">
                 <pre className="text-sm overflow-x-auto">
@@ -778,7 +778,7 @@ export default function HTML5StructurePage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Always include the <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">DOCTYPE</code> declaration</li>
@@ -791,14 +791,14 @@ export default function HTML5StructurePage() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't use deprecated elements like <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;center&gt;</code> or <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;font&gt;</code></li>
+              <li>Don&apos;t use deprecated elements like <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;center&gt;</code> or <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;font&gt;</code></li>
               <li>Avoid unnecessary divs when semantic elements would work</li>
-              <li>Don't skip the <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;title&gt;</code> element</li>
+              <li>Don&apos;t skip the <code className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">&lt;title&gt;</code> element</li>
               <li>Avoid inline styles and scripts when possible</li>
-              <li>Don't use tables for layout</li>
+              <li>Don&apos;t use tables for layout</li>
               <li>Avoid too many nested elements</li>
             </ul>
           </div>

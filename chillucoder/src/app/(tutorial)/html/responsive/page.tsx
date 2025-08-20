@@ -643,7 +643,7 @@ export default function ResponsiveDesignPage() {
                       <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
                         width=device-width
                       </code>{" "}
-                      to match the screen's width
+                      to match the screen&apos;s width
                     </li>
                     <li>
                       <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
@@ -916,7 +916,7 @@ export default function ResponsiveDesignPage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Start with a mobile-first approach</li>
@@ -929,14 +929,14 @@ export default function ResponsiveDesignPage() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't hide content arbitrarily on mobile</li>
+              <li>Don&apos;t hide content arbitrarily on mobile</li>
               <li>Avoid fixed widths that might cause overflow</li>
-              <li>Don't rely solely on device-width breakpoints</li>
+              <li>Don&apos;t rely solely on device-width breakpoints</li>
               <li>Avoid heavy assets on mobile connections</li>
-              <li>Don't disable zoom without good reason</li>
+              <li>Don&apos;t disable zoom without good reason</li>
               <li>Avoid complex hover states on touch devices</li>
             </ul>
           </div>

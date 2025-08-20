@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  FaCode,
   FaCopy,
   FaCheck,
   FaChevronDown,
@@ -18,7 +17,6 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 import { useState } from "react";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -669,7 +667,7 @@ export default function HtmlTagsReference() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Do's:
+              Do&apos;s:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
               <li>Use semantic HTML5 tags when possible</li>
@@ -683,16 +681,16 @@ export default function HtmlTagsReference() {
           </div>
           <div>
             <h3 className="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">
-              Don'ts:
+              Don&apos;ts:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Don't use deprecated tags (like &lt;font&gt; or &lt;center&gt;)</li>
+              <li>Don&apos;t use deprecated tags (like &lt;font&gt; or &lt;center&gt;)</li>
               <li>Avoid presentational tags (use CSS instead)</li>
-              <li>Don't skip closing tags (except void elements)</li>
+              <li>Don&apos;t skip closing tags (except void elements)</li>
               <li>Avoid excessive div nesting</li>
-              <li>Don't use tables for layout</li>
+              <li>Don&apos;t use tables for layout</li>
               <li>Avoid inline styles</li>
-              <li>Don't forget the document type declaration</li>
+              <li>Don&apos;t forget the document type declaration</li>
             </ul>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { FaCopy, FaCheck, FaChevronDown, FaCode, FaPlay } from "react-icons/fa";
+import { FaCopy, FaCheck, FaChevronDown, FaPlay } from "react-icons/fa";
 import { useState } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import Link from "next/link";
@@ -356,7 +356,7 @@ export default function HTMLWebStorageTutorial() {
               <li>
                 Data is cleared when the page session ends (when tab is closed)
               </li>
-              <li>Useful for temporary data that shouldn't persist</li>
+              <li>Useful for temporary data that shouldn&apos;t persist</li>
               <li>Storage limit is typically 5MB per origin</li>
               <li>Only accessible from the tab that created it</li>
             </ul>
@@ -983,8 +983,8 @@ window.addEventListener('storage', (event) => {
                           const largeString = "a".repeat(5 * 1024 * 1024); // ~5MB
                           localStorage.setItem("quotaTest", largeString);
                           alert("Successfully stored ~5MB of data");
-                        } catch (e) {
-                          alert(`Error: ${e.message}`);
+                        } catch {
+                          alert(`Error: To Store Data`);
                         }
                       }}
                       className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
@@ -1006,7 +1006,7 @@ window.addEventListener('storage', (event) => {
                             }
                           }
                           return `${(total / 1024).toFixed(2)} KB used`;
-                        } catch (e) {
+                        } catch {
                           return "Could not calculate storage usage";
                         }
                       })()}
@@ -1286,7 +1286,7 @@ try {
                   <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <code className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-sm">
-                        window.addEventListener('storage', callback)
+                        window.addEventListener(&apos;storage&apos;, callback)
                       </code>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
@@ -1328,7 +1328,7 @@ try {
             </h3>
             <p className="text-gray-700 dark:text-gray-300">
               Never store sensitive information like passwords or tokens in web
-              storage as it's accessible via JavaScript.
+              storage as it&apos;s accessible via JavaScript.
             </p>
           </div>
           <div>
@@ -1343,7 +1343,7 @@ try {
           <div>
             <h3 className="font-bold text-lg mb-2">5. Implement Fallbacks</h3>
             <p className="text-gray-700 dark:text-gray-300">
-              Provide fallback mechanisms for browsers that don't support web
+              Provide fallback mechanisms for browsers that don&apos;t support web
               storage or when storage is disabled.
             </p>
           </div>
