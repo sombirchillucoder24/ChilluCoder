@@ -24,7 +24,7 @@ export function Topbar() {
           href="/compilers" 
           className="bg-[#282A35] hover:bg-[#1e1f26] px-2 py-1 md:px-3 rounded text-xs whitespace-nowrap"
         >
-          Online Compilers
+          Online Compilers 
         </Link>
         {/* <Link 
           href="/login" 
