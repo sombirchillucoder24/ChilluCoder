@@ -303,7 +303,7 @@ export default function Counter() {
               href="/tutorials"
               className="bg-transparent border-2 border-white py-3 px-8 rounded-full hover:bg-white hover:text-blue-700 transition"
             >
-              Browse All Tutorials.
+              Browse All Tutorials
             </a>
           </div>
         </div>
