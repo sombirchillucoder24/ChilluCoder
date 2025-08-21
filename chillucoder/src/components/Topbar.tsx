@@ -9,11 +9,6 @@ export function Topbar() {
       <div className="flex space-x-2 md:space-x-4 mb-2 md:mb-0 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
         <Link href="/tutorials" className="hover:text-gray-200 whitespace-nowrap px-2 py-1">Tutorials</Link>
         <Link href="/html" className="hover:text-gray-200 whitespace-nowrap px-2 py-1">HTML</Link>
-        {/* Add more navigation links as needed */}
-      </div>
-
-      {/* Right Section - Buttons with Links */}
-      <div className="flex items-center space-x-2 md:space-x-4 w-full md:w-auto justify-between md:justify-normal">
         <Link 
           href="/tools" 
           className="bg-[#282A35] hover:bg-[#1e1f26] px-2 py-1 md:px-3 rounded text-xs whitespace-nowrap"
@@ -26,6 +21,12 @@ export function Topbar() {
         >
           Online Compilers
         </Link>
+        {/* Add more navigation links as needed */}
+      </div>
+
+      {/* Right Section - Buttons with Links */}
+      <div className="flex items-center space-x-2 md:space-x-4 w-full md:w-auto justify-between md:justify-normal">
+        
         {/* <Link 
           href="/login" 
           className="bg-[#FFC0C7] text-black hover:bg-[#ffaeb8] px-2 py-1 md:px-3 rounded text-xs whitespace-nowrap"
